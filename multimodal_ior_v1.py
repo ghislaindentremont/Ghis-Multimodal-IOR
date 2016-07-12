@@ -889,6 +889,9 @@ if __name__ == '__main__':
 					else:
 						target_response_key = 'voice'
 						target_response_rt = (event[1] - target_on_time)*1000
+						if target_response_rt < 100:
+							# send error to vmrk for responses within 100 ms after target onset
+							labjack.getFeedback(u3.PortStateWrite(State = [98,0,0]))  
 						feedback_text = str(int(target_response_rt/10))
 						feedback_color = [127,127,127,255]
 						trial_done = True
