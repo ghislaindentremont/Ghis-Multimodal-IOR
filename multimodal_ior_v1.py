@@ -12,7 +12,7 @@ if __name__ == '__main__':
 	viewing_distance = 60.0 #units can be anything so long as they match those used in stim_display_width below
 	stim_display_width = 54.5 #units can be anything so long as they match those used in viewing_distance above
 	stim_display_res = (1920,1080) #pixel resolution of the stim_display
-	stim_display_position = (-1440-1920,1680-1080)
+	stim_display_position = (-1440-1920, 0) #,1680-1080)
 
 	writer_window_size = (200,200)
 	writer_window_position = (600,0)

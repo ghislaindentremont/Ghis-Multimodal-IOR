@@ -1,7 +1,7 @@
 <PyCorder xmlns:py="http://codespeak.net/lxml/objectify/pytype" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.9">
   <modules>
     <AMP_ActiChamp instance="0" version="3" module="amplifier">
-      <samplerate py:pytype="float">10000.0</samplerate>
+      <samplerate py:pytype="float">1000.0</samplerate>
       <pllexternal py:pytype="int">0</pllexternal>
       <channels/>
       <InputDeviceContainer>
@@ -805,9 +805,9 @@
       </MontageChannels>
     </MNT_Recording>
     <StorageVision instance="0" version="2" module="storage">
-      <d_path py:pytype="str">Z:/Experiments/ssior/_Data</d_path>
+      <d_path py:pytype="str">Z:/Experiments/Ghis-Multimodal-IOR/_EEG</d_path>
       <d_autoname py:pytype="bool">true</d_autoname>
-      <d_prefix py:pytype="str">ssior</d_prefix>
+      <d_prefix py:pytype="str">multimodal_ior_</d_prefix>
       <d_numbersize py:pytype="int">2</d_numbersize>
       <mindiskspace py:pytype="float">1.0</mindiskspace>
     </StorageVision>
@@ -816,19 +816,7 @@
       <lp_global py:pytype="float">0.0</lp_global>
       <hp_global py:pytype="float">0.0</hp_global>
       <notch_global py:pytype="bool">false</notch_global>
-      <channels>
-        <channel version="3">
-          <input py:pytype="int">1</input>
-          <inputgroup py:pytype="int">1</inputgroup>
-          <enable py:pytype="bool">true</enable>
-          <name py:pytype="str">Aux1</name>
-          <group py:pytype="int">1</group>
-          <lowpass py:pytype="float">0.0</lowpass>
-          <highpass py:pytype="float">0.0</highpass>
-          <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">false</reference>
-        </channel>
-      </channels>
+      <channels/>
     </EegFilter>
     <IMP_Display instance="0" version="1" module="impedance">
       <range_max py:pytype="int">50</range_max>
@@ -838,7 +826,7 @@
       <timebase py:pytype="float">10.0</timebase>
       <eegscale py:pytype="float">100.0</eegscale>
       <auxscale py:pytype="float">1000.0</auxscale>
-      <groupsize py:pytype="float">16.0</groupsize>
+      <groupsize py:pytype="float">32.0</groupsize>
       <baseline py:pytype="bool">true</baseline>
     </DISP_Scope>
   </modules>
