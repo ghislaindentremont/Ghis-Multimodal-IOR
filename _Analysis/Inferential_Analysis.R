@@ -2,9 +2,11 @@ library(ggplot2)
 library(plyr)
 library(reshape)
 
+setwd("~/Documents/Multimodal_IOR/condition_averages/")
+
 a = ldply(
   .data = list.files(
-    path = "~/Documents/Multimodal_IOR/condition_averages/"
+    path = "."
   )
   , .fun = function(file) {
       df = read.csv(
@@ -64,5 +66,6 @@ ggplot(
   , aes(x = X, y = value, group = cueing, color = cueing)
 ) +
   geom_line() +
-  facet_grid(cue_modality ~ target_modality + laterality)
+  facet_grid(cue_modality ~ target_modality + laterality)+
+  scale_y_reverse()
   
