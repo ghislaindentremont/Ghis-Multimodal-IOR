@@ -11,7 +11,7 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ####                                Load Data                                             ####
 ##############################################################################################
 # Participant
-participant = "e12"
+participant = "e27"
 
 # for one participant: e12
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
@@ -25,12 +25,8 @@ print(raw.info['ch_names'])
 # remove Aux
 raw.info['bads'] = ['Aux1']  # AUX = microsensor 
 
-# EEG montage 10-20 international system with 64 electrodes
-montage = mne.channels.read_montage('standard_1020')
-print(montage)  # not quite... Need to get down to 64 and double check
-
-# look for other bad channels 
-raw.plot()
+# # look for other bad channels 
+# raw.plot()
 # NOTE: They all look too noisy to tell. I would have to consult my notebook or used automated process
 # NOTE: Another recommendation is: 
 """Compute preliminary off-line averages with artifact rejection,
@@ -466,6 +462,7 @@ ax[0,0].plot(X, cued_contra_TT, label = 'cued')
 ax[0,0].plot(X, uncued_contra_TT, label = 'uncued')
 ax[0,0].axhline(y=0, color = 'black')
 ax[0,0].axvline(x=0, linestyle='dashed', color = 'black')
+ax[0,0].legend()
 
 ax[0,1].plot(X, cued_ipsi_TT, label = 'cued')
 ax[0,1].plot(X, uncued_ipsi_TT, label = 'uncued')
