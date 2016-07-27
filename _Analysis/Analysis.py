@@ -11,7 +11,7 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ####                                Load Data                                             ####
 ##############################################################################################
 # Participant
-participant = "e27"
+participant = "e22"
 
 # for one participant: e12
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
@@ -129,6 +129,7 @@ raw.notch_filter(
     )
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0))
 #---------------------------------- Notch Filter --------------------------------------------#
+
 
 
 
@@ -440,7 +441,7 @@ epochs_ipsi_LVLV = get_evoked( raw, {'LV/LV': 20}, ['Ch47'], tmin, tmax, reject_
 epochs_ipsi_RVRV = get_evoked( raw, {'RV/RV': 30}, ['Ch51'], tmin, tmax, reject_num = 100e-6, get_evoked = False )
 evoked_cued_ipsi_VV = concatenate_epochs(epochs_ipsi_LVLV, epochs_ipsi_RVRV, 'cued ipsi VV')
 cued_ipsi_VV = evoked_cued_ipsi_VV.data[0]
-#---------------------------------- Cued/Contra/VV ------------------------------------------#
+#---------------------------------- Cued/Ipsi/VV ------------------------------------------#
 
 
 #---------------------------------- Uncued/Ipsi/VV ----------------------------------------#
@@ -448,7 +449,7 @@ epochs_ipsi_LVRV = get_evoked( raw, {'LV/RV': 22}, ['Ch51'], tmin, tmax, reject_
 epochs_ipsi_RVLV = get_evoked( raw, {'RV/LV': 28}, ['Ch47'], tmin, tmax, reject_num = 100e-6, get_evoked = False )
 evoked_uncued_ipsi_VV = concatenate_epochs(epochs_ipsi_LVRV, epochs_ipsi_RVLV, 'uncued ipsi VV')
 uncued_ipsi_VV = evoked_uncued_ipsi_VV.data[0]
-#---------------------------------- Uncued/Contra/VV ----------------------------------------#
+#---------------------------------- Uncued/Ipsi/VV ----------------------------------------#
 
 
 
