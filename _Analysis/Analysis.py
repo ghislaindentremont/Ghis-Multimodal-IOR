@@ -11,7 +11,7 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ####                                Load Data                                             ####
 ##############################################################################################
 # Participant
-participant = "e22"
+participant = "e12"
 
 # for one participant: e12
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
@@ -23,16 +23,106 @@ print(raw.info)
 print(raw.info['ch_names'])
 
 # remove Aux
-raw.info['bads'] = ['Aux1']  # AUX = microsensor 
+raw.drop_channels(['Aux1']) # AUX = microsensor 
 
-# # look for other bad channels 
-# raw.plot()
-# NOTE: They all look too noisy to tell. I would have to consult my notebook or used automated process
-# NOTE: Another recommendation is: 
-"""Compute preliminary off-line averages with artifact rejection,
-   SSP/ICA, and EEG average electrode reference computation
-   off and check the condition of the channels."""
-# NOTE: Need to identify bads before interpolating them 
+# check that Aux was dropped
+print(raw.info['ch_names'])
+
+# look for bad channels 
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+
+# label bads for each P
+if participant == "e12":
+   raw.info['bads'] = []   
+
+# channel names
+ch_names = [
+    # greens (1-32)
+    'Fp1'
+    , 'Fz'
+    , 'F3'
+    , 'F7'
+    , 'FT9'
+    , 'FC5'
+    , 'FC1'
+    , 'C3'
+    , 'T7'
+    , 'TP9'
+    , 'CP5'
+    , 'CP1'
+    , 'Pz'
+    , 'P3'
+    , 'P7'
+    , 'O1'
+    , 'Oz'
+    , 'O2'
+    , 'P4'
+    , 'P8'
+    , 'TP10'
+    , 'CP6'
+    , 'CP2'
+    , 'Cz'
+    , 'C4'
+    , 'T8'
+    , 'FT10'
+    , 'FC6'
+    , 'FC2'
+    , 'F4'
+    , 'F8'
+    , 'Fp2'
+    # yellows (33-64)
+    , 'AF7'
+    , 'AF3'
+    , 'AFz'
+    , 'F1'
+    , 'F5'
+    , 'FT7'
+    , 'FC3'
+    , 'FCz'
+    , 'C1'
+    , 'C5'
+    , 'TP7'
+    , 'CP3'
+    , 'P1'
+    , 'P5'
+    , 'PO7'
+    , 'PO3'
+    , 'POz'
+    , 'PO4'
+    , 'PO8'
+    , 'P6'
+    , 'P2'
+    , 'CPz'
+    , 'CP4'
+    , 'TP8'
+    , 'C6'
+    , 'C2'
+    , 'FC4'
+    , 'FT8'
+    , 'F6'
+    , 'F2'
+    , 'AF4'
+    , 'AF8'
+    ]
+
+# get montage for interpolation and visualization
+montage = mne.channels.read_montage(kind = "easycap-M1", ch_names = ch_names)
+mne.viz.plot_montage(montage, show_names = True)
+
+# rename channels in raw 
+original_ch_names = raw.info['ch_names'][0:64]
+ch_names_dict = dict(zip(original_ch_names, ch_names))
+raw.rename_channels(mapping = ch_names_dict)
+
+# add montage to raw instance 
+raw.set_montage(montage)
+
+# interpolate bads 
+raw.interpolate_bads()
+
+# see effect of interpolation 
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+
 
 
 
@@ -73,7 +163,7 @@ print(raw.info['projs'])
 
 
 #---------------------- Show Effect of Reference on Continuous ------------------------------#
-raw.plot(events = events)
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
 #---------------------- Show Effect of Reference on Continuous ------------------------------#
 
 
@@ -106,7 +196,7 @@ raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = 
 # apply filter 
 iir_params = dict(order=2, ftype='butter')
 raw.filter(
-    1
+    .1
     , 50
     , picks=picks
     , method = 'iir'
@@ -501,6 +591,8 @@ ax[1,3].axhline(y=0, color = 'black')
 ax[1,3].axvline(x=0, linestyle='dashed', color = 'black')
 
 plt.show()
+
+# savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/condition_averages/condition_averages_%s.png'%participant )
 #------------------------------------ Plot Together -----------------------------------------#
 
 
