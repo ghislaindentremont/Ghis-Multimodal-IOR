@@ -10,32 +10,76 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
+
 # Participant
-participant = "e12"
+participant = "e03"
 
-# for one participant: e12
+# for one participant
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
-
-# look at info
-print(raw.info)
-
-# look at channels in particular
-print(raw.info['ch_names'])
 
 # remove Aux
 raw.drop_channels(['Aux1']) # AUX = microsensor 
 
-# check that Aux was dropped
-print(raw.info['ch_names'])
 
-# look for bad channels 
+#--------------------------------- Look for bad channels ------------------------------------#
 raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+#--------------------------------- Look for bad channels ------------------------------------#
 
-# label bads for each P
+
+#------------------------------------ Visualize Events --------------------------------------# 
+events = mne.find_events(raw, stim_channel = 'STI 014', output = 'onset')
+mne.viz.plot_events(events, raw.info['sfreq'], raw.first_samp)
+#------------------------------------ Visualize Events --------------------------------------# 
+
+
+#------------------------------------ AR on all channels ------------------------------------# 
+picks_all = mne.pick_types(raw.info, meg=False, eeg=True, eog=False, exclude='bads')
+event_id_all = {
+    'LV/LV': 20
+    , 'LV/RV': 22
+    , 'LT/LV': 24
+    , 'LT/RV': 26
+    , 'RV/LV': 28
+    , 'RV/RV': 30
+    , 'RT/LV': 32
+    , 'RT/RV': 34 
+
+    , 'LV/RT': 23
+    , 'LT/RT': 27
+    , 'RV/RT': 31
+    , 'RT/RT': 35
+
+    , 'LV/LT': 21
+    , 'LT/LT': 25
+    , 'RV/LT': 29
+    , 'RT/LT': 33 
+}
+tmin, tmax = -0.2, 0.5
+epochs_params_all = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
+epochs_all = mne.Epochs(
+    raw
+    , **epochs_params_all
+    , add_eeg_ref = False
+    , baseline = (-0.1,0)
+)
+
+# artifact rejection
+epochs_all.drop_bad(reject = dict(eeg=100e-5), flat = dict(eeg = 100e-6))
+
+# percentage rejected by channel
+epochs_all.plot_drop_log()
+#------------------------------------ AR on all channels ------------------------------------# 
+
+
+#--------------------------------- Label Bad for each P -------------------------------------#
 if participant == "e12":
-   raw.info['bads'] = []   
+    raw.info['bads'] = []   # arguably Ch32 and Ch64 based on AR
+elif participant == "e03":
+    raw.info['bads'] = ['Ch32', 'Ch1']    # based on continuous raw data and AR (flat)
+#--------------------------------- Label Bad for each P -------------------------------------#
 
-# channel names
+
+#--------------------------------------- See Montage ----------------------------------------#
 ch_names = [
     # greens (1-32)
     'Fp1'
@@ -108,36 +152,34 @@ ch_names = [
 # get montage for interpolation and visualization
 montage = mne.channels.read_montage(kind = "easycap-M1", ch_names = ch_names)
 mne.viz.plot_montage(montage, show_names = True)
+#--------------------------------------- See Montage ----------------------------------------#
 
-# rename channels in raw 
+
+#--------------------------------------- Set Montage ----------------------------------------#
 original_ch_names = raw.info['ch_names'][0:64]
 ch_names_dict = dict(zip(original_ch_names, ch_names))
 raw.rename_channels(mapping = ch_names_dict)
 
-# add montage to raw instance 
 raw.set_montage(montage)
+#--------------------------------------- Set Montage ----------------------------------------#
 
-# interpolate bads 
+
+#------------------------------------ Interpolate Bads --------------------------------------#
 raw.interpolate_bads()
+#------------------------------------ Interpolate Bads --------------------------------------#
 
-# see effect of interpolation 
+
+#-------------------------------------- See effect ------------------------------------------#
 raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
-
+#-------------------------------------- See effect ------------------------------------------#
 
 
 
 ##############################################################################################
 ####                                Re-Reference                                          ####
 ##############################################################################################
-# events, LV/LV for re-reference visualization
-events = mne.find_events(raw, stim_channel = 'STI 014', output = 'onset')
 
-# visualize timeline of events 
-mne.viz.plot_events(events, raw.info['sfreq'], raw.first_samp)
-
-picks_all = mne.pick_types(raw.info, meg=False, eeg=True, eog=False, exclude='bads')
-event_id, tmin, tmax = {'LV/LV': 20}, -0.2, 0.5
-epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id, tmin=tmin, tmax=tmax)
+epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
 
 
 #------------------------- Show Effect of Reference on Evoked -------------------------------#
@@ -150,12 +192,19 @@ del raw_no_ref  # save memory
 
 evoked_no_ref.plot(axes = ax[0], titles=dict(eeg='EEG Original reference'), show=False)
 
-# Average reference 
-raw_ref, _ = mne.io.set_eeg_reference(raw)
-evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
-del raw_ref  # save memory
+# # Average reference 
+# raw_ref, _ = mne.io.set_eeg_reference(raw)
+# evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
+# del raw_ref  # save memory
 
-evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
+# evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
+
+# average of mastoid reference 
+raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
+evoked_mast_ref = mne.Epochs(raw_mast_ref, **epochs_params_test).average()
+del raw_mast_ref  # save memory
+
+evoked_mast_ref.plot(axes = ax[1], titles=dict(eeg='EEG Mastoid reference'))
 
 # see addition of proj
 print(raw.info['projs'])
@@ -426,7 +475,7 @@ ax[1].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
 # plt.tight_layout()
 
-plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.png'%participant )
+# plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Both ---------------------------------------------#
@@ -455,7 +504,7 @@ df = pd.DataFrame(
         ]
  )
 
-df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.csv'%participant )
+# df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.csv'%participant )
 
 
 
@@ -699,7 +748,7 @@ ax[1,3].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
 f.set_size_inches(18.5, 10.5)
 
-plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.png'%participant )
+# plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Together -----------------------------------------#
@@ -762,4 +811,4 @@ df = pd.DataFrame(
         ]
  )
 
-df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.csv'%participant )
+# df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.csv'%participant )
