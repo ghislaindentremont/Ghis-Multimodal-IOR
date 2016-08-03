@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
 	#(9+1)*2*2*2*2 = 160 trials
 	number_of_blocks = 1
-	trials_for_practice = 0
+	trials_for_practice = 40
 	trials_per_break = 40
 
 	instruction_size_in_degrees = 1 #specify the size of the instruction text
