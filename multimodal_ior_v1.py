@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	stamper_window_color = [255,255,255]
 	stamper_do_border = True
 
-	do_eyelink = False
+	do_eyelink = True 
 	eyelink_window_size = (200,200)
 	eyelink_window_position = (900,0)
 	eyelink_ip = '100.1.1.1'
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 	# cue_stim_frequency = 100 #Hz
 
 	#(9+1)*2*2*2*2 = 160 trials
-	number_of_blocks = 1
+	number_of_blocks = 5
 	trials_for_practice = 40
 	trials_per_break = 40
 
