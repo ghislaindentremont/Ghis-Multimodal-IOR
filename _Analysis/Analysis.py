@@ -150,7 +150,7 @@ ch_names = [
     ]
 
 # get montage for interpolation and visualization
-montage = mne.channels.read_montage(kind = "easycap-M1", ch_names = ch_names)
+montage = mne.channels.read_montage(kind ="easycap-M1", ch_names = ch_names)
 mne.viz.plot_montage(montage, show_names = True)
 #--------------------------------------- See Montage ----------------------------------------#
 
@@ -192,22 +192,19 @@ del raw_no_ref  # save memory
 
 evoked_no_ref.plot(axes = ax[0], titles=dict(eeg='EEG Original reference'), show=False)
 
-# # Average reference 
-# raw_ref, _ = mne.io.set_eeg_reference(raw)
-# evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
-# del raw_ref  # save memory
+# Average reference
+raw_ref, _ = mne.io.set_eeg_reference(raw)
+evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
+del raw_ref  # save memory
 
-# evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
+evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
 
-# average of mastoid reference 
-raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
-evoked_mast_ref = mne.Epochs(raw_mast_ref, **epochs_params_test).average()
-del raw_mast_ref  # save memory
-
-evoked_mast_ref.plot(axes = ax[1], titles=dict(eeg='EEG Mastoid reference'))
-
-# see addition of proj
-print(raw.info['projs'])
+# # average of mastoid reference
+# raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
+# evoked_mast_ref = mne.Epochs(raw_mast_ref, **epochs_params_test).average()
+# del raw_mast_ref  # save memory
+#
+# evoked_mast_ref.plot(axes = ax[1], titles=dict(eeg='EEG Mastoid reference'))
 #------------------------- Show Effect of Reference on Evoked -------------------------------#
 
 
@@ -473,9 +470,7 @@ ax[1].set_title('tactile target')
 ax[1].set_ylim(ax[1].get_ylim()[::-1])
 ax[1].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
-# plt.tight_layout()
-
-# plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.png'%participant )
+plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Both ---------------------------------------------#
@@ -504,7 +499,7 @@ df = pd.DataFrame(
         ]
  )
 
-# df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.csv'%participant )
+df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.csv'%participant )
 
 
 
@@ -748,7 +743,7 @@ ax[1,3].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
 f.set_size_inches(18.5, 10.5)
 
-# plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.png'%participant )
+plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Together -----------------------------------------#
@@ -811,4 +806,4 @@ df = pd.DataFrame(
         ]
  )
 
-# df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.csv'%participant )
+df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.csv'%participant )
