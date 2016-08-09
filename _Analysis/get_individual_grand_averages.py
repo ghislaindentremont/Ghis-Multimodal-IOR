@@ -1,6 +1,7 @@
-print("""Script designed to be used immediately after data collection from terminal
+print("""\n\n\n[USAGE]
+Script designed to be used immediately after data collection from terminal
 to quickly visualize waveforms without gaining information about experimental effects (potential bias).
-No interpolation is performed and error trials are not removed""")
+No interpolation is performed and error trials are not removed\n\n\n""")
 
 import os
 import mne
@@ -17,14 +18,17 @@ import pandas as pd
 # get dir
 filedir = input("Where is the .eeg file found?\n>>> ")
 # filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis"
+print(filedir)
 
 # Participant
 participant = input("What is the participants id (e.g. e01)?\n>>> ")
 # participant = "e03"
+print(participant)
 
 # later save to this dir
 save_dir = input("Where would you like this file to be saved?\n>>> ")
 # save_dir = "/Users/ghislaindentremont/Desktop/"
+print(save_dir)
 
 # change dir
 os.chdir(filedir)
