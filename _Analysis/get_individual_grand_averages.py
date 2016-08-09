@@ -1,5 +1,6 @@
-# script designed to be used immediately after data collection from terminal to quickly visualize waveforms without gaining information about experimental effects (potential bias)
-# no interpolation is performed and error trials are not removed
+print("""Script designed to be used immediately after data collection from terminal
+to quickly visualize waveforms without gaining information about experimental effects (potential bias).
+No interpolation is performed and error trials are not removed""")
 
 import os
 import mne
@@ -17,20 +18,19 @@ import pandas as pd
 filedir = input("Where is the .eeg file found?\n>>> ")
 # filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis"
 
-# change dir
-os.chdir(filedir)
-
 # Participant
 participant = input("What is the participants id (e.g. e01)?\n>>> ")
 # participant = "e03"
-
-# for one participant
-raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
 
 # later save to this dir
 save_dir = input("Where would you like this file to be saved?\n>>> ")
 # save_dir = "/Users/ghislaindentremont/Desktop/"
 
+# change dir
+os.chdir(filedir)
+
+# for one participant
+raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
 
 # remove Aux
 raw.drop_channels(['Aux1']) # AUX = microsensor
