@@ -12,7 +12,7 @@ dataStarted = False
 
 def get_number_string(lyne):
     if line == '':
-        number_str = "1"  # to get out of bottom while loop when file complete 
+        number_str = "1"  # to get out of bottom while loop when file complete
     else:
         number_str = lyne.replace(' ', '').split(',')[1].strip().strip('S').strip('R')  # this takes the number
     return(number_str)
