@@ -34,7 +34,7 @@ while not done:
                 line = oldFile.readline()
                 number_string = get_number_string(line)
                 while number_string != "1":
-                    if number_string in ["99","98"]:
+                    if number_string in ["99","98","97"]:
                         break
                     else:
                         lines += line
