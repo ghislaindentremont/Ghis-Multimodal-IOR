@@ -245,7 +245,6 @@ def get_evoked(raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0
     # epochs.plot_drop_log()
     # # visualize by channel, by epoch
     # epochs.plot()
-    
     if get_evoked:
         evoked = epochs.average()
         # evoked.plot()
@@ -253,7 +252,6 @@ def get_evoked(raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0
         sums = np.zeros(len(evoked.data[0]))
         for i in range(0, len(evoked.data)):
             sums = evoked.data[i] + sums
-
         avg = np.array([sums / len(evoked.data)])
         info = mne.create_info(
             ch_names=[' '.join(channel_name)]
@@ -272,26 +270,20 @@ def concatenate_epochs(epoch1, epoch2, ch_name, reversal=False):
     epoch1_arr = epoch1.get_data()
     epoch2_arr = epoch2.get_data()
     comb_arr = np.concatenate([epoch1_arr, epoch2_arr])
-
     comb_arr_sum = np.zeros(len(comb_arr[0][0]))
     for idx in range(0, len(comb_arr)):
         temp = comb_arr[idx][0]
         comb_arr_sum = comb_arr_sum + temp
-
     comb_arr_avg = np.array([comb_arr_sum / len(comb_arr)])  # get type 2d array
-
     if reversal:
         comb_arr_avg = comb_arr_avg * (-1)
-
     info_comb = mne.create_info(
         ch_names=[ch_name]
         , sfreq=epoch1.info['sfreq']
         , ch_types='eeg'
     )
-
     evoked = mne.EvokedArray(comb_arr_avg, info_comb, tmin=tmin)
     # evoked.plot()
-
     return evoked
 
 

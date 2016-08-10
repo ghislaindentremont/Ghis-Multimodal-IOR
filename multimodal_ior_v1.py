@@ -25,7 +25,8 @@ if __name__ == '__main__':
 	stamper_window_color = [255,255,255]
 	stamper_do_border = True
 
-	do_eyelink = True 
+	do_eyelink = True
+
 	eyelink_window_size = (200,200)
 	eyelink_window_position = (900,0)
 	eyelink_ip = '100.1.1.1'
@@ -814,7 +815,10 @@ if __name__ == '__main__':
 				#manage stimuli
 				if not cue_started:
 					if get_time()>=cue_start_time:
-						labjack.getFeedback(u3.PortStateWrite(State = [labjack_to_eeg_cue_int,labjack_to_tactamp_cue_on_bits_int,0]))
+						if not block == 'practice':
+							labjack.getFeedback(u3.PortStateWrite(State = [labjack_to_eeg_cue_int,labjack_to_tactamp_cue_on_bits_int,0]))
+						else:
+							labjack.getFeedback(u3.PortStateWrite(State = [97,0,0]))
 						cue_started = True
 						last_cue_state = 1
 				elif not cue_done:
