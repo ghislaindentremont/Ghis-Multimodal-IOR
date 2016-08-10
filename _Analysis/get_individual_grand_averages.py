@@ -7,7 +7,6 @@ import os
 import mne
 import numpy as np
 from matplotlib import pyplot as plt
-import pandas as pd
 
 
 
@@ -16,18 +15,18 @@ import pandas as pd
 ##############################################################################################
 
 # get dir
-filedir = input("Where is the .eeg file found?\n>>> ")
-# filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis"
+# filedir = input("Where is the .eeg file found?\n>>> ")
+filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_EEG"
 print(filedir)
 
 # Participant
-participant = input("What is the participants id (e.g. e01)?\n>>> ")
-# participant = "e03"
+# participant = input("What is the participants id (e.g. e01)?\n>>> ")
+participant = "e32"
 print(participant)
 
 # later save to this dir
-save_dir = input("Where would you like this file to be saved?\n>>> ")
-# save_dir = "/Users/ghislaindentremont/Desktop/"
+# save_dir = input("Where would you like this file to be saved?\n>>> ")
+save_dir = "/Users/ray/Desktop/"
 print(save_dir)
 
 # change dir
@@ -193,7 +192,7 @@ raw.filter(
     , picks=picks
     , method = 'iir'
     , iir_params = iir_params
-    , n_jobs = 4
+    # , n_jobs = 4
 )
 #---------------------------------- Butterworth Filter --------------------------------------#
 
@@ -203,7 +202,7 @@ raw.filter(
 raw.notch_filter(
     np.arange(60,121,60)  # get 60 and 120 Hz
     , picks=picks
-    , n_jobs = 4
+    # , n_jobs = 4
     )
 #---------------------------------- Notch Filter --------------------------------------------#
 
@@ -223,16 +222,20 @@ def get_evoked(raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0
         , eog=False
         , selection=channel_name
     )
-    params = dict(
-        picks=picks
+    # params = dict(
+    #     picks=picks
+    #     , events=events  # global variable
+    #     , event_id=event_id
+    #     , tmin=tmin
+    #     , tmax=tmax
+    # )
+    epochs = mne.Epochs(
+        raw
+        , picks=picks
         , events=events  # global variable
         , event_id=event_id
         , tmin=tmin
         , tmax=tmax
-    )
-    epochs = mne.Epochs(
-        raw
-        , **params
         , add_eeg_ref=False
         , baseline=baseline
     )
@@ -242,7 +245,7 @@ def get_evoked(raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0
     # epochs.plot_drop_log()
     # # visualize by channel, by epoch
     # epochs.plot()
-
+    
     if get_evoked:
         evoked = epochs.average()
         # evoked.plot()
