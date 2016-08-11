@@ -1,0 +1,122 @@
+setwd)
+setwd("/Users/ray/Experiments/Ghis-Multimodal-IOR/_Analysis/")
+source("get_ind_behav_resp_summaries.R")
+sprintf("%s/%s.png",savedir,participant)
+hist(b$target_response_rt, breaks = 50)#
+abline(v = 100)#
+dev.copy(png, sprintf("%s/%s.png",savedir,participant))#
+dev.off()
+hist(b$target_response_rt, breaks = 50)#
+abline(v = 100)#
+dev.copy(png, sprintf("%s/%s.png",savedir,participant))#
+dev.off()
+hist(b$target_response_rt, breaks = 50)#
+abline(v = 100)#
+png(sprintf("%s/%s.png",savedir,participant))#
+hist(b$target_response_rt, breaks = 50)#
+abline(v = 100)#
+dev.off()
+png(sprintf("%s/%s.png",savedir,participant));#
+hist(b$target_response_rt, breaks = 50)#
+abline(v = 100)#
+dev.off();
+source("get_ind_behav_resp_summaries.R")
+ls
+ob
+ls()
+print("#
+R script that read in and summarizes participant behavioural data.#
+Get RT distribution, and exclusion proportions, and overall usable trial count.#
+")#
+#
+# libraries#
+library(grid)#
+library(gridExtra)#
+library(plyr)#
+library(ggplot2) #
+library(stringr)#
+#
+# directory#
+filedir = readline("Where is the txt file found? ")#
+#
+# participant#
+participant =readline("What is the participant id? ")#
+#
+# where to save info to later#
+savedir = readline("Where should I save results? ")#
+#
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+  )
+filedir = readline("Where is the txt file found? ")
+/Users/ray/Experiments/Ghis-Multimodal-IOR/_Analysis
+filedir
+filedir = readline("Where is the txt file found? ")
+participant =readline("What is the participant id? ")
+e32
+participant =readline("What is the participant id? ")
+savedir = readline("Where should I save results? ")
+savedir = readline("Where should I save results? ")
+savedir = readline("Where should I save results? ")
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+  )
+filename = file_ls[ grep(".txt", file_ls) ]#
+#
+a = read.table(filename, header = T)#
+#
+print("getting rid of practice trials...")#
+b = a[a$block != "practice",]
+filename
+file_ls
+filedir
+participant
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+  )
+file_ls
+getwd()
+# filedir = readline("Where is the txt file found? ")#
+filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_Data"#
+#
+# participant#
+participant =readline("What is the participant id? ")
+savedir = "/Users/ray/Desktop/Multimoda Quick Results"#
+#
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+  )#
+#
+filename = file_ls[ grep(".txt", file_ls) ]#
+#
+a = read.table(filename, header = T)#
+#
+print("getting rid of practice trials...")#
+b = a[a$block != "practice",]
+file_ls
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+    , recursive = T#
+  )
+file_ls
+filename = file_ls[ grep(".txt", file_ls) ]#
+#
+a = read.table(filename, header = T)#
+#
+print("getting rid of practice trials...")#
+b = a[a$block != "practice",]#
+#
+summarize_b = summary(b)
+print(summarize_b)
+source("get_ind_behav_resp_summaries.R")
+source("get_ind_behav_resp_summaries.R")
