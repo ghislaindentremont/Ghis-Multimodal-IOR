@@ -815,8 +815,9 @@ if __name__ == '__main__':
 				#manage stimuli
 				if not cue_started:
 					if get_time()>=cue_start_time:
+						labjack.getFeedback(u3.PortStateWrite(State = [labjack_to_eeg_cue_int,labjack_to_tactamp_cue_on_bits_int,0]))
 						if not block == 'practice':
-							labjack.getFeedback(u3.PortStateWrite(State = [labjack_to_eeg_cue_int,labjack_to_tactamp_cue_on_bits_int,0]))
+							pass
 						else:
 							labjack.getFeedback(u3.PortStateWrite(State = [97,0,0]))
 						cue_started = True
