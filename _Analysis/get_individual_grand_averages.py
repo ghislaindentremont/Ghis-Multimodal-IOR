@@ -15,18 +15,19 @@ from matplotlib import pyplot as plt
 ##############################################################################################
 
 # get dir
-# filedir = input("Where is the .eeg file found?\n>>> ")
-filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_EEG"
+filedir = raw_input("Where is the .eeg file found?\n>>> ")
+# filedir = input()
+# filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_EEG"
 print(filedir)
 
 # Participant
-# participant = input("What is the participants id (e.g. e01)?\n>>> ")
-participant = "e32"
+participant = raw_input("What is the participants id (e.g. e01)?\n>>> ")
+# participant = "e32"
 print(participant)
 
 # later save to this dir
-# save_dir = input("Where would you like this file to be saved?\n>>> ")
-save_dir = "/Users/ray/Desktop/"
+save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
+# save_dir = "/Users/ray/Desktop/"
 print(save_dir)
 
 # change dir
