@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	stamper_window_color = [255,255,255]
 	stamper_do_border = True
 
-	do_eyelink = False
+	do_eyelink = True 
 
 	eyelink_window_size = (200,200)
 	eyelink_window_position = (900,0)
@@ -819,6 +819,10 @@ if __name__ == '__main__':
 						if not block == 'practice':
 							pass
 						else:
+							# print(get_time()) to test
+							time.sleep(0.01)
+							# print(get_time()) accuracy of sleep (i.e. in this case can't go over 50 ms)! 
+							# It's very accurate...
 							labjack.getFeedback(u3.PortStateWrite(State = [97,0,0]))
 						cue_started = True
 						last_cue_state = 1
