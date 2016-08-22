@@ -4,15 +4,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 
-os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis")
-
+os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data")
 
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
 
 # Participant
-participant = "e03"
+participant = "e32"
 
 # for one participant
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
