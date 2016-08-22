@@ -11,8 +11,8 @@ library(ggplot2)
 library(stringr)
 
 # directory
-# filedir = readline("Where is the txt file found? ")
-filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_Data"
+filedir = readline("Where is the txt file found? ")
+# filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_Data"
 
 # participant
 participant =readline("What is the participant id? ")

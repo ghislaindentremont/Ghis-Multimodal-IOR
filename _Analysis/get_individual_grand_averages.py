@@ -18,17 +18,14 @@ from matplotlib import pyplot as plt
 filedir = raw_input("Where is the .eeg file found?\n>>> ")
 # filedir = input()
 # filedir = "/Users/ray/Experiments/Ghis-Multimodal-IOR/_EEG"
-print(filedir)
 
 # Participant
 participant = raw_input("What is the participants id (e.g. e01)?\n>>> ")
 # participant = "e32"
-print(participant)
 
 # later save to this dir
-save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
-# save_dir = "/Users/ray/Desktop/"
-print(save_dir)
+# save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
+save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
 
 # change dir
 os.chdir(filedir)
