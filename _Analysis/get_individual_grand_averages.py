@@ -24,8 +24,8 @@ participant = raw_input("What is the participants id (e.g. e01)?\n>>> ")
 # participant = "e32"
 
 # later save to this dir
-save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
-# save_dir = "/Users/ray/Desktop/"
+# save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
+save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
 
 # change dir
 os.chdir(filedir)
