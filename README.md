@@ -1,5 +1,5 @@
 # Ghis-Multimodal-IOR
-Cognitive Psychology/Neuroscience Stuty - Experiment and Analysis Script 
+Cognitive Psychology/Neuroscience Study - Experiment and Analysis Script 
 
 NOTE: Mike Lawrence helped designed, and almost entirely coded the script (experiment.py) for this experiment for which I am the principal investigator under the supervision of Raymond Klein.
       The original repository, which no longer will be updated, can be found at https://github.com/mike-lawrence/multimodal_ior.
