@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	stamper_window_color = [255,255,255]
 	stamper_do_border = True
 
-	do_eyelink = True 
+	do_eyelink = True
 
 	eyelink_window_size = (200,200)
 	eyelink_window_position = (900,0)

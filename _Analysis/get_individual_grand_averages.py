@@ -25,7 +25,7 @@ participant = raw_input("What is the participants id (e.g. e01)?\n>>> ")
 
 # later save to this dir
 # save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
-save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
+# save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
 
 # change dir
 os.chdir(filedir)
@@ -405,7 +405,7 @@ ax[1].set_title('tactile target')
 ax[1].set_ylim(ax[1].get_ylim()[::-1])
 ax[1].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
-plt.savefig( '%squick_grand_averages_%s.png'%(save_dir,participant) )
+# plt.savefig( '%squick_grand_averages_%s.png'%(save_dir,participant) )
 
 plt.show()
 #------------------------------------ Plot Both ---------------------------------------------#
