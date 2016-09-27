@@ -41,7 +41,7 @@ print(summarize_b)
 
 hist(b$target_response_rt, breaks = 50)
 abline(v = 100)
-dev.copy(png, sprintf("%s/%s.png",savedir,participant))
+# dev.copy(png, sprintf("%s/%s.png",savedir,participant))
 dev.off()
 
 print("Proportion of blinks: ")

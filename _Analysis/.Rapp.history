@@ -113,3 +113,6 @@ b = a[a$block != "practice",]#
 summarize_b = summary(b)
 print(summarize_b)
 source("get_ind_behav_resp_summaries.R")
+source('/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Analysis/get_ind_behav_resp_summaries.R', chdir = TRUE)
+source('/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Analysis/get_ind_behav_resp_summaries.R', chdir = TRUE)
+source('/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Analysis/get_ind_behav_resp_summaries.R', chdir = TRUE)

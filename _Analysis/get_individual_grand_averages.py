@@ -303,7 +303,7 @@ vis_id = {
 }
 
 evoked_grand_avg_vis = get_evoked( raw, vis_id, ['PO7','PO8'], tmin, tmax, reject_num = 100e-6 )
-# evoked_grand_avg_vis.plot()
+evoked_grand_avg_vis.plot()
 grand_avg_vis = evoked_grand_avg_vis.data[0]
 
 
@@ -381,7 +381,8 @@ grand_avg_tact = evoked_grand_avg_tact.data[0]
 
 
 #------------------------------------ Plot Both ---------------------------------------------#
-X = np.linspace(-200, 500, 701)
+samps = np.shape(grand_avg_vis)[0]
+X = np.linspace(-200, 500, samps) # 701
 
 f, ax = plt.subplots(1,2, sharex = True, sharey = True)
 
