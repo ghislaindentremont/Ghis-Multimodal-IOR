@@ -25,7 +25,7 @@ participant = raw_input("What is the participants id (e.g. e01)?\n>>> ")
 
 # later save to this dir
 # save_dir = raw_input("Where would you like this file to be saved?\n>>> ")
-save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
+# save_dir = "/Users/ray/Desktop/Multimodal Quick Results"
 
 # change dir
 os.chdir(filedir)
@@ -303,7 +303,7 @@ vis_id = {
 }
 
 evoked_grand_avg_vis = get_evoked( raw, vis_id, ['PO7','PO8'], tmin, tmax, reject_num = 100e-6 )
-# evoked_grand_avg_vis.plot()
+evoked_grand_avg_vis.plot()
 grand_avg_vis = evoked_grand_avg_vis.data[0]
 
 
@@ -381,7 +381,8 @@ grand_avg_tact = evoked_grand_avg_tact.data[0]
 
 
 #------------------------------------ Plot Both ---------------------------------------------#
-X = np.linspace(-200, 500, 701)
+samps = np.shape(grand_avg_vis)[0]
+X = np.linspace(-200, 500, samps) # 701
 
 f, ax = plt.subplots(1,2, sharex = True, sharey = True)
 
@@ -405,7 +406,7 @@ ax[1].set_title('tactile target')
 ax[1].set_ylim(ax[1].get_ylim()[::-1])
 ax[1].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
-plt.savefig( '%squick_grand_averages_%s.png'%(save_dir,participant) )
+# plt.savefig( '%squick_grand_averages_%s.png'%(save_dir,participant) )
 
 plt.show()
 #------------------------------------ Plot Both ---------------------------------------------#

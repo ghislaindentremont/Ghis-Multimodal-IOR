@@ -19,7 +19,7 @@ participant =readline("What is the participant id? ")
 
 # where to save info to later
 # savedir = readline("Where should I save results? ")
-savedir = "/Users/ray/Desktop/Multimodal Quick Results"
+# savedir = "/Users/ray/Desktop/Multimodal Quick Results"
 
 file_ls = list.files(
     path = filedir
@@ -41,7 +41,7 @@ print(summarize_b)
 
 hist(b$target_response_rt, breaks = 50)
 abline(v = 100)
-dev.copy(png, sprintf("%s/%s.png",savedir,participant))
+# dev.copy(png, sprintf("%s/%s.png",savedir,participant))
 dev.off()
 
 print("Proportion of blinks: ")
@@ -86,5 +86,5 @@ df = data.frame(blink_prop
 	, kept_prop_num
 	)
 
-write.csv(df, file = sprintf("%s/%s.csv",savedir,participant))
+# write.csv(df, file = sprintf("%s/%s.csv",savedir,participant))
 
