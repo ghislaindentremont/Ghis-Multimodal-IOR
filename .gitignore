@@ -2,3 +2,4 @@ _Data/
 _EEG/
 *.pyc
 .idea/
+.DS_Store
