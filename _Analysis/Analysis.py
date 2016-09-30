@@ -11,23 +11,26 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ##############################################################################################
 
 # Participant
-participant = "e32"
+participant = "e40"
 
 # for one participant
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
 
 # remove Aux
-raw.drop_channels(['Aux1']) # AUX = microsensor 
+raw.drop_channels(['Aux1', 'Aux2', 'Aux3', 'Aux4'
+                      , 'Aux5', 'Aux6', 'Aux7', 'Aux8']) # AUX1 = microsensor, o.w. nothing
 
 
 #--------------------------------- Look for bad channels ------------------------------------#
-raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6))#, block = True)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/raw_waveforms_%s.png'%participant )
 #--------------------------------- Look for bad channels ------------------------------------#
 
 
 #------------------------------------ Visualize Events --------------------------------------# 
 events = mne.find_events(raw, stim_channel = 'STI 014', output = 'onset')
 mne.viz.plot_events(events, raw.info['sfreq'], raw.first_samp)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/events_%s.png'%participant )
 #------------------------------------ Visualize Events --------------------------------------# 
 
 
@@ -67,6 +70,7 @@ epochs_all.drop_bad(reject = dict(eeg=100e-5), flat = dict(eeg = 100e-6))
 
 # percentage rejected by channel
 epochs_all.plot_drop_log()
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/drop_log_%s.png'%participant )
 #------------------------------------ AR on all channels ------------------------------------# 
 
 
@@ -75,6 +79,8 @@ if participant == "e12":
     raw.info['bads'] = []   # arguably Ch32 and Ch64 based on AR
 elif participant == "e03":
     raw.info['bads'] = ['Ch32', 'Ch1']    # based on continuous raw data and AR (flat)
+elif participant == "e40":
+    raw.info['bads'] = ['Ch32', 'Ch43']   # based on continuous raw data and AR (flat)
 #--------------------------------- Label Bad for each P -------------------------------------#
 
 
@@ -169,7 +175,8 @@ raw.interpolate_bads()
 
 
 #-------------------------------------- See effect ------------------------------------------#
-raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6))#, block = True)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/waveforms_post_interpolation_%s.png'%participant )
 #-------------------------------------- See effect ------------------------------------------#
 
 
@@ -197,6 +204,7 @@ evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
 del raw_ref  # save memory
 
 evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/waveforms_pre_post_rereference_%s.png'%participant )
 
 # # average of mastoid reference
 # raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
@@ -208,7 +216,8 @@ evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'))
 
 
 #---------------------- Show Effect of Reference on Continuous ------------------------------#
-raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), block = True)
+raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6))#, block = True)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/waveforms_post_rereference_by_channel_%s.png'%participant )
 #---------------------- Show Effect of Reference on Continuous ------------------------------#
 
 
@@ -237,6 +246,7 @@ picks = mne.pick_types(
 
 # without filter
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/psd_pre_bandpass_%s.png'%participant )
 
 # apply filter 
 iir_params = dict(order=2, ftype='butter')
@@ -249,12 +259,14 @@ raw.filter(
     , n_jobs = 4
 )
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0))
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/psd_post_bandpass_%s.png'%participant )
 #---------------------------------- Butterworth Filter --------------------------------------#
 
 
 #---------------------------------- Notch Filter --------------------------------------------#
 # without filter
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/psd_pre_notch_%s.png'%participant )
 
 # apply notch
 raw.notch_filter(
@@ -263,6 +275,7 @@ raw.notch_filter(
     , n_jobs = 4
     )
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0))
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_preprocessing/psd_post_notch_%s.png'%participant )
 #---------------------------------- Notch Filter --------------------------------------------#
 
 
@@ -469,7 +482,7 @@ ax[1].set_title('tactile target')
 ax[1].set_ylim(ax[1].get_ylim()[::-1])
 ax[1].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
-plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.png'%participant )
+plt.savefig('/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_averages/grand_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Both ---------------------------------------------#
@@ -498,7 +511,7 @@ df = pd.DataFrame(
         ]
  )
 
-df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/grand_averages_%s.csv'%participant )
+df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_averages/grand_averages_%s.csv'%participant )
 
 
 
@@ -742,7 +755,7 @@ ax[1,3].ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
 f.set_size_inches(18.5, 10.5)
 
-plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.png'%participant )
+plt.savefig( '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_averages/condition_averages_%s.png'%participant )
 
 plt.show()
 #------------------------------------ Plot Together -----------------------------------------#
@@ -805,4 +818,4 @@ df = pd.DataFrame(
         ]
  )
 
-df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/P_averages/condition_averages_%s.csv'%participant )
+df.to_csv( '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis/P_averages/condition_averages_%s.csv'%participant )
