@@ -4,7 +4,7 @@ import os
 filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data"
 
 # filename = input("What is the vmrk file name?\n>>> ")
-participant = "e40"
+participant = "e37"
 filename = "multimodal_ior_%s.vmrk" % participant
 
 os.chdir(filedir)  # change to file's folder

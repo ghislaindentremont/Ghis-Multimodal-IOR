@@ -198,7 +198,7 @@ raw.filter(
 #---------------------------------- Notch Filter --------------------------------------------#
 # apply notch
 raw.notch_filter(
-    np.arange(60,121,60)  # get 60 and 120 Hz
+    60
     , picks=picks
     # , n_jobs = 4
     )

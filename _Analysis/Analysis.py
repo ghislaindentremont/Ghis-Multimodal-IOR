@@ -11,7 +11,7 @@ os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/fo
 ##############################################################################################
 
 # Participant
-participant = "e40"
+participant = "e38"
 
 # for one participant
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
@@ -91,6 +91,11 @@ elif participant == "e03":
     raw.info['bads'] = ['Ch32', 'Ch1']    # based on continuous raw data and AR (flat)
 elif participant == "e40":
     raw.info['bads'] = ['Ch32', 'Ch43']   # based on continuous raw data and AR (flat)
+elif participant == "e39":
+    raw.info['bads'] = ['Ch1', 'Ch32','Ch43']  # based on continous raw data
+elif participant == "e38":
+    raw.info['bads'] = ['Ch9']   # continuous + AR (flat)
+
 #--------------------------------- Label Bad for each P -------------------------------------#
 
 
@@ -258,7 +263,8 @@ picks = mne.pick_types(
 raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
 plt.savefig('%s/P_preprocessing/psd_pre_bandpass_%s.png'%(directory, participant) )
 
-# apply filter 
+# apply filter
+# applies zero-phase bandpass filter (default is 4th order butterworth, but using 2nd order here)
 iir_params = dict(order=2, ftype='butter')
 raw.filter(
     .1
@@ -279,6 +285,7 @@ raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = 
 plt.savefig('%s/P_preprocessing/psd_pre_notch_%s.png'%(directory, participant) )
 
 # apply notch
+# zero phase notch filter
 raw.notch_filter(
     60
     , picks=picks
@@ -479,7 +486,8 @@ grand_avg_tact = evoked_grand_avg_tact.data[0]
 
 
 #------------------------------------ Plot Both ---------------------------------------------#
-X = np.linspace(-200, 500, 701)
+samps = np.shape(grand_avg_vis)[0]
+X = np.linspace(-200, 500, samps)
 
 f, ax = plt.subplots(1,2, sharex = True, sharey = True)
 
@@ -684,7 +692,7 @@ uncued_ipsi_VV = evoked_uncued_ipsi_VV.data[0]
 
 
 #------------------------------------ Plot Together -----------------------------------------#
-X = np.linspace(-200, 500, 701)
+X = np.linspace(-200, 500, samps)
 
 f, ax = plt.subplots(2,4, sharex = True, sharey = True)
 
