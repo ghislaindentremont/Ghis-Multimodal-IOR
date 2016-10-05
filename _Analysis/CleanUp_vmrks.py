@@ -1,12 +1,19 @@
-import fnmatch
 import os
 
-filedir = input("What is the vmrk directory?\n>>> ")
-filename = input("What is the vmrk file name?\n>>> ")
+# filedir = input("What is the vmrk directory?\n>>> ")
+filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data"
+
+# filename = input("What is the vmrk file name?\n>>> ")
+participant = "e40"
+filename = "multimodal_ior_%s.vmrk" % participant
 
 os.chdir(filedir)  # change to file's folder
-newFile = open("clean_" + filename, "w")  # open file in which error-free vmrk info will be put in
-oldFile = open(filename, 'r')
+
+# rename original
+os.rename(filename, "original_vmrks/original_" + filename)
+
+newFile = open(filename, "w")  # open file in which error-free vmrk info will be put in
+oldFile = open("original_vmrks/original_" + filename, 'r')
 done = False
 dataStarted = False
 
@@ -34,7 +41,7 @@ while not done:
                 line = oldFile.readline()
                 number_string = get_number_string(line)
                 while number_string != "1":
-                    if number_string in ["99","98","97"]:
+                    if number_string in ["99","98","97","43","42"]:
                         break
                     else:
                         lines += line
