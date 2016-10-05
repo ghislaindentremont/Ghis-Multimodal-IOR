@@ -105,4 +105,29 @@ e[is.na(e$target_type),]$target_type = "target"
 e = e[e$target_type == "target",]
 e = e[!is.na(e$target_response_rt),]
 e = e[e$target_response_rt >= 100,]
+e$count = TRUE
+
+# count trials per condition 
+trial_per_condition_post = aggregate(count ~ cue_modality + cue_location + target_modality + target_location + id, data = e, FUN = sum)
+# who has fewer than 10 trials in one condition or more?
+too_few = unique(trial_per_condition_post[trial_per_condition_post$count < 10,]$id)
+print(too_few)
+# get rid of them
+f = e
+f = f[!(f$id %in% too_few), ]
+# who's left?
+unique(f$id)
+# how many?
+length(unique(f$id))
+
+# look at IOR by P
+IOR = aggregate(target_response_rt ~ cued + cue_modality + target_modality + id, data = f, FUN = mean)
+
+# IOR 
+# cued - uncued
+IOR_effects = aggregate(target_response_rt ~ cue_modality + target_modality + id, data = IOR, FUN = diff)
+names(IOR_effects)[4] = "IOR"
+
+# group IOR
+IOR_effecs_group = aggregate(IOR ~ cue_modality + target_modality, data = IOR_effects, FUN = mean)
 
