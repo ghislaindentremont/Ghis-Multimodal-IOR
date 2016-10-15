@@ -4,13 +4,16 @@ library(gridExtra)
 library(plyr)
 library(ggplot2) 
 library(stringr)
+library(ez)
+library(nlme)
 
 # old or new data
 NEW = TRUE
+BOTH = TRUE
 
-if (NEW) {
+if (NEW | BOTH) {
   # directory
-  setwd("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forR/new_data")
+  setwd("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/TXT/new_data")
   
   # old data 
   a = ldply(
@@ -27,11 +30,16 @@ if (NEW) {
   )
   
   # copy
-  d = a
+  d2 = a
   
-} else{
+  # get rid of participants with no EEG
+  d2 = d2[d2$id != "e37" & d2$id != "e38",]
+  
+}
+
+if (!NEW | BOTH){
   # directory
-  setwd("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forR/BeforeSummer_ForAnalysis")
+  setwd("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/TXT/BeforeSummer_ForAnalysis")
   
   # old data 
   a = ldply(
@@ -42,6 +50,7 @@ if (NEW) {
       read.table(
         x
         , header = T
+        , stringsAsFactors = F
       )
     }
   )
@@ -70,21 +79,30 @@ if (NEW) {
   )  
   
   # make another copy
-  d = b 
+  d1 = b 
   
   # factor this 
-  d$id = as.factor(d$id)
+  d1$id = as.factor(d1$id)
   
   # define recovered data files
-  d$recovered = FALSE
-  d[d$id == 'e03' | d$id == 'e04' | d$id == 'e05' |d$id == 'e06' | d$id == 'e07',]$recovered = TRUE
+  d1$recovered = FALSE
+  d1[d1$id == 'e03' | d1$id == 'e04' | d1$id == 'e05' |d1$id == 'e06' | d1$id == 'e07',]$recovered = TRUE
   
-  # add some columns 
-  d[d$recovered,]$target_response_rt = d[d$recovered,]$response_time - d[d$recovered,]$target_on_time 
+  # add some columns
+  d1[d1$recovered,]$target_response_rt = d1[d1$recovered,]$response_time - d1[d1$recovered,]$target_on_time 
   
   # make NA factor 
-  d$block = as.factor(ifelse(is.na(d$block), "NA", d$block))
+  d1$block = as.factor(ifelse(is.na(d1$block), "NA", d1$block))
   
+}
+
+# join new and old data if applicable otherwise create copy of single df
+if (BOTH) {
+  d = rbind.fill(d1, d2)
+} else if (NEW) {
+  d = d2
+} else {
+  d = d1
 }
 
 
@@ -106,32 +124,10 @@ print(summarize_d)
 hist(d$target_response_rt, breaks = 50)
 abline(v = 100)
 
-
-# proportions of exclusions
-length_id = aggregate(critical_blink ~ id, data = d, FUN = length)
-
-blink_excl = aggregate(critical_blink ~ id,data = d, FUN = sum)
-blink_excl$prop = blink_excl$critical_blink / length_id$critical_blink
-print("Proportion of blinks: ")
-print(blink_excl)
-mean(blink_excl$prop)
-
-saccade_excl = aggregate(critical_saccade ~ id,data = d, FUN = sum)
-saccade_excl$prop = saccade_excl$critical_saccade / length_id$critical_blink
-print("Proportion of saccades: ")
-print(saccade_excl)
-mean(saccade_excl$prop)
-
-# no recovered data sets here
-pre_target_response_excl = aggregate(pre_target_response ~ id,data = d, FUN = sum)
-pre_target_response_excl$prop = pre_target_response_excl$pre_target_response / length_id$critical_blink
-print("Proportion of pre target responses: ")
-print(pre_target_response_excl)
-mean(pre_target_response_excl$prop)
-
-if (!NEW){
-  e[is.na(e$pre_target_response),]$pre_target_response = FALSE
-  e[is.na(e$target_type),]$target_type = "target" 
+if (!NEW | BOTH){
+  d[is.na(d$pre_target_response),]$pre_target_response = FALSE
+  d[is.na(d$target_type),]$target_type = "target" 
+  d[is.na(d$recovered),]$recovered = FALSE
 }
 
 # exclusions
@@ -153,9 +149,37 @@ print(too_few)
 f = e
 f = f[!(f$id %in% too_few), ]
 # who's left?
-unique(f$id)
+P_list = unique(f$id)
+print(P_list)
+save(P_list, file = "../P_list.Rdata")
 # how many?
-length(unique(f$id))
+length(P_list)
+
+# create data frame for people that actually end up being used in analysis
+d_left = d[d$id %in% P_list,]
+
+# proportions of exclusions
+length_id = aggregate(critical_blink ~ id, data = d_left, FUN = length)
+length_id2 = aggregate(critical_blink ~ id, data = d_left[!d_left$recovered,], FUN = length)
+
+blink_excl = aggregate(critical_blink ~ id,data = d_left, FUN = sum)
+blink_excl$prop = blink_excl$critical_blink / length_id$critical_blink
+print("Proportion of blinks: ")
+print(blink_excl)
+mean(blink_excl$prop)
+
+saccade_excl = aggregate(critical_saccade ~ id,data = d_left, FUN = sum)
+saccade_excl$prop = saccade_excl$critical_saccade / length_id$critical_blink
+print("Proportion of saccades: ")
+print(saccade_excl)
+mean(saccade_excl$prop)
+
+# no recovered data sets here
+pre_target_response_excl = aggregate(pre_target_response ~ id,data = d_left[!d_left$recovered,], FUN = sum)
+pre_target_response_excl$prop = pre_target_response_excl$pre_target_response / length_id2$critical_blink
+print("Proportion of pre target responses: ")
+print(pre_target_response_excl)
+mean(pre_target_response_excl$prop)
 
 
 
@@ -172,4 +196,118 @@ print(IOR_effects)
 # group IOR
 IOR_effecs_group = aggregate(IOR ~ cue_modality + target_modality, data = IOR_effects, FUN = mean)
 print(IOR_effecs_group)
+
+
+
+#### Analysis ####
+# ezA = ezANOVA(
+#   IOR
+#   , target_response_rt
+#   , id
+#   , .(cued, cue_modality, target_modality)
+#   , return_aov = T
+# )
+# print(ezA)
+
+# ezP = ezPlot(
+#   IOR
+#   , target_response_rt
+#   , id
+#   , .(cued, cue_modality, target_modality)
+#   , split = .(cued)
+#   , col = .(target_modality)
+#   # , diff = factor(cued)
+#   , x = .(cue_modality)
+# )
+# print(ezP)
+
+# ezS = ezStats(
+#   IOR
+#   , target_response_rt
+#   , id
+#   , .(cued, cue_modality, target_modality)
+#   # , diff = cued
+# )
+# print(ezS)
+
+
+m = aov(target_response_rt ~
+          cue_modality*target_modality*cued 
+        + Error(id/(cue_modality*target_modality*cued))
+        , data = IOR)
+m_summary = summary(m)
+
+# # Normality Assumption - NOT SURE THIS IS RIGHT
+# residz = NULL
+# for (i in 1:7) {
+#   m_stuff = proj(m)
+#   temp = m_stuff[[2+i]][,"Residuals"]
+#   temp = temp[seq(1,184,8)]
+#   residz = c(residz, temp)
+# }
+# qqnorm(residz)
+# qqline(residz)
+
+# # residual standard error (from ez table) is given by sqrt of MSE of of cueing of full model
+# res_st_err = sqrt(318)
+
+# equaltion: LSD = t(alpha/2, N-a) * sqrt(2*MSE/n), when n1=n2
+alpha_over_2 = 0.025
+
+# GET MSE from one-way ANOVA
+IOR_cueing = aggregate(target_response_rt ~ cued + id, data = IOR, FUN = mean) 
+# model
+m2 = aov(target_response_rt ~ cued
+         + Error(id/cued)
+         , data = IOR_cueing)
+m2_summary = summary(m2)
+
+MSE = m2_summary$`Error: id:cued`[1][[1]][[3]][2]
+df = m2_summary$`Error: id:cued`[1][[1]][[1]][2]
+n = df + 1
+# double check 
+n == length(unique(IOR$id))
+
+# get critical t value and LSD
+t_crit = qt(alpha_over_2, df)
+LSD = abs(t_crit * sqrt(2*MSE/n))
+
+# now identify your IOR effects 
+IOR_effects = aggregate(target_response_rt ~ cue_modality + target_modality + id ,data = IOR, FUN = diff)
+IOR_CIs = aggregate(target_response_rt ~ cue_modality + target_modality,data = IOR_effects, FUN = mean)
+# change name
+names(IOR_CIs)[3] = "M"
+
+# plot 3 way 
+# add ci to data frame
+IOR_CIs$CI = LSD
+
+# plot 3 way interaction 
+IOR_CIs$cue_modality = as.factor(IOR_CIs$cue_modality)
+levels(IOR_CIs$cue_modality) = c("Tactile Cue", "Visual Cue")
+IOR_CIs$target_modality = as.factor(IOR_CIs$target_modality)
+levels(IOR_CIs$target_modality) = c("Tactile Target", "Visual Target")
+
+# generate plot
+gg = ggplot(IOR_CIs, aes(x = cue_modality
+                                 ,y = M
+                                 , group = target_modality
+                                 , fill = target_modality
+                                 , color = target_modality
+)
+)+
+  geom_line(size = 1)+
+  geom_errorbar(aes(ymin = M - CI, ymax = M + CI)
+                , width = 0.1
+                , size = 1
+  )+
+  labs(x = "Cue Modality",y = "IOR Effect: Cued - Uncued (ms)", color = "Target Modality")+
+  geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
+  theme_gray(base_size = 30)+
+  theme(panel.grid.major = element_line(size = 1.5)
+   ,panel.grid.minor = element_line(size = 1)) 
+
+print(gg)
+
+
 

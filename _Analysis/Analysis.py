@@ -4,14 +4,16 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 
+# os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis")
 os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data")
+
 
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
 
 # Participant
-participant = "e38"
+participant = "e41"
 
 # for one participant
 raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
@@ -27,7 +29,8 @@ if not os.path.exists('%s/P_AR'%directory):
     os.makedirs('%s/P_AR'%directory)
 
 # remove Aux
-raw.drop_channels(['Aux1', 'Aux2', 'Aux3', 'Aux4'
+raw.drop_channels(['Aux1'
+                      , 'Aux2', 'Aux3', 'Aux4'
                       , 'Aux5', 'Aux6', 'Aux7', 'Aux8']) # AUX1 = microsensor, o.w. nothing
 
 
@@ -86,7 +89,9 @@ plt.savefig('%s/P_preprocessing/drop_log_%s.png'%(directory, participant) )
 
 #--------------------------------- Label Bad for each P -------------------------------------#
 if participant == "e12":
-    raw.info['bads'] = []   # arguably Ch32 and Ch64 based on AR
+    raw.info['bads'] = ['Ch32', 'Ch64']   # arguably Ch32 and Ch64 based on AR
+elif participant == "e02":
+    raw.info['bads'] = []
 elif participant == "e03":
     raw.info['bads'] = ['Ch32', 'Ch1']    # based on continuous raw data and AR (flat)
 elif participant == "e40":
@@ -95,7 +100,30 @@ elif participant == "e39":
     raw.info['bads'] = ['Ch1', 'Ch32','Ch43']  # based on continous raw data
 elif participant == "e38":
     raw.info['bads'] = ['Ch9']   # continuous + AR (flat)
-
+elif participant == "e03":
+    raw.info['bads'] = ['Ch1', 'Ch32']   # continous + AR (flat/ish)
+elif participant == "e04":
+    raw.info['bads'] = ['Ch32']    # AR (flatish)
+elif participant == "e05":
+    raw.info['bads'] = ['Ch32']   # continous + AR (flat)
+elif participant == "e06":
+    raw.info['bads'] = ['Ch32', 'Ch63']    # continous + AR (flat)
+elif participant == "p06":
+    raw.info['bads'] = ['Ch1']   # continous + AR (flat)
+elif participant == "e16":
+    raw.info['bads'] = ['Ch1', 'Ch32', 'Ch33', 'Ch34', 'Ch63', 'Ch64']
+elif participant == "e17":
+    raw.info['bads'] = ['Ch32']
+elif participant == "e20":
+    raw.info['bads'] = []
+elif participant == "e22":
+    raw.info['bads'] = []  # although AR ~100 % for many channels, will attribute to overall noise around 500 s mark since otherwise the channels look good
+elif participant == "e27":
+    raw.info['bads'] = ['Ch1', 'Ch33']
+elif participant == "e42":
+    raw.info['bads'] = ['Ch43', 'Ch1', 'Ch32', 'Ch35']
+elif participant == "e41":
+    raw.info['bads'] = ['Ch43', 'Ch1', 'Ch32', 'Ch64']
 #--------------------------------- Label Bad for each P -------------------------------------#
 
 
