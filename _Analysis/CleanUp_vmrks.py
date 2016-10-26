@@ -1,10 +1,11 @@
 import os
 
 # filedir = input("What is the vmrk directory?\n>>> ")
-filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data"
+# filedir = "/Volumes/Seagate Backup Plus Drive/Experiments/m'ultimodal_ior/_Data/forMNE/new_data"
+filedir = "/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis_EEG"
 
 # filename = input("What is the vmrk file name?\n>>> ")
-participant = "e41"
+participant = "e45"
 filename = "multimodal_ior_%s.vmrk" % participant
 
 os.chdir(filedir)  # change to file's folder
