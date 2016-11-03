@@ -5,20 +5,19 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import fnmatch
 
-# os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/BeforeSummer_ForAnalysis")
-# os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE/new_data")
-# filedir = "/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis_EEG"
-os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE")
+# os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE")
+os.chdir("/Users/ghislaindentremont/Downloads/e49")
 
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
 
 # Participant
-# 'e02', 'e12', 'e16', 'e17',
-participants = ['e20', 'e22', 'e27', 'e03', 'e04', 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e45']
+# participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04', 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47', 'e48', 'e49']
 
-dont_plot = True
+participant = 'e49'
+
+dont_plot = False
 
 for participant in participants:
 
@@ -31,7 +30,8 @@ for participant in participants:
     # raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
     raw = mne.io.read_raw_brainvision(file, preload=True)
 
-    directory = '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis2/%s'%participant
+    directory = '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis3/%s'%participant
+    # directory = '/Users/ghislaindentremont/Downloads/e48/P_analysis2/%s' % participant
     if not os.path.exists(directory):
         os.makedirs(directory)
     if not os.path.exists('%s/P_preprocessing'%directory):
@@ -145,6 +145,16 @@ for participant in participants:
         raw.info['bads'] = ['Ch43']
     elif participant == "e45":
         raw.info['bads'] = []
+    elif participant == "e46":
+        raw.info['bads'] = []
+    elif participant == "e47":
+        raw.info['bads'] = ['Ch41']
+    elif participant == "e48":
+        raw.info['bads'] = ['Ch41']
+    elif participant == "e44":
+        raw.info['bads'] = ['Ch41']
+    elif participant == "e49":
+        raw.info['bads'] = []
     #--------------------------------- Label Bad for each P -------------------------------------#
 
 
@@ -246,56 +256,6 @@ for participant in participants:
 
 
 
-    ##############################################################################################
-    ####                                Re-Reference                                          ####
-    ##############################################################################################
-
-    epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
-
-
-    #------------------------- Show Effect of Reference on Evoked -------------------------------#
-    fig, ax = plt.subplots(2,1, sharex = True)
-
-    # no reference
-    raw_no_ref, _ = mne.io.set_eeg_reference(raw, [])
-    evoked_no_ref = mne.Epochs(raw_no_ref, **epochs_params_test).average()
-    del raw_no_ref  # save memory
-
-    evoked_no_ref.plot(axes = ax[0], titles=dict(eeg='EEG Original reference'), show=False)
-
-    # Average reference
-    raw_ref, _ = mne.io.set_eeg_reference(raw)
-    evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
-    del raw_ref  # save memory
-
-    evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'), show=False)
-    plt.savefig('%s/P_preprocessing/waveforms_pre_post_rereference_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-
-    # # average of mastoid reference
-    # raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
-    # evoked_mast_ref = mne.Epochs(raw_mast_ref, **epochs_params_test).average()
-    # del raw_mast_ref  # save memory
-    #
-    # evoked_mast_ref.plot(axes = ax[1], titles=dict(eeg='EEG Mastoid reference'))
-    #------------------------- Show Effect of Reference on Evoked -------------------------------#
-
-
-    #---------------------- Show Effect of Reference on Continuous ------------------------------#
-    raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), show = False)
-    plt.savefig('%s/P_preprocessing/waveforms_post_rereference_by_channel_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-    #---------------------- Show Effect of Reference on Continuous ------------------------------#
-
-
-    #------------------------ Apply and Rid Reference Projector ---------------------------------#
-    raw.apply_proj()
-    raw.info['projs'] = []
-    #------------------------ Apply and Rid Reference Projector ---------------------------------#
-
-
 
     ##############################################################################################
     ####                                    Filters                                           ####
@@ -356,6 +316,59 @@ for participant in participants:
     if dont_plot:
         plt.close()
     #---------------------------------- Notch Filter --------------------------------------------#
+
+    
+
+
+    ##############################################################################################
+    ####                                Re-Reference                                          ####
+    ##############################################################################################
+
+    epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
+
+
+    #------------------------- Show Effect of Reference on Evoked -------------------------------#
+    fig, ax = plt.subplots(2,1, sharex = True)
+
+    # no reference
+    raw_no_ref, _ = mne.io.set_eeg_reference(raw, [])
+    evoked_no_ref = mne.Epochs(raw_no_ref, **epochs_params_test).average()
+    del raw_no_ref  # save memory
+
+    evoked_no_ref.plot(axes = ax[0], titles=dict(eeg='EEG Original reference'), show=False)
+
+    # Average reference
+    raw_ref, _ = mne.io.set_eeg_reference(raw)
+    evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
+    del raw_ref  # save memory
+
+    evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'), show=False)
+    plt.savefig('%s/P_preprocessing/waveforms_pre_post_rereference_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
+
+    # # average of mastoid reference
+    # raw_mast_ref, _ = mne.io.set_eeg_reference(raw, ['TP9', 'TP10'])
+    # evoked_mast_ref = mne.Epochs(raw_mast_ref, **epochs_params_test).average()
+    # del raw_mast_ref  # save memory
+    #
+    # evoked_mast_ref.plot(axes = ax[1], titles=dict(eeg='EEG Mastoid reference'))
+    #------------------------- Show Effect of Reference on Evoked -------------------------------#
+
+
+    #---------------------- Show Effect of Reference on Continuous ------------------------------#
+    raw.plot(n_channels = 64, scalings = dict(eeg = 100e-6), show = False)
+    plt.savefig('%s/P_preprocessing/waveforms_post_rereference_by_channel_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
+    #---------------------- Show Effect of Reference on Continuous ------------------------------#
+
+
+    #------------------------ Apply and Rid Reference Projector ---------------------------------#
+    raw.apply_proj()
+    raw.info['projs'] = []
+    #------------------------ Apply and Rid Reference Projector ---------------------------------#
+
 
 
 

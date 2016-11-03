@@ -32,8 +32,8 @@ if (NEW | BOTH) {
   # copy
   d2 = a
   
-  # get rid of participants with no EEG
-  d2 = d2[d2$id != "e37" & d2$id != "e38" & d2$id != "e44",]
+  # get rid of participants with no EEG or other exclusions
+  d2 = d2[d2$id != "e37" & d2$id != "e38" & d2$id != "e43",]
   
 }
 
@@ -195,6 +195,8 @@ mean(pre_target_response_excl$prop)
 #### IOR ####
 # look at IOR by P
 IOR = aggregate(target_response_rt ~ cued + cue_modality + target_modality + id, data = f, FUN = mean)
+IOR_summ = aggregate(target_response_rt ~ cued + cue_modality + target_modality, data = IOR, FUN = mean)
+IOR_summ$SD = aggregate(target_response_rt ~ cued + cue_modality + target_modality, data = IOR, FUN = sd)$target_response_rt
 
 # IOR 
 # cued - uncued
@@ -245,42 +247,21 @@ m = aov(target_response_rt ~
         , data = IOR)
 m_summary = summary(m)
 
-# # Normality Assumption - NOT SURE THIS IS RIGHT
-# residz = NULL
-# for (i in 1:7) {
-#   m_stuff = proj(m)
-#   temp = m_stuff[[2+i]][,"Residuals"]
-#   temp = temp[seq(1,184,8)]
-#   residz = c(residz, temp)
-# }
-# qqnorm(residz)
-# qqline(residz)
-
-
-#--------------------------------- compare with eZ ------------------------------------#
-# recreate FLSD by taking higest order interaction
-MSE2 = m_summary$`Error: id:cue_modality:target_modality:cued`[1][[1]][[3]][2]
-df2 = m_summary$`Error: id:cue_modality:target_modality:cued`[1][[1]][[1]][2]
-n2 = df2 + 1
-# double check 
-n2 == length(unique(IOR$id))
-
-# equaltion: LSD = t(alpha/2, N-a) * sqrt(2*MSE/n), when n1=n2
-alpha_over_2 = 0.025
-
-# get critical t value and LSD
-t_crit2 = qt(1-alpha_over_2, df2)
-FLSD = abs(t_crit2 * sqrt(2*MSE2/n2))
-# check
-abs(unique(ezS$FLSD) - FLSD) < 0.0001
-
-# then, confidence interval for each mean (not what I want - I want to use FLSD as CI for cueing effects):
-ME2 = FLSD / sqrt(2)
-#--------------------------------- compare with eZ ------------------------------------#
-
+# Normality Assumption - NOT SURE THIS IS RIGHT
+residz = NULL
+for (i in 1:7) {
+  m_stuff = proj(m)
+  temp = m_stuff[[2+i]][,"Residuals"]
+  temp = temp[seq(1,184,8)]
+  residz = c(residz, temp)
+}
+qqnorm(residz)
+qqline(residz)
 
 
 #--------------------------------- SEM (L & M) ----------------------------------------#
+alpha_over_2 = 0.025
+
 IOR$mix_factor = paste(IOR$cued, IOR$cue_modality, IOR$target_modality)
 # model
 m2 = aov(target_response_rt ~ mix_factor
@@ -290,7 +271,7 @@ m2_summary = summary(m2)
 
 MSE = m2_summary$`Error: id:mix_factor`[1][[1]][[3]][2]
 df = m2_summary$`Error: id:mix_factor`[1][[1]][[1]][2]
-n = n2
+n = length(unique(IOR$id))
 
 SEM_LM = sqrt(MSE/n)
 
@@ -298,9 +279,6 @@ SEM_LM = sqrt(MSE/n)
 t_crit = qt(1-alpha_over_2, df)
 ME_LM = abs(t_crit * SEM_LM)
 LSD = sqrt(2) * ME_LM
-
-# would not expect to be the same (FLSD taken from highest interaction)
-abs(FLSD - LSD) < 0.0001  # is not
 #--------------------------------- SEM (L & M) ----------------------------------------#
 
 
@@ -313,6 +291,7 @@ alpha = 0.05
 SEs = NULL
 MEs = NULL
 ids = NULL
+MEANs = NULL
 for (i in 1:ncol(pairings)) {
   pair = pairings[,i]
   
@@ -334,6 +313,7 @@ for (i in 1:ncol(pairings)) {
   
   ME = T_CRIT * SE
   
+  MEANs = c(MEANs, MEAN)
   MEs = c(MEs, ME)
   SEs = c(SEs, SE)
   ids = c(ids, paste(level1, level2))
@@ -349,43 +329,29 @@ ezEpsi = ezANOVA(data = IOR
         , within = mix_factor)
 ezEpsi$`Sphericity Corrections`$GGe
 
-pairdiffs = data.frame(ids, MEs, SEs)
-pSEs = pairdiffs$SEs
+pairdiffs = data.frame(ids, MEs, SEs, MEANs)
+gg2 = ggplot(pairdiffs, aes(x = ids, y = MEANs*1e6))+
+  geom_bar(stat="identity")+
+  geom_errorbar(aes(ymin = (MEANs - SEs)*1e6, ymax = (MEANs + SEs)*1e6)
+                , width = 0.1
+                , size = 1
+  )+
+  theme_gray(base_size = 30)+
+  theme(panel.grid.major = element_line(size = 1.5)
+        ,panel.grid.minor = element_line(size = 1)) 
+print(gg2)
 
+pSEs = pairdiffs$SEs
 SEM_LM_estimate = sqrt( mean((pSEs/sqrt(2))^2) )
 abs(SEM_LM - SEM_LM_estimate) < 0.0001
 #--------------------------------- Circularity ----------------------------------------#
 
- 
-# #--------------------------------- SEM (2 x 2) ----------------------------------------#
-# # get individual confidence intervals
-IOR_cueing = aggregate(target_response_rt ~ id + cue_modality + target_modality, data = IOR, FUN = diff) 
-IOR_cueing$mix_factor = paste(IOR_cueing$cue_modality, IOR_cueing$target_modality)
-# 
-# # model
-# m3 = aov(target_response_rt ~ mix_factor
-#          + Error(id/mix_factor)
-#          , data = IOR_cueing)
-# m3_summary = summary(m3)
-# 
-# MSE3 = m3_summary$`Error: id:mix_factor`[1][[1]][[3]][2]
-# df3 = m3_summary$`Error: id:mix_factor`[1][[1]][[1]][2]
-# n3 = 15
-# 
-# SEM_LM3 = sqrt(MSE3/n3)
-# 
-# # get critical t value and LSD
-# t_crit3 = qt(1-alpha_over_2, df3)
-# ME_LM3 = abs(t_crit3 * SEM_LM3)
-# abs(FLSD - ME_LM3) < 0.0001  # NO, but close...
-# # would not expect to be the same
-# 
-# LSD3 = sqrt(2) * ME_LM3 
-# #--------------------------------- SEM (2 x 2) ----------------------------------------#
-
-
 
 #--------------------------------- condition-wise--------------------------------------#
+# get individual confidence intervals
+IOR_cueing = aggregate(target_response_rt ~ id + cue_modality + target_modality, data = IOR, FUN = diff) 
+IOR_cueing$mix_factor = paste(IOR_cueing$cue_modality, IOR_cueing$target_modality)
+
 CW = ddply(
   .data = IOR_cueing
   , .variables = .(mix_factor, cue_modality, target_modality)
@@ -408,26 +374,35 @@ CW = ddply(
 
 CW$LSD = LSD
 
-# plot 3 way interaction 
-CW$cue_modality = as.factor(CW$cue_modality)
-levels(CW$cue_modality) = c("Tactile Cue", "Visual Cue")
-CW$target_modality = as.factor(CW$target_modality)
-levels(CW$target_modality) = c("Tactile Target", "Visual Target")
+# # plot 3 way interaction 
+# NOTE: These are not necessarily the error bars I would want for interaction
+# CW$cue_modality = as.factor(CW$cue_modality)
+# levels(CW$cue_modality) = c("Tactile Cue", "Visual Cue")
+# CW$target_modality = as.factor(CW$target_modality)
+# levels(CW$target_modality) = c("Tactile Target", "Visual Target")
+
+# focus on IOR effects
+CW$mix_factor = as.factor(CW$mix_factor)
+levels(CW$mix_factor) = c("Tactile\nTactile", "Tactile\nVisual", "Visual\nTactile", "Visual\nVisual")
 
 # generate plot
-gg = ggplot(CW, aes(x = cue_modality
+gg = ggplot(CW, 
+            aes(x = mix_factor
+              # x = cue_modality
                          ,y = M
-                         , group = target_modality
-                         , fill = target_modality
-                         , color = target_modality
-)
+#                          , group = target_modality
+#                          , fill = target_modality
+#                          , color = target_modality
+            )
 )+
-  geom_line(size = 1)+
+  # geom_line(size = 1)+
   geom_errorbar(aes(ymin = M - ME, ymax = M + ME)
                 , width = 0.1
                 , size = 1
   )+
-  labs(x = "Cue Modality",y = "IOR Effect: Cued - Uncued (ms)", color = "Target Modality")+
+  geom_point(size = 2)+
+  # labs(x = "Cue Modality",y = "IOR Effect: Cued - Uncued (ms)", color = "Target Modality")+
+  labs(x = "Cue/Target Pairing",y = "IOR Effect: Cued - Uncued (ms)")+
   geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
   theme_gray(base_size = 30)+
   theme(panel.grid.major = element_line(size = 1.5)
@@ -435,5 +410,86 @@ gg = ggplot(CW, aes(x = cue_modality
 
 print(gg)
 #--------------------------------- condition-wise -------------------------------------#
+
+
+#------------------------------------- pooled -----------------------------------------#
+SEM_LM_cueing = sqrt( mean((CW$SE)^2) ) # don't devide by square 2 - because already differences
+t_crit_cueing = qt(1-alpha_over_2, n-1)
+ME_cueing = t_crit_cueing * SEM_LM_cueing
+
+CW$ME_cueing = ME_cueing
+
+# generate plot
+gg = ggplot(CW, 
+            aes(x = mix_factor
+                ,y = M
+            )
+)+
+  geom_errorbar(aes(ymin = M - ME_cueing, ymax = M + ME_cueing)
+                , width = 0.1
+                , size = 1
+  )+
+  geom_point(size = 2)+
+  labs(x = "Cue/Target Pairing",y = "IOR Effect: Cued - Uncued (ms)")+
+  geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
+  theme_gray(base_size = 30)+
+  theme(panel.grid.major = element_line(size = 1.5)
+        ,panel.grid.minor = element_line(size = 1)) 
+
+print(gg)
+#------------------------------------- pooled -----------------------------------------#
+
+
+# NOTE: why is this not the sameas taking the MSE from interaction term of full ANOVA?
+# is it meaningful that it is roughly a thrid of it? 
+#--------------------------------- interaction ----------------------------------------#
+IOR_same = IOR_cueing
+IOR_same$cue_modality = ifelse(IOR_cueing$cue_modality == IOR_cueing$target_modality, TRUE, FALSE)
+
+IOR_int_id2 = aggregate(target_response_rt ~ target_modality + cue_modality + id, data = IOR_same, FUN =mean)
+# same modality minus different modality
+IOR_int_id = aggregate(target_response_rt ~ target_modality + id, data = IOR_int_id2, FUN =diff)
+
+# model
+m3 = aov(target_response_rt ~ target_modality
+         + Error(id/target_modality)
+         , data = IOR_int_id)
+m3_summary = summary(m3)
+
+MSE3 = m3_summary$`Error: id:target_modality`[1][[1]][[3]][2]
+df3 = m3_summary$`Error: id:target_modality`[1][[1]][[1]][2]
+
+SEM_LM3 = sqrt(MSE3/n)
+t_crit3 = qt(1-alpha_over_2, n-1)
+ME3 = t_crit3 * SEM_LM3
+
+IOR_int = aggregate(target_response_rt ~ target_modality, data = IOR_int_id, FUN =mean)
+names(IOR_int)[2] = "M"
+IOR_int$ME3 = ME3
+
+IOR_int$target_modality = as.factor(IOR_int$target_modality)
+levels(IOR_int$target_modality) = c("Tactile", "Visual")
+
+# generate plot
+gg = ggplot(IOR_int, 
+            aes(x = target_modality
+                ,y = M
+            )
+)+
+  geom_errorbar(aes(ymin = M - ME3, ymax = M + ME3)
+                , width = 0.1
+                , size = 1
+  )+
+  geom_point(size = 2)+
+  labs(x = "Target Modality",y = "Same Modality IOR - Different Modality IOR (ms)")+
+  geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
+  theme_gray(base_size = 30)+
+  theme(panel.grid.major = element_line(size = 1.5)
+        ,panel.grid.minor = element_line(size = 1)) 
+
+print(gg)
+
+# MSE_int = m_summary$`Error: id:cue_modality:target_modality:cued`[1][[1]][[3]][2]
+#---------------------------------- interaction ----------------------------------------#
 
 

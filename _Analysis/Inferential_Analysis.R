@@ -125,7 +125,7 @@ plot_grands = function(dat, vline1, vline2, vline3, vline4) {
     geom_vline(xintercept = vline2, color = "red", size = 1)+
     geom_vline(xintercept = vline3, color = "red", size = 1)+
     geom_vline(xintercept = vline4, color = "red", size = 1)+
-    scale_x_continuous("Time (ms)")+
+    scale_x_continuous("Time (ms)", limits = c(-100, 400))+
     scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
     theme_gray(base_size = 30)+
     theme(panel.grid.major = element_line(size = 1.5)
@@ -136,12 +136,20 @@ plot_grands = function(dat, vline1, vline2, vline3, vline4) {
 
 # tactile
 tactile_only = b2_agg[b2_agg$target_modality == 'Tactile Target\n(C3/4)',]
-plot_grands(tactile_only, 25, 60, 60, 120)
+Plo = 25
+Phi = 60
+Nlo = 60
+Nhi = 120
+plot_grands(tactile_only, Plo, Phi, Nlo, Nhi)
 
 
 # visual
 visual_only = b2_agg[b2_agg$target_modality == 'Visual Target\n(PO7/8)',]
-plot_grands(visual_only, 90, 175, 175, 205)
+P1lo = 70
+P1hi = 170
+N1lo = 170
+N1hi = 210
+plot_grands(visual_only,P1lo, P1hi, N1lo, N1hi)
 
 
 
@@ -230,7 +238,7 @@ gg = ggplot(
   , aes(x = time, y = value*1e6, group = cueing, color = cueing)
 ) +
   geom_line(size = 1) +
-  facet_grid(cue_modality ~ target_modality + laterality)+
+  facet_grid(laterality ~ target_modality + cue_modality)+
   geom_vline(
     xintercept =  0
     , linetype = 2
@@ -238,7 +246,7 @@ gg = ggplot(
   geom_hline(
     yintercept = 0
   )+
-  scale_x_continuous("Time (ms)")+
+  scale_x_continuous("Time (ms)", limits = c(-100, 400))+
   scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
   labs(color = "Cueing")+
   theme_gray(base_size = 30)+
@@ -335,126 +343,249 @@ print(gg)
 
 
 
-# ##################################################################
-# ####                     Analysis                             ####
-# ##################################################################
-# 
-# do_aov = function(component, target_modality, lower_bound, upper_bound) {
-#   # P45
-#   eeg_comp = a2[a2$target_modality == target_modality
-#                           & a2$time >= lower_bound
-#                           & a2$time <= upper_bound, ]
-#   
-#   # get average voltage in window for each condition (4) x cueing (2) x participant (n)
-#   eeg_comp_agg = aggregate(value ~ cue_modality + laterality + cueing + id, data = eeg_comp, FUN = mean)
-#   
-#   # get means 
-#   eeg_comp_agg_means = aggregate(value ~ cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = mean)
-#   
-#   # get sds
-#   eeg_comp_agg_sds = aggregate(value ~ cueing + cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = sd)
-#   
-#   # data frame of summary stats 
-#   eeg_comp_agg_sum = cbind(eeg_comp_agg_means, eeg_comp_agg_sds$value)
-#   names(eeg_comp_agg_sum)[4:5] = c("M", "SD")
-#   
-#   
-#   # Run ANOVA
-#   m <- aov(value ~
-#               cue_modality*laterality*cueing
-#             + Error(id/(cue_modality*laterality*cueing))
-#             , data = eeg_comp_agg)
-#   print(summary(m))
-#   
-# #   # ONLY TEST NORMALITY OF RESIDUALS (CANNOT TEST SPHERICITY WITH TWO LEVELS)
-# #   residz = NULL
-# #   for (i in 1:7) {
-# #     m_stuff = proj(m)
-# #     temp = m_stuff[[2+i]][,"Residuals"]
-# #     temp = temp[seq(1,184,8)]
-# #     residz = c(residz, temp)
-# #   }
-# #   
-# #   qqnorm(residz)
-# #   qqline(residz)
-#   
-#   
-#   # let's generate CIs
-#   # equaltion: LSD = t(alpha/2, N-a) * sqrt(2*MSE/n), when n1=n2
-#   alpha_over_2 = 0.025
-#   
-#   # GET MSE from one-way ANOVA
-#   EEG_cueing = aggregate(value ~ cueing + id, data = eeg_comp_agg, FUN = mean) 
-#   # model
-#   m2 = aov(value ~ cueing
-#            + Error(id/cueing)
-#            , data = EEG_cueing)
-#   m2_summary = summary(m2)
-#   
-#   MSE = m2_summary$`Error: id:cueing`[1][[1]][[3]][2]
-#   df = m2_summary$`Error: id:cueing`[1][[1]][[1]][2]
-#   n = df + 1
-#   # double check 
-#   n == length(unique(eeg_comp_agg$id))
-#   
-#   # get critical t value and LSD
-#   t_crit = qt(alpha_over_2, df)
-#   LSD = abs(t_crit * sqrt(2*MSE/n))
-#   
-#   # now identify your IOR effects 
-#   EEG_effects = aggregate(value ~ cue_modality + laterality + id ,data = eeg_comp_agg, FUN = diff)
-#   EEG_CIs = aggregate(value ~ cue_modality + laterality, data = EEG_effects, FUN = mean)
-#   # change name
-#   names(EEG_CIs)[3] = "M"
-#   
-#   # plot 3 way 
-#   # add ci to data frame
-#   EEG_CIs$CI = LSD
-#   
-#   # plot 3 way interaction 
-#   EEG_CIs$cue_modality = as.factor(EEG_CIs$cue_modality)
-#   levels(EEG_CIs$cue_modality) = c("Tactile Cue", "Visual Cue")
-#   EEG_CIs$laterality = as.factor(EEG_CIs$laterality)
-#   levels(EEG_CIs$laterality) = c("Contralateral", "Ipsilateral")
-#   
-#   # plot!
-#   gg = ggplot(EEG_CIs, aes(x = cue_modality
-#                            ,y = M*1e6  # get micro volts 
-#                            , group = laterality
-#                            , fill = laterality
-#                            , color = laterality
-#   )
-#   )+
-#     geom_line(size = 1)+
-#     geom_errorbar(aes(ymin = (M - CI)*1e6, ymax = (M + CI)*1e6)
-#                   , width = 0.1
-#                   , size = 1
-#     )+
-#     labs(x = "Cue Modality",y = paste("Cueing Effect: Cued - Uncued ", expression(u),"V", sep = ""), color = "Laterality")+
-#     geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
-#     theme_gray(base_size = 30)+
-#     theme(panel.grid.major = element_line(size = 1.5)
-#           ,panel.grid.minor = element_line(size = 1)) 
-#   
-#   print(gg)
-#   
-#   
-#   return(eeg_comp_agg_sum)
-# }
-# 
-# 
-# 
-# #### P45 ####
-# P45 = do_aov('P45', 'tactile', 30, 65)
-# 
-# #### N80/P100 ####
-# N80_P100 = do_aov('N80.P100.Complex', 'tactile', 65, 120)
-# 
-# #### P1 ####
-# P1 = do_aov("P1", 'visual', 110, 170)
-# 
-# #### N1 ####
-# N1 = do_aov("N1", 'visual', 170, 205)
-# 
-# 
-# 
+##################################################################
+####                     Analysis                             ####
+##################################################################
+
+do_aov = function(component, target_modality, lower_bound, upper_bound) {
+  # P45
+  eeg_comp = a2[a2$target_modality == target_modality
+                          & a2$time >= lower_bound
+                          & a2$time <= upper_bound, ]
+  
+  # get average voltage in window for each condition (4) x cueing (2) x participant (n)
+  eeg_comp_agg = aggregate(value ~ cue_modality + laterality + cueing + id, data = eeg_comp, FUN = mean)
+  
+  # get means 
+  eeg_comp_agg_means = aggregate(value ~ cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = mean)
+  
+  # get sds
+  eeg_comp_agg_sds = aggregate(value ~ cueing + cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = sd)
+  
+  # data frame of summary stats 
+  eeg_comp_agg_sum = cbind(eeg_comp_agg_means, eeg_comp_agg_sds$value)
+  names(eeg_comp_agg_sum)[4:5] = c("M", "SD")
+  
+  # ANOVA
+  m = aov(value ~
+            cue_modality*laterality*cueing 
+          + Error(id/(cue_modality*laterality*cueing))
+          , data = eeg_comp_agg)
+  m_summary = summary(m)
+  print(m_summary)
+  
+  # Normality Assumption - NOT SURE THIS IS RIGHT
+  residz = NULL
+  for (i in 1:7) {
+    m_stuff = proj(m)
+    temp = m_stuff[[2+i]][,"Residuals"]
+    temp = temp[seq(1,184,8)]
+    residz = c(residz, temp)
+  }
+  qqnorm(residz)
+  qqline(residz)
+  
+  
+  #--------------------------------- SEM (L & M) ----------------------------------------#
+  alpha_over_2 = 0.025
+  
+  eeg_comp_agg$mix_factor = paste(eeg_comp_agg$cueing, eeg_comp_agg$cue_modality, eeg_comp_agg$laterality)
+  # model
+  m2 = aov(value ~ mix_factor
+           + Error(id/mix_factor)
+           , data = eeg_comp_agg)
+  m2_summary = summary(m2)
+  
+  MSE = m2_summary$`Error: id:mix_factor`[1][[1]][[3]][2]
+  df = m2_summary$`Error: id:mix_factor`[1][[1]][[1]][2]
+  n = length(unique(eeg_comp_agg$id))
+  
+  SEM_LM = sqrt(MSE/n)
+  
+  # get critical t value and LSD
+  t_crit = qt(1-alpha_over_2, df)
+  ME_LM = abs(t_crit * SEM_LM)
+  LSD = sqrt(2) * ME_LM
+  #--------------------------------- SEM (L & M) ----------------------------------------#
+  
+  
+  #--------------------------------- Circularity ----------------------------------------#
+  # NOTE: ciruclarity = sphericity
+  eeg_comp_agg$mix_factor_num = as.numeric(factor(eeg_comp_agg$mix_factor))
+  pairings = combn(unique(eeg_comp_agg$mix_factor_num),2)
+  
+  print( cbind(unique(eeg_comp_agg[6]), unique(eeg_comp_agg[7])))
+  
+  alpha = 0.05
+  SEs = NULL
+  MEs = NULL
+  ids = NULL
+  MEANs = NULL
+  for (i in 1:ncol(pairings)) {
+    pair = pairings[,i]
+    
+    level1 = pair[1]
+    level2 = pair[2]
+    
+    data1 = eeg_comp_agg[eeg_comp_agg$mix_factor_num == level1,]$value
+    data2 = eeg_comp_agg[eeg_comp_agg$mix_factor_num == level2,]$value
+    
+    dat = data1-data2
+    
+    MEAN = mean(dat)
+    SD = sd(dat)
+    N = length(dat)
+    DF = N - 1
+    T_CRIT = qt(1-alpha/2, DF)
+    
+    SE = SD/sqrt(N)
+    
+    ME = T_CRIT * SE
+    
+    MEANs = c(MEANs, MEAN)
+    MEs = c(MEs, ME)
+    SEs = c(SEs, SE)
+    ids = c(ids, paste(level1, level2))
+  }
+  
+  hist(SEs/sqrt(2)) # scale!
+  abline(v = SEM_LM)
+  
+  # also look at epsilon
+  ezEpsi = ezANOVA(data = eeg_comp_agg
+                   , dv = value
+                   , wid = id
+                   , within = mix_factor)
+  print(ezEpsi$`Sphericity Corrections`$GGe)
+  
+  pairdiffs = data.frame(ids, MEs, SEs, MEANs)
+  gg2 = ggplot(pairdiffs, aes(x = ids, y = MEANs*1e6))+
+    geom_bar(stat="identity")+
+    geom_errorbar(aes(ymin = (MEANs - SEs)*1e6, ymax = (MEANs + SEs)*1e6)
+                  , width = 0.1
+                  , size = 1
+    )+
+    theme_gray(base_size = 30)+
+    theme(panel.grid.major = element_line(size = 1.5)
+          ,panel.grid.minor = element_line(size = 1)) 
+  print(gg2)
+    
+  
+  pSEs = pairdiffs$SEs
+  SEM_LM_estimate = sqrt( mean((pSEs/sqrt(2))^2) )
+  abs(SEM_LM - SEM_LM_estimate) < 0.0001
+  #--------------------------------- Circularity ----------------------------------------#
+  
+  
+  #----------------------------- Look at interaction ------------------------------------#
+  eeg_comp_agg_cueing2 = aggregate(value ~ laterality + cue_modality + id,data = eeg_comp_agg, FUN = diff)
+  eeg_comp_agg_cueing2$value = -eeg_comp_agg_cueing2$value  # flip sign
+  eeg_comp_agg_cueing = aggregate(value ~ cue_modality + id,data = eeg_comp_agg_cueing2, FUN = mean)
+  
+  # calculate paired differences (from zero!)
+  mods = unique(eeg_comp_agg_cueing$cue_modality)
+  MEs = NULL
+  for (mod in mods) {
+    dat = eeg_comp_agg_cueing[eeg_comp_agg_cueing$cue_modality == mod,]$value
+    
+    MEAN = mean(dat)
+    SD = sd(dat)
+    N = length(dat)
+    DF = N - 1
+    T_CRIT = qt(1-alpha/2, DF)
+    
+    SE = SD/sqrt(N)
+    
+    ME = T_CRIT * SE
+    MEs = c(MEs, ME)
+  }
+  
+  eeg_comp_agg_cueing$mix_factor = paste(eeg_comp_agg_cueing$cue_modality)
+  # model
+  m3 = aov(value ~ mix_factor
+           + Error(id/mix_factor)
+           , data = eeg_comp_agg_cueing)
+  m3_summary = summary(m3)
+  
+  MSE3 = m3_summary$`Error: id:mix_factor`[1][[1]][[3]][2]
+  df3 = m3_summary$`Error: id:mix_factor`[1][[1]][[1]][2]
+  
+  SEM_LM3 = sqrt(MSE3/n)
+  
+  # get critical t value and LSD
+  t_crit3 = qt(1-alpha_over_2, df3)
+  ME_LM3 = abs(t_crit3 * SEM_LM3)
+  LSD3 = sqrt(2) * ME_LM3
+  
+  EEG_CIs2 = aggregate(value ~ cue_modality + cueing, data = eeg_comp_agg_means, FUN = mean)
+  EEG_CIs = aggregate(value ~ cue_modality, data = EEG_CIs2, FUN = diff)
+  EEG_CIs$value = -EEG_CIs$value
+  EEG_CIs$CI = ME_LM3  # use margin of error !
+  
+  names(EEG_CIs)[2] = "M"
+  
+  # plot 3 way interaction 
+  EEG_CIs$cue_modality = as.factor(EEG_CIs$cue_modality)
+  levels(EEG_CIs$cue_modality) = c("Tactile Cue", "Visual Cue")
+  
+  # add pair-wise
+  EEG_CIs$from_zero = MEs
+  
+  if(substr(component, 1,1) == "P"){
+   EEG_CIs$M = -EEG_CIs$M 
+  }
+  
+  print(EEG_CIs)
+  
+  # plot!
+  gg = ggplot(EEG_CIs, aes(x = cue_modality
+                           ,y = M*1e6  # get micro volts
+  )
+  )+
+    geom_point(size = 2)+
+    ggtitle(component)+
+    geom_errorbar(aes(ymin = (M - CI)*1e6, ymax = (M + CI)*1e6)
+                  , width = 0.1
+                  , size = 1
+    )+
+    
+    geom_errorbar(aes(ymin = (M - from_zero)*1e6, ymax = (M + from_zero)*1e6)
+                  , width = 0.1
+                  , size = 1
+                  , color = "red"
+    )+
+    labs(x = "Cue Modality",y = paste("Cueing Reduction (", expression(u),"V)", sep = ""), color = "Laterality")+
+    geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
+    theme_gray(base_size = 30)+
+    theme(panel.grid.major = element_line(size = 1.5)
+          ,panel.grid.minor = element_line(size = 1)) 
+  
+  print(gg)
+  
+  
+  #----------------------------- Look at interaction ------------------------------------#
+  
+  
+  return(eeg_comp_agg_sum)
+}
+
+
+
+#### P45 ####
+P45 = do_aov('P45', 'tactile', Plo, Phi)
+
+#### N80/P100 ####
+N80_P100 = do_aov('N80.P100.Complex', 'tactile', Nlo, Nhi)
+
+#### P1 ####
+P1 = do_aov("P1", 'visual', P1lo, P1hi)
+
+#### N1 ####
+N1 = do_aov("N1", 'visual', N1lo, N1hi)
+
+
+
+
+
+
+
