@@ -508,6 +508,9 @@ do_aov = function(component, target_modality, lower_bound, upper_bound) {
   m3_summary = summary(m3)
   
   MSE3 = m3_summary$`Error: id:mix_factor`[1][[1]][[3]][2]
+  # which is the same as taking the MSE of the interaction from the full ANOVA
+  MSE = m_summary$`Error: id:cue_modality:cueing`[1][[1]][[3]][2]
+  abs(MSE - MSE3) < 0.01
   df3 = m3_summary$`Error: id:mix_factor`[1][[1]][[1]][2]
   
   SEM_LM3 = sqrt(MSE3/n)

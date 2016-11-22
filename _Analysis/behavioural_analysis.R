@@ -352,6 +352,31 @@ abs(SEM_LM - SEM_LM_estimate) < 0.0001
 IOR_cueing = aggregate(target_response_rt ~ id + cue_modality + target_modality, data = IOR, FUN = diff) 
 IOR_cueing$mix_factor = paste(IOR_cueing$cue_modality, IOR_cueing$target_modality)
 
+# TEST main effect of cueing 
+test1 = aggregate(target_response_rt ~ id + cued, data = IOR, FUN = mean) 
+test1m = summary(aov(target_response_rt ~ cued
+         + Error(id/cued)
+         , data = test1))
+MSEtest1 = test1m$`Error: id:cued`[1][[1]][[3]][2]
+m_summary$`Error: id:cued`[1][[1]][[3]][2]/4  # devide by 4
+
+# TEST: cue modality X cueing
+test2 = aggregate(target_response_rt ~ id + cue_modality, data = IOR_cueing, FUN = mean) 
+test2m = summary(aov(target_response_rt ~ cue_modality
+            + Error(id/cue_modality)
+            , data = test2))
+MSEtest2 = test2m$`Error: id:cue_modality`[1][[1]][[3]][2]
+m_summary$`Error: id:cue_modality:cued`[1][[1]][[3]][2]  # no need to devide 
+
+# TEST: cue modality X cueing X target_modality
+test3 = aggregate(target_response_rt ~ id + cue_modality, data = IOR_cueing, FUN = diff) 
+test3m = summary(aov(target_response_rt ~ cue_modality
+                     + Error(id/cue_modality)
+                     , data = test3))
+MSEtest3 = test3m$`Error: id:cue_modality`[1][[1]][[3]][2]
+m_summary$`Error: id:cue_modality:target_modality:cued`[1][[1]][[3]][2]*4  # need to multiply by 4
+
+
 CW = ddply(
   .data = IOR_cueing
   , .variables = .(mix_factor, cue_modality, target_modality)
@@ -440,15 +465,15 @@ print(gg)
 #------------------------------------- pooled -----------------------------------------#
 
 
-# NOTE: why is this not the sameas taking the MSE from interaction term of full ANOVA?
+# NOTE: why is this not the same as taking the MSE from interaction term of full ANOVA?
 # is it meaningful that it is roughly a thrid of it? 
 #--------------------------------- interaction ----------------------------------------#
 IOR_same = IOR_cueing
 IOR_same$cue_modality = ifelse(IOR_cueing$cue_modality == IOR_cueing$target_modality, TRUE, FALSE)
 
-IOR_int_id2 = aggregate(target_response_rt ~ target_modality + cue_modality + id, data = IOR_same, FUN =mean)
 # same modality minus different modality
-IOR_int_id = aggregate(target_response_rt ~ target_modality + id, data = IOR_int_id2, FUN =diff)
+IOR_int_id = aggregate(target_response_rt ~ target_modality + id, data = IOR_same, FUN =diff)
+IOR_int_id$target_response_rt = -IOR_int_id$target_response_rt
 
 # model
 m3 = aov(target_response_rt ~ target_modality

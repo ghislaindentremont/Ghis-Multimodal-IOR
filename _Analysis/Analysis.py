@@ -5,19 +5,20 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import fnmatch
 
-# os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE")
-os.chdir("/Users/ghislaindentremont/Downloads/e49")
+os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE")
+# os.chdir("/Users/ghislaindentremont/Downloads/e49")
 
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
 
 # Participant
-# participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04', 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47', 'e48', 'e49']
+participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04', 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47']
+# , 'e48', 'e49'
 
-participant = 'e49'
+# participant = 'e49'
 
-dont_plot = False
+dont_plot = True
 
 for participant in participants:
 
@@ -31,7 +32,6 @@ for participant in participants:
     raw = mne.io.read_raw_brainvision(file, preload=True)
 
     directory = '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis3/%s'%participant
-    # directory = '/Users/ghislaindentremont/Downloads/e48/P_analysis2/%s' % participant
     if not os.path.exists(directory):
         os.makedirs(directory)
     if not os.path.exists('%s/P_preprocessing'%directory):
@@ -317,7 +317,7 @@ for participant in participants:
         plt.close()
     #---------------------------------- Notch Filter --------------------------------------------#
 
-    
+
 
 
     ##############################################################################################
