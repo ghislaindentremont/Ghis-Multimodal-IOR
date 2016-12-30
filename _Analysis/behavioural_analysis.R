@@ -13,7 +13,7 @@ BOTH = TRUE
 
 if (NEW | BOTH) {
   # directory
-  setwd("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/TXT/new_data")
+  setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/TXT/new_data")
   
   # old data 
   a = ldply(
@@ -33,13 +33,13 @@ if (NEW | BOTH) {
   d2 = a
   
   # get rid of participants with no EEG or other exclusions
-  d2 = d2[d2$id != "e37" & d2$id != "e38" & d2$id != "e43",]
+  d2 = d2[d2$id != "e37" & d2$id !=  "e31" & d2$id !=  "e32" & d2$id !=  "e34"& d2$id !=  "e35" & d2$id != "e36" & d2$id != "e38" & d2$id != "e43",]
   
 }
 
 if (!NEW | BOTH){
   # directory
-  setwd("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/TXT/BeforeSummer_ForAnalysis")
+  setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/TXT/BeforeSummer_ForAnalysis")
   
   # old data 
   a = ldply(
@@ -160,7 +160,7 @@ d_left = d[d$id %in% P_list,]
 
 # demographics
 sex = aggregate(sex ~ id, d_left, unique)
-mean(sex$sex == "f")  # approximate proportion of women
+sum(sex$sex == "f")  # count of women
 age = aggregate(age ~ id, d_left, unique)
 median(age$age)  # approximate proportion 
 
@@ -190,6 +190,16 @@ print("Proportion of pre target responses: ")
 print(pre_target_response_excl)
 mean(pre_target_response_excl$prop)
 
+# looking at just catch trials
+catch = d_left[d_left$target_type == "catch",]
+length_id3 = aggregate(critical_blink ~ id, data = catch[!catch$recovered,], FUN = length)
+
+catch$bad = !is.na(catch$target_response_key) 
+catch_trial_excl = aggregate(bad~ id, data = catch[!catch$recovered,], FUN = sum)
+catch_trial_excl$prop = catch_trial_excl$bad / length_id3$critical_blink
+print("Proportion of bad catch trials: ")
+print(catch_trial_excl)
+mean(catch_trial_excl$prop)
 
 
 #### IOR ####
@@ -203,6 +213,9 @@ IOR_summ$SD = aggregate(target_response_rt ~ cued + cue_modality + target_modali
 IOR_effects = aggregate(target_response_rt ~ cue_modality + target_modality + id, data = IOR, FUN = diff)
 names(IOR_effects)[4] = "IOR"
 print(IOR_effects)
+
+# save it for EEG analysis file
+save(IOR_effects, file = "../IOR_effects.Rdata")
 
 # group IOR
 IOR_effecs_group = aggregate(IOR ~ cue_modality + target_modality, data = IOR_effects, FUN = mean)

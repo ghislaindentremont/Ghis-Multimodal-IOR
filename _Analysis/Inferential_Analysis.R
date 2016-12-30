@@ -4,7 +4,7 @@ library(reshape)
 library(scales)
 library(ggthemes)
 
-setwd("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis2")
+setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis2")
 
 
 ##################################################################
@@ -18,7 +18,7 @@ b_list2 = list.files(
 )
 b_list = b_list2[grep(".csv", b_list2)]
 
-load("/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/TXT/P_list.Rdata")
+load("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/TXT/P_list.Rdata")
 b_data = NULL
 for (id in P_list) {
   b_data = c(b_data, b_list[grep(id, b_list)])
@@ -347,6 +347,8 @@ print(gg)
 ####                     Analysis                             ####
 ##################################################################
 
+load("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/TXT/IOR_effects.Rdata")
+
 do_aov = function(component, target_modality, lower_bound, upper_bound) {
   # P45
   eeg_comp = a2[a2$target_modality == target_modality
@@ -358,9 +360,65 @@ do_aov = function(component, target_modality, lower_bound, upper_bound) {
   
   # get means 
   eeg_comp_agg_means = aggregate(value ~ cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = mean)
+  print(eeg_comp_agg_means)
   
   # get sds
-  eeg_comp_agg_sds = aggregate(value ~ cueing + cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = sd)
+  eeg_comp_agg_sds = aggregate(value ~ cue_modality + laterality + cueing, data = eeg_comp_agg, FUN = sd)
+  print(eeg_comp_agg_sds)
+  
+  # get cueing effects
+  cueing_effects = aggregate(value ~ cue_modality + laterality + id, data = eeg_comp_agg, FUN = diff)
+  
+  if (component == "N1" | component == "N80.P100.Complex") {
+    cueing_effects$value = -cueing_effects$value
+  }
+  
+  cueing_effects_bilateral = aggregate(value ~ cue_modality + id, data = cueing_effects, FUN = mean)
+  
+  IOR_effects_one_target_type = IOR_effects[IOR_effects$target_modality == target_modality,]
+  
+  # merge to create correlation data frame 
+  corr_df = merge(cueing_effects_bilateral, IOR_effects_one_target_type)
+  
+  corr_tactile = corr_df[corr_df$cue_modality == "tactile",]
+  corr_T = cor(corr_tactile$IOR, corr_tactile$value)
+  corr_T_test = cor.test(corr_tactile$IOR, corr_tactile$value)
+  print(corr_T_test)
+  
+  corr_visual = corr_df[corr_df$cue_modality == "visual",]
+  corr_V = cor(corr_visual$IOR, corr_visual$value)
+  corr_V_test = cor.test(corr_visual$IOR, corr_visual$value)
+  print(corr_V_test)
+  
+  corr_df$cue_modality = as.factor(corr_df$cue_modality)
+  levels(corr_df$cue_modality) = c("Tactile", "Visual")
+  
+  gg3 = ggplot(data = corr_df, aes(x = IOR, y = value*1e6, color = cue_modality))+
+    geom_point(size = 2)+
+    geom_smooth(method = "lm", se = FALSE)+
+    labs(x = "IOR Effect", y = paste("Cueing Reduction (", expression(u),"V)", sep = ""), color = "Cue Modality")+
+    geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
+    geom_vline(xintercept = 0, size = 1, linetype = "dashed")+
+    
+    theme_gray(base_size = 30)+
+    theme(panel.grid.major = element_line(size = 1.5)
+          ,panel.grid.minor = element_line(size = 1)) 
+  
+  if (component == "P1") {
+    gg3 = gg3 + 
+      annotate("text", x = 82, y=3, label = sprintf("%f", corr_V), size = 7, color = "#00BFC4")+
+      annotate("text", x = 82, y=3.5, label = sprintf("%f", corr_T), size = 7, color = "#F8766D")+
+      ggtitle(component)
+  } else if (component == "N80.P100.Complex") {
+    gg3 = gg3 + 
+      annotate("text", x = 82, y=1.5, label = sprintf("%f", corr_V), size = 7, color = "#00BFC4")+
+      annotate("text", x = 82, y=2, label = sprintf("%f", corr_T), size = 7, color = "#F8766D")+
+      ggtitle(component)
+  }
+  
+  
+  
+  print(gg3)
   
   # data frame of summary stats 
   eeg_comp_agg_sum = cbind(eeg_comp_agg_means, eeg_comp_agg_sds$value)
