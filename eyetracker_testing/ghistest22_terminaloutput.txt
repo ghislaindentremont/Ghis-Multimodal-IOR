@@ -1,0 +1,1152 @@
+Last login: Mon Jan 16 11:47:38 on ttys000
+You have new mail.
+Rays-iMac:Ghis-Multimodal-IOR ray$ python /Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/multimodal_ior_v1.py 
+objc[8661]: Class SDLTranslatorResponder is implemented in both /usr/local/lib/libSDL2.dylib and /Library/Frameworks/SDL.framework/Versions/A/SDL. One of the two will be used. Which one is undefined.
+
+Attempting to connect to eyelink (check that wifi is off!)
+975 thread_policy_set failed: 4.
+Eyelink connected
+/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/fileForker/__init__.py:22: ExperimentalWarning: 'pixels3d' is in an experimental state.
+  self.process = billiard.Process( target=self.f , args=(self.childFile,self.qTo,self.qFrom,self.initDict,) )
+Block: 1; Trial: 1
+['eyelink: saccade', (951.0999755859375, 568.9000244140625), (952.9000244140625, 559.7000122070312), array([ 480.,  270.])]
+['real distance', 20.940394797569812]
+gaze target lost
+saccade
+['eyelink: saccade', (951.0999755859375, 557.5999755859375), (949.4000244140625, 546.4000244140625), array([ 480.,  270.])]
+['real distance', 12.382237072640271]
+gaze target lost
+saccade
+['eyelink: saccade', (949.0999755859375, 541.5999755859375), (949.5999755859375, 554.2000122070312), array([ 480.,  270.])]
+['real distance', 17.60116060073689]
+gaze target lost
+saccade
+['eyelink: saccade', (947.5, 548.2000122070312), (947.5999755859375, 539.5), array([ 480.,  270.])]
+['real distance', 12.410100945171479]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.4000244140625, 538.5), (947.0, 547.5999755859375), array([ 480.,  270.])]
+['real distance', 15.058540065585577]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.5999755859375, 548.5999755859375), (949.5999755859375, 538.2999877929688), array([ 480.,  270.])]
+['real distance', 10.538052444220957]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (950.4000244140625, 542.7999877929688), (950.7999877929688, 542.4000244140625), array([ 480.,  270.])]
+['real distance', 9.5079094336042171]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (951.9000244140625, 568.4000244140625), (950.9000244140625, 579.7000122070312), array([ 480.,  270.])]
+['real distance', 40.729602562547662]
+Block: 1; Trial: 2
+['eyelink: saccade', (944.5, 531.0999755859375), (942.4000244140625, 544.0), array([ 480.,  270.])]
+['real distance', 18.04879886933189]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.7999877929688, 538.5), (946.0, 528.5), array([ 480.,  270.])]
+['real distance', 18.117670931993437]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.9000244140625, 538.0999755859375), (942.5999755859375, 535.0), array([ 480.,  270.])]
+['real distance', 18.104166636715732]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.2999877929688, 529.0999755859375), (943.2999877929688, 534.7000122070312), array([ 480.,  270.])]
+['real distance', 17.520852671049163]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.4000244140625, 532.0), (942.7999877929688, 541.2000122070312), array([ 480.,  270.])]
+['real distance', 17.241822676824164]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.5999755859375, 551.5), (940.7000122070312, 550.9000244140625), array([ 480.,  270.])]
+['real distance', 22.165289554524239]
+Block: 1; Trial: 3
+['eyelink: saccade', (951.0999755859375, 549.4000244140625), (951.2999877929688, 542.0), array([ 480.,  270.])]
+['real distance', 8.9269374593133985]
+gaze target lost
+saccade
+['eyelink: saccade', (953.2999877929688, 547.9000244140625), (923.9000244140625, 541.5), array([ 480.,  270.])]
+['real distance', 36.131125602522872]
+gaze target lost
+saccade
+['eyelink: saccade', (926.2999877929688, 546.2999877929688), (941.9000244140625, 536.4000244140625), array([ 480.,  270.])]
+['real distance', 18.454510029553198]
+gaze target lost
+saccade
+['eyelink: saccade', (940.0999755859375, 526.5999755859375), (939.7999877929688, 531.7999877929688), array([ 480.,  270.])]
+['real distance', 21.800933313958673]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 541.0999755859375), (941.0999755859375, 530.5999755859375), array([ 480.,  270.])]
+['real distance', 21.108561813565831]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.7999877929688, 540.2000122070312), (944.5999755859375, 538.2000122070312), array([ 480.,  270.])]
+['real distance', 15.504860786493943]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.5, 534.5999755859375), (944.0, 543.4000244140625), array([ 480.,  270.])]
+['real distance', 16.357266459167956]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.0999755859375, 545.7000122070312), (944.7000122070312, 537.0), array([ 480.,  270.])]
+['real distance', 15.591331773296108]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.5999755859375, 540.2000122070312), (943.0, 552.2000122070312), array([ 480.,  270.])]
+['real distance', 20.924633756692408]
+['eyelink: saccade', (938.5999755859375, 562.7000122070312), (938.4000244140625, 555.0999755859375), array([ 480.,  270.])]
+['real distance', 26.354661978651986]
+Block: 1; Trial: 4
+['eyelink: saccade', (942.2999877929688, 533.9000244140625), (942.7999877929688, 539.5999755859375), array([ 480.,  270.])]
+['real distance', 17.204663305449195]
+gaze target lost
+saccade
+['eyelink: saccade', (939.7000122070312, 528.0999755859375), (937.9000244140625, 532.7999877929688), array([ 480.,  270.])]
+['real distance', 23.243259166485938]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.7999877929688, 541.9000244140625), (939.4000244140625, 533.4000244140625), array([ 480.,  270.])]
+['real distance', 21.631427874187874]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.2999877929688, 541.0999755859375), (940.2999877929688, 531.0999755859375), array([ 480.,  270.])]
+['real distance', 21.617144018766421]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.5, 532.4000244140625), (943.0, 540.2999877929688), array([ 480.,  270.])]
+['real distance', 17.002646637389436]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.7000122070312, 533.7000122070312), (942.5999755859375, 538.2000122070312), array([ 480.,  270.])]
+['real distance', 17.492878712916511]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.0999755859375, 560.7999877929688), (944.4000244140625, 569.7999877929688), array([ 480.,  270.])]
+['real distance', 33.636267788548309]
+['eyelink: saccade', (944.2999877929688, 552.4000244140625), (944.4000244140625, 562.7000122070312), array([ 480.,  270.])]
+['real distance', 27.543598030780469]
+['eyelink: saccade', (941.2999877929688, 560.2000122070312), (943.7000122070312, 550.4000244140625), array([ 480.,  270.])]
+['real distance', 19.335203900244402]
+Block: 1; Trial: 5
+['eyelink: saccade', (942.5999755859375, 549.5), (941.0, 540.0999755859375), array([ 480.,  270.])]
+['real distance', 19.000263027594738]
+gaze target lost
+saccade
+['eyelink: saccade', (934.7000122070312, 550.7999877929688), (934.4000244140625, 551.0), array([ 480.,  270.])]
+['real distance', 27.863214997566164]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (934.5999755859375, 547.4000244140625), (936.0999755859375, 543.7000122070312), array([ 480.,  270.])]
+['real distance', 24.184731905170331]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (934.7000122070312, 550.5999755859375), (934.5, 558.5999755859375), array([ 480.,  270.])]
+['real distance', 31.562780165845197]
+Block: 1; Trial: 6
+['eyelink: saccade', (941.9000244140625, 537.9000244140625), (941.5999755859375, 545.7999877929688), array([ 480.,  270.])]
+['real distance', 19.292505198565649]
+gaze target lost
+saccade
+['eyelink: saccade', (942.0999755859375, 541.5999755859375), (945.9000244140625, 542.2000122070312), array([ 480.,  270.])]
+['real distance', 14.270576906177272]
+gaze target lost
+saccade
+['eyelink: saccade', (948.5, 534.7999877929688), (943.0999755859375, 539.7000122070312), array([ 480.,  270.])]
+['real distance', 16.902686705723408]
+gaze target lost
+saccade
+['eyelink: saccade', (939.7999877929688, 539.4000244140625), (942.0999755859375, 531.7999877929688), array([ 480.,  270.])]
+['real distance', 19.68885660010492]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.7999877929688, 545.5), (938.5, 541.4000244140625), array([ 480.,  270.])]
+['real distance', 21.545534766163755]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.2999877929688, 538.5999755859375), (939.7999877929688, 540.2999877929688), array([ 480.,  270.])]
+['real distance', 20.202239624361994]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.7999877929688, 545.0), (936.5, 540.2000122070312), array([ 480.,  270.])]
+['real distance', 23.500851152308538]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (936.2999877929688, 543.7999877929688), (936.4000244140625, 555.5999755859375), array([ 480.,  270.])]
+['real distance', 28.289893706740788]
+Block: 1; Trial: 7
+['eyelink: saccade', (932.5999755859375, 542.0), (932.5, 550.9000244140625), array([ 480.,  270.])]
+['real distance', 29.581422079189476]
+['eyelink: saccade', (940.2000122070312, 543.2000122070312), (939.9000244140625, 532.5), array([ 480.,  270.])]
+['real distance', 21.453648140940587]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 543.0), (941.4000244140625, 536.0999755859375), array([ 480.,  270.])]
+['real distance', 19.004454273347463]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 543.2999877929688), (941.5, 535.7999877929688), array([ 480.,  270.])]
+['real distance', 18.970769687580194]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.7999877929688, 530.2000122070312), (942.2999877929688, 541.5999755859375), array([ 480.,  270.])]
+['real distance', 17.772179213721973]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.0999755859375, 535.2000122070312), (945.2000122070312, 540.5), array([ 480.,  270.])]
+['real distance', 14.808431337316724]
+gaze target lost
+saccade
+['eyelink: saccade', (947.0999755859375, 563.7000122070312), (947.4000244140625, 570.7000122070312), array([ 480.,  270.])]
+['real distance', 33.185089035259324]
+['eyelink: saccade', (946.4000244140625, 575.0999755859375), (946.5999755859375, 568.9000244140625), array([ 480.,  270.])]
+['real distance', 31.855487210696992]
+['eyelink: saccade', (947.0, 565.4000244140625), (929.5999755859375, 558.0), array([ 480.,  270.])]
+['real distance', 35.329328954504582]
+Block: 1; Trial: 8
+['eyelink: saccade', (940.0, 544.7999877929688), (939.4000244140625, 544.5999755859375), array([ 480.,  270.])]
+['real distance', 21.107315545384782]
+gaze target lost
+saccade
+['eyelink: saccade', (946.2000122070312, 534.5), (944.7000122070312, 523.9000244140625), array([ 480.,  270.])]
+['real distance', 22.210331837520489]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.2999877929688, 522.9000244140625), (944.9000244140625, 527.7000122070312), array([ 480.,  270.])]
+['real distance', 19.475599153892258]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.9000244140625, 524.2000122070312), (946.7999877929688, 515.9000244140625), array([ 480.,  270.])]
+['real distance', 27.478157607608221]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.0, 527.2000122070312), (947.9000244140625, 524.2999877929688), array([ 480.,  270.])]
+['real distance', 19.821700040138175]
+gaze target lost
+saccade
+['eyelink: saccade', (946.0999755859375, 517.2000122070312), (946.9000244140625, 519.5999755859375), array([ 480.,  270.])]
+['real distance', 24.243975673278189]
+gaze target lost
+saccade
+['eyelink: saccade', (944.7000122070312, 521.2999877929688), (945.0999755859375, 531.7000122070312), array([ 480.,  270.])]
+['real distance', 17.055806193290564]
+gaze target lost
+saccade
+['eyelink: saccade', (949.0999755859375, 522.2999877929688), (945.9000244140625, 526.7999877929688), array([ 480.,  270.])]
+['real distance', 19.314492843194397]
+Block: 1; Trial: 9
+['eyelink: saccade', (939.5, 537.2000122070312), (940.7000122070312, 530.4000244140625), array([ 480.,  270.])]
+['real distance', 21.555719891929819]
+gaze target lost
+saccade
+['eyelink: saccade', (939.7999877929688, 529.0999755859375), (939.2999877929688, 533.0999755859375), array([ 480.,  270.])]
+['real distance', 21.819735156181462]
+gaze target lost
+saccade
+['eyelink: saccade', (938.9000244140625, 540.5), (945.0, 534.2000122070312), array([ 480.,  270.])]
+['real distance', 16.082283991976592]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (947.9000244140625, 531.0999755859375), (946.5999755859375, 542.0), array([ 480.,  270.])]
+['real distance', 13.54845579014343]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (948.2000122070312, 542.2000122070312), (949.5999755859375, 535.5), array([ 480.,  270.])]
+['real distance', 11.331836030101037]
+gaze target lost
+saccade
+critical saccade
+Block: 1; Trial: 10
+['eyelink: saccade', (943.2999877929688, 561.9000244140625), (942.5, 559.5), array([ 480.,  270.])]
+['real distance', 26.201145013147805]
+gaze target lost
+saccade
+['eyelink: saccade', (934.5, 562.7000122070312), (938.7999877929688, 552.0999755859375), array([ 480.,  270.])]
+['real distance', 24.410037418212976]
+gaze target lost
+saccade
+['eyelink: saccade', (936.7999877929688, 553.7999877929688), (939.0, 553.9000244140625), array([ 480.,  270.])]
+['real distance', 25.183539836796843]
+gaze target lost
+saccade
+['eyelink: saccade', (934.0999755859375, 548.0999755859375), (935.2000122070312, 543.0), array([ 480.,  270.])]
+['real distance', 24.980780502846564]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.7999877929688, 530.0999755859375), (947.0999755859375, 542.2000122070312), array([ 480.,  270.])]
+['real distance', 13.086278447079408]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.7000122070312, 539.7000122070312), (944.2000122070312, 533.4000244140625), array([ 480.,  270.])]
+['real distance', 17.123063160338241]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.7000122070312, 548.7999877929688), (945.0, 559.0999755859375), array([ 480.,  270.])]
+['real distance', 24.285984999242022]
+['eyelink: saccade', (944.2000122070312, 553.5), (943.7999877929688, 561.7999877929688), array([ 480.,  270.])]
+['real distance', 27.160262577551567]
+['eyelink: saccade', (944.2000122070312, 557.0), (944.2999877929688, 550.0999755859375), array([ 480.,  270.])]
+['real distance', 18.668151760082299]
+['eyelink: saccade', (939.5999755859375, 542.9000244140625), (941.0999755859375, 548.0999755859375), array([ 480.,  270.])]
+['real distance', 20.562600208751373]
+Block: 1; Trial: 11
+['eyelink: saccade', (937.0, 542.5999755859375), (938.7999877929688, 542.5999755859375), array([ 480.,  270.])]
+['real distance', 21.358848064110223]
+gaze target lost
+saccade
+['eyelink: saccade', (929.5999755859375, 530.4000244140625), (931.0, 542.7999877929688), array([ 480.,  270.])]
+['real distance', 29.13485767325411]
+gaze target lost
+saccade
+['eyelink: saccade', (932.7000122070312, 529.7999877929688), (929.9000244140625, 536.2999877929688), array([ 480.,  270.])]
+['real distance', 30.326533277086153]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (929.7000122070312, 542.0999755859375), (944.7999877929688, 526.9000244140625), array([ 480.,  270.])]
+['real distance', 20.066133943688744]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.0, 535.9000244140625), (940.5999755859375, 527.5999755859375), array([ 480.,  270.])]
+['real distance', 23.024368671813068]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.2999877929688, 538.2000122070312), (940.4000244140625, 551.2000122070312), array([ 480.,  270.])]
+['real distance', 22.574306554288551]
+gaze target lost
+saccade
+['eyelink: saccade', (940.4000244140625, 552.7000122070312), (936.0, 497.3999938964844), array([ 480.,  270.])]
+['real distance', 48.895403874184005]
+['eyelink: saccade', (945.5, 483.0), (944.5999755859375, 518.5), array([ 480.,  270.])]
+['real distance', 26.446375024825635]
+Block: 1; Trial: 12
+['eyelink: saccade', (942.0999755859375, 549.5999755859375), (903.7000122070312, 511.1000061035156), array([ 480.,  270.])]
+['real distance', 63.284265601374123]
+gaze target lost
+saccade
+['eyelink: saccade', (906.9000244140625, 514.5999755859375), (941.4000244140625, 522.7999877929688), array([ 480.,  270.])]
+['real distance', 25.333762289077693]
+gaze target lost
+saccade
+['eyelink: saccade', (939.2000122070312, 527.4000244140625), (939.7000122070312, 523.7999877929688), array([ 480.,  270.])]
+['real distance', 25.971713457194959]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.5999755859375, 522.2999877929688), (943.7999877929688, 514.7000122070312), array([ 480.,  270.])]
+['real distance', 30.042133376848078]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.5, 497.6000061035156), (940.9000244140625, 512.2999877929688), array([ 480.,  270.])]
+['real distance', 33.646689936055949]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.0, 537.4000244140625), (939.4000244140625, 549.4000244140625), array([ 480.,  270.])]
+['real distance', 22.643309235316998]
+Block: 1; Trial: 13
+['eyelink: saccade', (945.0, 513.2000122070312), (942.7999877929688, 520.2000122070312), array([ 480.,  270.])]
+['real distance', 26.227465308789096]
+gaze target lost
+saccade
+['eyelink: saccade', (944.2999877929688, 516.5), (942.2999877929688, 525.9000244140625), array([ 480.,  270.])]
+['real distance', 22.629620934807743]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.2999877929688, 519.0), (944.4000244140625, 522.7999877929688), array([ 480.,  270.])]
+['real distance', 23.220673078183374]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.7999877929688, 519.0), (942.2000122070312, 521.2999877929688), array([ 480.,  270.])]
+['real distance', 25.817242725995243]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.5, 527.7999877929688), (939.7000122070312, 533.5999755859375), array([ 480.,  270.])]
+['real distance', 21.284966922578864]
+gaze target lost
+saccade
+['eyelink: saccade', (940.4000244140625, 520.5), (933.0, 462.5), array([ 480.,  270.])]
+['real distance', 82.068568892116062]
+['eyelink: saccade', (939.5, 455.8999938964844), (939.9000244140625, 494.8999938964844), array([ 480.,  270.])]
+['real distance', 49.376305745695781]
+Block: 1; Trial: 14
+['eyelink: saccade', (943.0999755859375, 519.2000122070312), (939.7000122070312, 528.9000244140625), array([ 480.,  270.])]
+['real distance', 23.136528745753733]
+gaze target lost
+saccade
+['eyelink: saccade', (940.4000244140625, 520.0), (938.2999877929688, 525.7999877929688), array([ 480.,  270.])]
+['real distance', 25.933200274265069]
+gaze target lost
+saccade
+['eyelink: saccade', (941.4000244140625, 527.2999877929688), (942.2000122070312, 521.0999755859375), array([ 480.,  270.])]
+['real distance', 25.96248232126495]
+['eyelink: saccade', (940.2999877929688, 523.5), (910.2000122070312, 472.6000061035156), array([ 480.,  270.])]
+['real distance', 83.802135780813884]
+Block: 1; Trial: 15
+['eyelink: saccade', (921.4000244140625, 490.8999938964844), (944.5, 536.9000244140625), array([ 480.,  270.])]
+['real distance', 15.806955704164181]
+['eyelink: saccade', (949.2999877929688, 545.5), (950.0999755859375, 539.5), array([ 480.,  270.])]
+['real distance', 9.9126426042218192]
+gaze target lost
+saccade
+['eyelink: saccade', (945.4000244140625, 519.5999755859375), (945.7000122070312, 513.7000122070312), array([ 480.,  270.])]
+['real distance', 29.936249076819234]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.7999877929688, 514.7000122070312), (941.7000122070312, 518.2000122070312), array([ 480.,  270.])]
+['real distance', 28.462765519119742]
+gaze target lost
+saccade
+Block: 1; Trial: 16
+['eyelink: saccade', (935.5, 530.7999877929688), (934.2999877929688, 527.9000244140625), array([ 480.,  270.])]
+['real distance', 28.405985929409997]
+gaze target lost
+saccade
+['eyelink: saccade', (935.0, 509.1000061035156), (935.2000122070312, 505.8999938964844), array([ 480.,  270.])]
+['real distance', 42.164556333385057]
+gaze target lost
+saccade
+['eyelink: saccade', (933.9000244140625, 501.0), (932.7999877929688, 506.6000061035156), array([ 480.,  270.])]
+['real distance', 43.074357294657837]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (932.7000122070312, 506.79998779296875), (932.7999877929688, 508.5), array([ 480.,  270.])]
+['real distance', 41.618393338314362]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (931.9000244140625, 532.5999755859375), (934.5, 518.4000244140625), array([ 480.,  270.])]
+['real distance', 33.418691555970533]
+gaze target lost
+saccade
+['eyelink: saccade', (935.7000122070312, 532.2999877929688), (934.2000122070312, 524.0999755859375), array([ 480.,  270.])]
+['real distance', 30.305942428591791]
+gaze target lost
+saccade
+Block: 1; Trial: 17
+['eyelink: saccade', (941.5, 511.79998779296875), (941.0999755859375, 507.8999938964844), array([ 480.,  270.])]
+['real distance', 37.250789450666666]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (933.5, 523.4000244140625), (933.7000122070312, 520.7999877929688), array([ 480.,  270.])]
+['real distance', 32.56270607090962]
+Block: 1; Trial: 18
+['eyelink: saccade', (939.5, 531.7999877929688), (939.5999755859375, 539.5), array([ 480.,  270.])]
+['real distance', 20.406150937752717]
+gaze target lost
+saccade
+['eyelink: saccade', (939.2000122070312, 540.7999877929688), (939.2999877929688, 530.0999755859375), array([ 480.,  270.])]
+['real distance', 22.945609357135762]
+gaze target lost
+saccade
+['eyelink: saccade', (938.0, 537.7999877929688), (937.2000122070312, 523.9000244140625), array([ 480.,  270.])]
+['real distance', 27.911443123337559]
+gaze target lost
+saccade
+['eyelink: saccade', (935.7999877929688, 526.0), (936.0999755859375, 518.5999755859375), array([ 480.,  270.])]
+['real distance', 32.080714018164471]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.7999877929688, 513.0), (936.5999755859375, 525.0999755859375), array([ 480.,  270.])]
+['real distance', 27.741158413418493]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.5, 526.5), (937.2999877929688, 522.5), array([ 480.,  270.])]
+['real distance', 28.662528747466922]
+gaze target lost
+saccade
+critical saccade
+Block: 1; Trial: 19
+['eyelink: saccade', (942.9000244140625, 550.2999877929688), (936.9000244140625, 529.5), array([ 480.,  270.])]
+['real distance', 25.374374318806534]
+['eyelink: saccade', (937.0999755859375, 527.2000122070312), (938.5, 529.2000122070312), array([ 480.,  270.])]
+['real distance', 24.060127521031013]
+gaze target lost
+saccade
+['eyelink: saccade', (941.0999755859375, 529.0), (938.7999877929688, 528.7999877929688), array([ 480.,  270.])]
+['real distance', 23.976671808570995]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.4000244140625, 539.0999755859375), (940.0999755859375, 528.0999755859375), array([ 480.,  270.])]
+['real distance', 23.186667564261302]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.5999755859375, 534.9000244140625), (937.5999755859375, 539.5), array([ 480.,  270.])]
+['real distance', 22.405604070200742]
+gaze target lost
+saccade
+['eyelink: saccade', (939.7999877929688, 554.2000122070312), (940.5, 554.9000244140625), array([ 480.,  270.])]
+['real distance', 24.541000948202143]
+Block: 1; Trial: 20
+['eyelink: saccade', (940.0999755859375, 546.5999755859375), (941.0, 537.2000122070312), array([ 480.,  270.])]
+['real distance', 19.20520584739393]
+gaze target lost
+saccade
+['eyelink: saccade', (940.5999755859375, 532.0999755859375), (972.2000122070312, 527.4000244140625), array([ 480.,  270.])]
+['real distance', 17.538519966574505]
+gaze target lost
+saccade
+['eyelink: saccade', (968.0, 534.2000122070312), (942.5999755859375, 549.0), array([ 480.,  270.])]
+['real distance', 19.589814945781672]
+gaze target lost
+saccade
+['eyelink: saccade', (942.5, 530.4000244140625), (941.2000122070312, 534.4000244140625), array([ 480.,  270.])]
+['real distance', 19.616301067705656]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.0, 536.0), (941.4000244140625, 530.0999755859375), array([ 480.,  270.])]
+['real distance', 21.070585544699622]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.7999877929688, 559.2000122070312), (942.2000122070312, 549.2999877929688), array([ 480.,  270.])]
+['real distance', 20.083060981314684]
+['eyelink: saccade', (937.9000244140625, 543.7999877929688), (923.4000244140625, 475.79998779296875), array([ 480.,  270.])]
+['real distance', 73.899930854326129]
+Block: 1; Trial: 21
+['eyelink: saccade', (935.7999877929688, 539.7000122070312), (936.2999877929688, 528.0999755859375), array([ 480.,  270.])]
+['real distance', 26.51982578503701]
+gaze target lost
+saccade
+['eyelink: saccade', (936.9000244140625, 533.7000122070312), (936.9000244140625, 528.0999755859375), array([ 480.,  270.])]
+['real distance', 25.984985147700048]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.2999877929688, 526.7999877929688), (936.5999755859375, 533.2999877929688), array([ 480.,  270.])]
+['real distance', 24.340322638639957]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (936.5999755859375, 525.2000122070312), (937.4000244140625, 535.2999877929688), array([ 480.,  270.])]
+['real distance', 23.083522504834782]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.0999755859375, 528.5), (939.7999877929688, 540.7000122070312), array([ 480.,  270.])]
+['real distance', 20.212137696300317]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.9000244140625, 536.7000122070312), (938.7000122070312, 545.9000244140625), array([ 480.,  270.])]
+['real distance', 22.102030858433604]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.4000244140625, 545.9000244140625), (940.5, 550.2999877929688), array([ 480.,  270.])]
+['real distance', 22.05311199208187]
+Block: 1; Trial: 22
+['eyelink: saccade', (940.7000122070312, 526.9000244140625), (928.9000244140625, 526.7000122070312), array([ 480.,  270.])]
+['real distance', 33.824520051865129]
+gaze target lost
+saccade
+['eyelink: saccade', (936.5, 535.7999877929688), (936.2999877929688, 525.5), array([ 480.,  270.])]
+['real distance', 27.783818647072799]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.2999877929688, 530.9000244140625), (941.2999877929688, 524.7999877929688), array([ 480.,  270.])]
+['real distance', 24.098357363874758]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.0, 545.0999755859375), (931.2000122070312, 516.7999877929688), array([ 480.,  270.])]
+['real distance', 36.982156011805856]
+['eyelink: saccade', (936.5999755859375, 518.5), (938.0, 509.3999938964844), array([ 480.,  270.])]
+['real distance', 37.687668719823911]
+Block: 1; Trial: 23
+['eyelink: saccade', (938.0, 560.5999755859375), (936.7999877929688, 562.0), array([ 480.,  270.])]
+['real distance', 31.972497031142236]
+gaze target lost
+saccade
+['eyelink: saccade', (932.5999755859375, 549.2000122070312), (933.0, 542.9000244140625), array([ 480.,  270.])]
+['real distance', 27.155296750397675]
+gaze target lost
+saccade
+['eyelink: saccade', (932.9000244140625, 534.2000122070312), (934.0999755859375, 538.7000122070312), array([ 480.,  270.])]
+['real distance', 25.932628731212372]
+gaze target lost
+saccade
+['eyelink: saccade', (935.2000122070312, 539.5999755859375), (935.5999755859375, 532.0999755859375), array([ 480.,  270.])]
+['real distance', 25.647057865369852]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (934.4000244140625, 535.7999877929688), (934.7999877929688, 531.5999755859375), array([ 480.,  270.])]
+['real distance', 26.563151646432509]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.2999877929688, 530.9000244140625), (937.2000122070312, 531.2000122070312), array([ 480.,  270.])]
+['real distance', 24.439296808949372]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.0, 553.9000244140625), (942.0, 551.7000122070312), array([ 480.,  270.])]
+['real distance', 21.468355448070078]
+['eyelink: saccade', (938.5, 552.0999755859375), (938.5, 543.0), array([ 480.,  270.])]
+['real distance', 21.708293346092411]
+Block: 1; Trial: 24
+['eyelink: saccade', (938.4000244140625, 553.5), (939.5, 541.4000244140625), array([ 480.,  270.])]
+['real distance', 20.54775093191396]
+['eyelink: saccade', (932.7999877929688, 530.2999877929688), (932.9000244140625, 532.4000244140625), array([ 480.,  270.])]
+['real distance', 28.145484640795488]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (935.2000122070312, 524.0), (934.2000122070312, 528.5999755859375), array([ 480.,  270.])]
+['real distance', 28.206380958190252]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (930.7000122070312, 532.9000244140625), (962.0999755859375, 522.4000244140625), array([ 480.,  270.])]
+['real distance', 17.724814190482494]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (962.5999755859375, 525.0), (962.2999877929688, 521.2999877929688), array([ 480.,  270.])]
+['real distance', 18.840923554617035]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (965.4000244140625, 529.7000122070312), (935.2999877929688, 527.0999755859375), array([ 480.,  270.])]
+['real distance', 27.865771708511883]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.7000122070312, 539.7000122070312), (945.7999877929688, 529.4000244140625), array([ 480.,  270.])]
+['real distance', 17.720040324511327]
+['eyelink: saccade', (944.2999877929688, 528.5999755859375), (943.4000244140625, 479.6000061035156), array([ 480.,  270.])]
+['real distance', 62.639591730383039]
+Block: 1; Trial: 25
+['eyelink: saccade', (942.0, 527.7000122070312), (943.9000244140625, 533.5999755859375), array([ 480.,  270.])]
+['real distance', 17.325401189247525]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.7999877929688, 527.2999877929688), (944.5, 534.4000244140625), array([ 480.,  270.])]
+['real distance', 16.480586353740453]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.7000122070312, 526.5), (944.7000122070312, 530.5), array([ 480.,  270.])]
+['real distance', 18.009431597498928]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.5999755859375, 533.2999877929688), (933.7999877929688, 524.4000244140625), array([ 480.,  270.])]
+['real distance', 30.492620056833957]
+gaze target lost
+saccade
+['eyelink: saccade', (935.0, 538.5), (934.7999877929688, 536.0), array([ 480.,  270.])]
+['real distance', 25.515497550205129]
+['eyelink: saccade', (929.5999755859375, 538.0), (930.2999877929688, 539.7999877929688), array([ 480.,  270.])]
+['real distance', 29.700685681996749]
+Block: 1; Trial: 26
+['eyelink: saccade', (939.7000122070312, 527.5999755859375), (938.5999755859375, 521.7999877929688), array([ 480.,  270.])]
+['real distance', 28.092730185201965]
+gaze target lost
+saccade
+['eyelink: saccade', (939.5999755859375, 518.5999755859375), (939.7000122070312, 526.0), array([ 480.,  270.])]
+['real distance', 24.659470886348721]
+gaze target lost
+saccade
+['eyelink: saccade', (945.0, 523.5), (945.2000122070312, 519.5), array([ 480.,  270.])]
+['real distance', 25.284177634877192]
+gaze target lost
+saccade
+['eyelink: saccade', (943.2999877929688, 523.0999755859375), (943.7999877929688, 514.0), array([ 480.,  270.])]
+['real distance', 30.633974530053418]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.2999877929688, 538.2000122070312), (930.7999877929688, 495.1000061035156), array([ 480.,  270.])]
+['real distance', 53.559781224302142]
+Block: 1; Trial: 27
+['eyelink: saccade', (939.9000244140625, 535.7999877929688), (938.5999755859375, 538.7999877929688), array([ 480.,  270.])]
+['real distance', 21.43364351246645]
+gaze target lost
+saccade
+['eyelink: saccade', (940.7000122070312, 529.2999877929688), (939.7000122070312, 530.5), array([ 480.,  270.])]
+['real distance', 22.412931633204085]
+gaze target lost
+saccade
+['eyelink: saccade', (937.7000122070312, 528.7000122070312), (937.7000122070312, 532.0), array([ 480.,  270.])]
+['real distance', 23.691548188469138]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.4000244140625, 533.0999755859375), (937.5999755859375, 519.9000244140625), array([ 480.,  270.])]
+['real distance', 30.096014890777145]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.0999755859375, 553.2000122070312), (937.4000244140625, 547.5), array([ 480.,  270.])]
+['real distance', 23.811948607473749]
+['eyelink: saccade', (931.5, 548.2000122070312), (908.7000122070312, 481.1000061035156), array([ 480.,  270.])]
+['real distance', 78.108245586267259]
+['eyelink: saccade', (928.5, 483.8999938964844), (937.5, 530.7999877929688), array([ 480.,  270.])]
+['real distance', 24.30823367934256]
+Block: 1; Trial: 28
+['eyelink: saccade', (940.0999755859375, 542.7999877929688), (940.0999755859375, 532.0), array([ 480.,  270.])]
+['real distance', 21.447866366617532]
+gaze target lost
+saccade
+['eyelink: saccade', (940.5999755859375, 522.5), (939.7000122070312, 525.7999877929688), array([ 480.,  270.])]
+['real distance', 24.773571625313068]
+gaze target lost
+saccade
+['eyelink: saccade', (937.5999755859375, 521.9000244140625), (935.9000244140625, 532.5999755859375), array([ 480.,  270.])]
+['real distance', 25.210497507417511]
+gaze target lost
+saccade
+['eyelink: saccade', (936.7999877929688, 527.0), (936.0999755859375, 525.0), array([ 480.,  270.])]
+['real distance', 28.217214018977558]
+gaze target lost
+saccade
+['eyelink: saccade', (935.7999877929688, 521.4000244140625), (936.2000122070312, 517.2000122070312), array([ 480.,  270.])]
+['real distance', 32.958744853300857]
+gaze target lost
+saccade
+['eyelink: saccade', (940.2999877929688, 524.7000122070312), (941.5999755859375, 521.4000244140625), array([ 480.,  270.])]
+['real distance', 26.163332934386762]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.0, 517.5999755859375), (939.4000244140625, 527.9000244140625), array([ 480.,  270.])]
+['real distance', 23.890759789540066]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.0999755859375, 530.5), (932.5999755859375, 490.70001220703125), array([ 480.,  270.])]
+['real distance', 56.402572053746702]
+Block: 1; Trial: 29
+['eyelink: saccade', (937.2000122070312, 495.6000061035156), (939.2999877929688, 513.2000122070312), array([ 480.,  270.])]
+['real distance', 33.863399874710112]
+['eyelink: saccade', (941.9000244140625, 534.9000244140625), (941.2999877929688, 528.2999877929688), array([ 480.,  270.])]
+['real distance', 22.05857525289877]
+gaze target lost
+saccade
+['eyelink: saccade', (940.2999877929688, 527.5), (939.9000244140625, 520.4000244140625), array([ 480.,  270.])]
+['real distance', 28.074331007606034]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 525.5), (939.2000122070312, 515.7000122070312), array([ 480.,  270.])]
+['real distance', 31.986386149830668]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.0999755859375, 526.7000122070312), (937.9000244140625, 526.4000244140625), array([ 480.,  270.])]
+['real distance', 25.949340200419925]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (931.7999877929688, 526.2999877929688), (931.7000122070312, 526.7000122070312), array([ 480.,  270.])]
+['real distance', 31.269457692376086]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (929.9000244140625, 529.7999877929688), (930.0999755859375, 544.9000244140625), array([ 480.,  270.])]
+['real distance', 30.298872903458673]
+gaze target lost
+saccade
+['eyelink: saccade', (929.7999877929688, 551.5999755859375), (930.2000122070312, 556.7000122070312), array([ 480.,  270.])]
+['real distance', 34.160352459775339]
+['eyelink: saccade', (922.4000244140625, 552.0), (962.0999755859375, 548.4000244140625), array([ 480.,  270.])]
+['real distance', 8.6585395776874279]
+Block: 1; Trial: 30
+['eyelink: saccade', (933.0, 526.9000244140625), (933.7999877929688, 535.4000244140625), array([ 480.,  270.])]
+['real distance', 26.600759670351664]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.9000244140625, 526.7000122070312), (937.5, 532.0), array([ 480.,  270.])]
+['real distance', 23.879907872519105]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (941.2999877929688, 523.5999755859375), (941.0, 529.2999877929688), array([ 480.,  270.])]
+['real distance', 21.805739181018783]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.7999877929688, 530.4000244140625), (940.7000122070312, 519.0999755859375), array([ 480.,  270.])]
+['real distance', 28.448208191679687]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.5999755859375, 527.5), (939.0, 527.0999755859375), array([ 480.,  270.])]
+['real distance', 24.645702057020177]
+gaze target lost
+saccade
+['eyelink: saccade', (935.9000244140625, 538.0), (934.0, 535.9000244140625), array([ 480.,  270.])]
+['real distance', 26.321280360295614]
+Block: 1; Trial: 31
+['eyelink: saccade', (941.7999877929688, 515.7000122070312), (941.9000244140625, 524.7000122070312), array([ 480.,  270.])]
+['real distance', 23.700184443934742]
+gaze target lost
+saccade
+['eyelink: saccade', (940.7999877929688, 508.0), (922.4000244140625, 496.5), array([ 480.,  270.])]
+['real distance', 57.497897040353536]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (924.7000122070312, 513.5999755859375), (966.9000244140625, 504.0), array([ 480.,  270.])]
+['real distance', 36.655290708363758]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (966.0, 500.70001220703125), (934.9000244140625, 506.70001220703125), array([ 480.,  270.])]
+['real distance', 41.700095460640448]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.7000122070312, 525.5), (943.9000244140625, 513.7000122070312), array([ 480.,  270.])]
+['real distance', 30.836643328645366]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 532.4000244140625), (918.7999877929688, 489.3999938964844), array([ 480.,  270.])]
+['real distance', 65.251832338527805]
+['eyelink: saccade', (925.4000244140625, 505.29998779296875), (935.0999755859375, 504.3999938964844), array([ 480.,  270.])]
+['real distance', 43.443890829335928]
+Block: 1; Trial: 32
+['eyelink: saccade', (939.0, 528.2000122070312), (928.5, 474.8999938964844), array([ 480.,  270.])]
+['real distance', 72.320541996570881]
+gaze target lost
+saccade
+['eyelink: saccade', (933.4000244140625, 498.29998779296875), (934.2000122070312, 529.7999877929688), array([ 480.,  270.])]
+['real distance', 27.743100388041043]
+gaze target lost
+saccade
+['eyelink: saccade', (934.5, 531.0), (934.0999755859375, 538.2999877929688), array([ 480.,  270.])]
+['real distance', 25.955756705461098]
+gaze target lost
+saccade
+['eyelink: saccade', (933.2000122070312, 546.0), (948.2000122070312, 539.7000122070312), array([ 480.,  270.])]
+['real distance', 11.803800429952286]
+gaze target lost
+saccade
+['eyelink: saccade', (945.2000122070312, 540.7999877929688), (945.5999755859375, 534.0), array([ 480.,  270.])]
+['real distance', 15.600022536060518]
+gaze target lost
+saccade
+['eyelink: saccade', (947.5999755859375, 538.2999877929688), (947.7999877929688, 526.5), array([ 480.,  270.])]
+['real distance', 18.195886838835627]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.7000122070312, 538.0999755859375), (946.7999877929688, 535.2999877929688), array([ 480.,  270.])]
+['real distance', 14.011796352074803]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (948.5, 542.0), (948.2000122070312, 532.5), array([ 480.,  270.])]
+['real distance', 13.981763548072593]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (948.7999877929688, 535.7000122070312), (948.2000122070312, 543.0), array([ 480.,  270.])]
+['real distance', 12.175373173509366]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.2000122070312, 539.9000244140625), (942.0, 542.5), array([ 480.,  270.])]
+['real distance', 18.172781845386247]
+gaze target lost
+saccade
+['eyelink: saccade', (945.2000122070312, 532.7999877929688), (944.0999755859375, 540.5), array([ 480.,  270.])]
+['real distance', 15.907884094617472]
+gaze target lost
+saccade
+['eyelink: saccade', (942.2000122070312, 538.5999755859375), (942.7000122070312, 531.4000244140625), array([ 480.,  270.])]
+['real distance', 19.319657287736469]
+gaze target lost
+saccade
+['eyelink: saccade', (941.9000244140625, 539.4000244140625), (940.7000122070312, 528.5999755859375), array([ 480.,  270.])]
+['real distance', 22.415398400429197]
+['eyelink: saccade', (940.2000122070312, 530.0), (939.7999877929688, 536.2000122070312), array([ 480.,  270.])]
+['real distance', 20.554328020904091]
+Block: 1; Trial: 33
+['eyelink: saccade', (939.2000122070312, 563.7999877929688), (938.4000244140625, 557.5), array([ 480.,  270.])]
+['real distance', 27.799441456854776]
+gaze target lost
+saccade
+['eyelink: saccade', (938.0999755859375, 534.9000244140625), (937.0, 530.5), array([ 480.,  270.])]
+['real distance', 24.884734276258609]
+gaze target lost
+saccade
+['eyelink: saccade', (936.7000122070312, 527.9000244140625), (937.0999755859375, 536.5), array([ 480.,  270.])]
+['real distance', 23.165947383274844]
+gaze target lost
+saccade
+['eyelink: saccade', (937.5, 528.2999877929688), (937.2000122070312, 521.5), array([ 480.,  270.])]
+['real distance', 29.361359698752441]
+Block: 1; Trial: 34
+['eyelink: saccade', (940.0999755859375, 567.0), (939.5999755859375, 568.2999877929688), array([ 480.,  270.])]
+['real distance', 34.886248081106778]
+gaze target lost
+saccade
+['eyelink: saccade', (937.2000122070312, 540.0999755859375), (937.2000122070312, 536.7000122070312), array([ 480.,  270.])]
+['real distance', 23.037564167968512]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.9000244140625, 527.0999755859375), (938.2999877929688, 537.9000244140625), array([ 480.,  270.])]
+['real distance', 21.801385901975102]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.2000122070312, 521.7000122070312), (939.5, 525.4000244140625), array([ 480.,  270.])]
+['real distance', 25.167623787516593]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.4000244140625, 537.2999877929688), (944.9000244140625, 546.9000244140625), array([ 480.,  270.])]
+['real distance', 16.601795071936259]
+['eyelink: saccade', (943.4000244140625, 547.5), (945.0999755859375, 538.2999877929688), array([ 480.,  270.])]
+['real distance', 14.99669193668103]
+['eyelink: saccade', (938.7000122070312, 536.0), (939.2000122070312, 538.9000244140625), array([ 480.,  270.])]
+['real distance', 20.829052750360674]
+Block: 1; Trial: 35
+['eyelink: saccade', (946.4000244140625, 525.5999755859375), (916.5999755859375, 527.0), array([ 480.,  270.])]
+['real distance', 45.305210728361267]
+gaze target lost
+saccade
+['eyelink: saccade', (922.7999877929688, 527.4000244140625), (922.7999877929688, 520.7000122070312), array([ 480.,  270.])]
+['real distance', 41.908596218580463]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (928.7000122070312, 523.7000122070312), (947.5999755859375, 524.9000244140625), array([ 480.,  270.])]
+['real distance', 19.538932114249608]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.9000244140625, 539.5), (944.2000122070312, 531.2999877929688), array([ 480.,  270.])]
+['real distance', 18.036901803260289]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.0999755859375, 526.5), (944.0, 537.7000122070312), array([ 480.,  270.])]
+['real distance', 16.164465467432112]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (945.9000244140625, 533.7000122070312), (946.5, 526.4000244140625), array([ 480.,  270.])]
+['real distance', 19.162706905291227]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (938.7999877929688, 545.5), (935.7000122070312, 498.8999938964844), array([ 480.,  270.])]
+['real distance', 47.746203078856979]
+Block: 1; Trial: 36
+['eyelink: saccade', (937.9000244140625, 498.1000061035156), (939.2999877929688, 549.2999877929688), array([ 480.,  270.])]
+['real distance', 22.693176911146896]
+['eyelink: saccade', (939.2000122070312, 538.2999877929688), (939.5, 543.2000122070312), array([ 480.,  270.])]
+['real distance', 20.74825482119277]
+gaze target lost
+saccade
+['eyelink: saccade', (932.5, 529.2000122070312), (934.2999877929688, 523.2999877929688), array([ 480.,  270.])]
+['real distance', 30.649323567683318]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (934.4000244140625, 520.2999877929688), (933.9000244140625, 528.2000122070312), array([ 480.,  270.])]
+['real distance', 28.643471114736514]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (935.2000122070312, 523.9000244140625), (934.5999755859375, 521.2999877929688), array([ 480.,  270.])]
+['real distance', 31.541269739471314]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (934.9000244140625, 522.4000244140625), (935.2000122070312, 525.9000244140625), array([ 480.,  270.])]
+['real distance', 28.528033687154686]
+gaze target lost
+saccade
+['eyelink: saccade', (933.0999755859375, 527.2000122070312), (933.0, 530.0999755859375), array([ 480.,  270.])]
+['real distance', 28.757789960270479]
+gaze target lost
+saccade
+['eyelink: saccade', (931.2000122070312, 539.0999755859375), (933.4000244140625, 527.9000244140625), array([ 480.,  270.])]
+['real distance', 29.222732766679343]
+['eyelink: saccade', (933.7999877929688, 536.0), (934.7999877929688, 529.5999755859375), array([ 480.,  270.])]
+['real distance', 27.261715335752811]
+Block: 1; Trial: 37
+['eyelink: saccade', (934.5999755859375, 537.9000244140625), (934.0999755859375, 543.0), array([ 480.,  270.])]
+['real distance', 26.073190534513291]
+['eyelink: saccade', (937.2000122070312, 541.5), (940.0999755859375, 532.7000122070312), array([ 480.,  270.])]
+['real distance', 21.19671657256794]
+gaze target lost
+saccade
+['eyelink: saccade', (936.5, 521.2999877929688), (935.9000244140625, 530.2000122070312), array([ 480.,  270.])]
+['real distance', 26.016313804709537]
+gaze target lost
+saccade
+['eyelink: saccade', (937.5999755859375, 533.2000122070312), (937.7999877929688, 527.5), array([ 480.,  270.])]
+['real distance', 25.477255385781579]
+gaze target lost
+saccade
+['eyelink: saccade', (941.7999877929688, 522.2000122070312), (940.5, 533.2000122070312), array([ 480.,  270.])]
+['real distance', 20.651630298466124]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.0999755859375, 523.7999877929688), (942.7999877929688, 529.7999877929688), array([ 480.,  270.])]
+['real distance', 19.997016501108622]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (943.7000122070312, 533.5), (947.0, 526.0), array([ 480.,  270.])]
+['real distance', 19.104973174542799]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (946.2999877929688, 522.5), (943.0, 536.5999755859375), array([ 480.,  270.])]
+['real distance', 17.336671134223579]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (944.5999755859375, 530.4000244140625), (943.0999755859375, 524.0999755859375), array([ 480.,  270.])]
+['real distance', 23.203913496729211]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.0, 535.0), (939.7000122070312, 524.2999877929688), array([ 480.,  270.])]
+['real distance', 25.662811375521787]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (931.2999877929688, 545.4000244140625), (932.7999877929688, 535.9000244140625), array([ 480.,  270.])]
+['real distance', 27.507280197575561]
+['eyelink: saccade', (931.7000122070312, 536.7999877929688), (931.7999877929688, 539.7999877929688), array([ 480.,  270.])]
+['real distance', 28.200721504239443]
+['eyelink: saccade', (927.7000122070312, 545.4000244140625), (966.4000244140625, 539.5999755859375), array([ 480.,  270.])]
+['real distance', 6.4125137062186539]
+Block: 1; Trial: 38
+['eyelink: saccade', (940.7000122070312, 531.0999755859375), (940.4000244140625, 537.5999755859375), array([ 480.,  270.])]
+['real distance', 19.746370809782796]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.9000244140625, 548.2000122070312), (941.0999755859375, 537.4000244140625), array([ 480.,  270.])]
+['real distance', 19.078018657597273]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.7999877929688, 556.7000122070312), (943.9000244140625, 544.2999877929688), array([ 480.,  270.])]
+['real distance', 16.664306432836135]
+['eyelink: saccade', (942.7000122070312, 540.7999877929688), (940.0999755859375, 545.9000244140625), array([ 480.,  270.])]
+['real distance', 20.756234238580397]
+['eyelink: saccade', (940.4000244140625, 544.2999877929688), (941.5, 538.0), array([ 480.,  270.])]
+['real distance', 18.607794065928395]
+Block: 1; Trial: 39
+['eyelink: saccade', (944.5, 511.79998779296875), (944.7999877929688, 517.5999755859375), array([ 480.,  270.])]
+['real distance', 27.070305961412682]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (942.2999877929688, 517.5999755859375), (942.5999755859375, 516.2000122070312), array([ 480.,  270.])]
+['real distance', 29.482202573000418]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (939.9000244140625, 537.7999877929688), (938.5, 545.5999755859375), array([ 480.,  270.])]
+['real distance', 22.217329420141748]
+Block: 1; Trial: 40
+['eyelink: saccade', (938.0, 535.4000244140625), (938.4000244140625, 531.9000244140625), array([ 480.,  270.])]
+['real distance', 23.068778680413047]
+gaze target lost
+saccade
+['eyelink: saccade', (937.7000122070312, 533.4000244140625), (955.2999877929688, 524.4000244140625), array([ 480.,  270.])]
+['real distance', 16.292616518782022]
+gaze target lost
+saccade
+['eyelink: saccade', (952.5, 527.5), (951.0999755859375, 528.2000122070312), array([ 480.,  270.])]
+['real distance', 14.780059082599097]
+gaze target lost
+saccade
+['eyelink: saccade', (950.2000122070312, 536.4000244140625), (930.9000244140625, 531.4000244140625), array([ 480.,  270.])]
+['real distance', 30.344161863213156]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.0, 537.5999755859375), (936.0, 547.2000122070312), array([ 480.,  270.])]
+['real distance', 25.056739129052666]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (940.5, 533.0999755859375), (940.5999755859375, 540.5999755859375), array([ 480.,  270.])]
+['real distance', 19.409299780516093]
+gaze target lost
+saccade
+critical saccade
+['eyelink: saccade', (937.2999877929688, 530.7000122070312), (936.0999755859375, 535.7000122070312), array([ 480.,  270.])]
+['real distance', 24.283761282232696]
+gaze target lost
+saccade
+['eyelink: saccade', (940.0, 521.4000244140625), (941.0999755859375, 521.2999877929688), array([ 480.,  270.])]
+['real distance', 26.587617031153361]
+on break
+['eyelink: saccade', (939.7000122070312, 520.2999877929688), (940.0, 529.5999755859375), array([ 480.,  270.])]
+['real distance', 22.542415749273548]
+['eyelink: saccade', (931.0, 546.7999877929688), (931.5999755859375, 544.0), array([ 480.,  270.])]
+['real distance', 28.68033100784135]
+yelink: blink
+['gaze end', (975.

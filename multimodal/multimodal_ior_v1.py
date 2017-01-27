@@ -4,15 +4,15 @@ if __name__ == '__main__':
 	########
 
 	trigger_led_num = 8
-	left_led_num = 11
-	right_led_num = 9
-	left_tact_num = 15
-	right_tact_num = 13
+	left_led_num = 9
+	right_led_num = 11
+	left_tact_num = 13
+	right_tact_num = 15
 
 	viewing_distance = 60.0 #units can be anything so long as they match those used in stim_display_width below
 	stim_display_width = 54.5 #units can be anything so long as they match those used in viewing_distance above
 	stim_display_res = (1920,1080) #pixel resolution of the stim_display
-	stim_display_position = (-1440-1920, 0) #,1680-1080)
+	stim_display_position = (-1440-1920,1680-1080)
 
 	writer_window_size = (200,200)
 	writer_window_position = (600,0)
@@ -26,7 +26,6 @@ if __name__ == '__main__':
 	stamper_do_border = True
 
 	do_eyelink = True
-
 	eyelink_window_size = (200,200)
 	eyelink_window_position = (900,0)
 	eyelink_ip = '100.1.1.1'
@@ -56,7 +55,7 @@ if __name__ == '__main__':
 
 	#(9+1)*2*2*2*2 = 160 trials
 	number_of_blocks = 5
-	trials_for_practice = 0
+	trials_for_practice = 40
 	trials_per_break = 40
 
 	instruction_size_in_degrees = 1 #specify the size of the instruction text
@@ -723,7 +722,7 @@ if __name__ == '__main__':
 
 			#make sure all the labjack outputs are off
 			labjack.getFeedback(u3.PortStateWrite(State = [0,0,0]))
- 
+
 			#tell the voicekey to report responses
 			voicekey_child.qTo.put(['report_responses',True])
 
@@ -816,14 +815,6 @@ if __name__ == '__main__':
 				if not cue_started:
 					if get_time()>=cue_start_time:
 						labjack.getFeedback(u3.PortStateWrite(State = [labjack_to_eeg_cue_int,labjack_to_tactamp_cue_on_bits_int,0]))
-						if not block == 'practice':
-							pass
-						else:
-							# print(get_time()) to test
-							time.sleep(0.01)
-							# print(get_time()) accuracy of sleep (i.e. in this case can't go over 50 ms)! 
-							# It's very accurate...
-							labjack.getFeedback(u3.PortStateWrite(State = [97,0,0]))
 						cue_started = True
 						last_cue_state = 1
 				elif not cue_done:
@@ -865,10 +856,8 @@ if __name__ == '__main__':
 								saccade = 'TRUE'
 								now = get_time()
 								labjack.getFeedback(u3.PortStateWrite(State = [41,0,0]))
-								print("saccade")
 								if (now>cue_start_time) and (now<(target_on_time+.3)):
 									critical_saccade = 'TRUE'
-									print("critical saccade")
 									labjack.getFeedback(u3.PortStateWrite(State = [43,0,0]))
 #								if block == 'practice':
 #									feedback_text = 'Eyes moved!'
@@ -900,9 +889,6 @@ if __name__ == '__main__':
 					else:
 						target_response_key = 'voice'
 						target_response_rt = (event[1] - target_on_time)*1000
-						if target_response_rt < 100:
-							# send error to vmrk for responses within 100 ms after target onset
-							labjack.getFeedback(u3.PortStateWrite(State = [98,0,0]))  
 						feedback_text = str(int(target_response_rt/10))
 						feedback_color = [127,127,127,255]
 						trial_done = True

@@ -283,7 +283,6 @@ qTo
 	pylink.openGraphicsEx(custom_display)
 	new_gaze_target = False
 	gaze_target = numpy.array(calibration_display_size)/2.0
-	real_gaze_target = gaze_target * 2.0
 	gaze_target_criterion = calibration_dot_size
 	do_sounds = False
 	report_saccades = False
@@ -362,13 +361,9 @@ qTo
 				eye_sample = eyelink.getFloatData()
 				gaze_start = eye_sample.getStartGaze()
 				gaze_end = eye_sample.getEndGaze()
-				print ['eyelink: saccade',gaze_start,gaze_end,gaze_target]
+				# print ['eyelink: saccade',gaze_start,gaze_end,gaze_target]
 				if (gaze_start[0]!=-32768.0) & (gaze_end[0]!=-32768.0):
 					gaze_dist_from_gaze_target = numpy.linalg.norm(numpy.array(gaze_end)-gaze_target)
-
-					real_gaze_dist_from_gaze_target = numpy.linalg.norm(numpy.array(gaze_end)-real_gaze_target)
-					print ['real distance', real_gaze_dist_from_gaze_target]
-
 					if gaze_dist_from_gaze_target<1000:
 						if new_gaze_target:
 							if gaze_dist_from_gaze_target<gaze_target_criterion:
@@ -378,7 +373,7 @@ qTo
 						elif gaze_dist_from_gaze_target>gaze_target_criterion:
 							if report_saccades:
 								qFrom.put('gaze_target_lost')
-								print('gaze target lost')
+								# print ['gaze_target_lost',gaze_target]
 							if (not saccade_sound.still_playing()) and (not blink_sound.still_playing()):
 								if do_sounds:
 									saccade_sound.play()
