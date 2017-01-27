@@ -5,33 +5,247 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import fnmatch
 
-os.chdir("/Volumes/Seagate Backup Plus Drive/Experiments/multimodal_ior/_Data/forMNE")
-# os.chdir("/Users/ghislaindentremont/Downloads/e49")
+
+
+##############################################################################################
+####                   Create Functions for vmrk Clean-Up                                 ####
+##############################################################################################
+
+def get_number_string(lyne):
+    if line == '':
+        number_str = "1"  # to get out of bottom while loop when file complete
+    else:
+        number_str = lyne.replace(' ', '').split(',')[1].strip().strip('S').strip('R')  # this takes the number
+    return(number_str)
+
+
+def do_vmrk_clean_up(participant):
+
+    filedir = "/Volumes/LaCie/Experiments/MMIOR/Ghis/_Data/forMNE/new_data"
+
+    filename = "multimodal_ior_%s.vmrk" % participant
+
+    os.chdir(filedir)  # change to file's folder
+
+    # rename original it hasn't already been 'cleaned up'
+    already_done = os.path.isfile("original_vmrks/original_" + filename)
+
+    if not already_done:
+        os.rename(filename, "original_vmrks/original_" + filename)
+
+        newFile = open(filename, "w")  # open file in which error-free vmrk info will be put in
+        oldFile = open("original_vmrks/original_" + filename, 'r')
+        done = False
+        dataStarted = False
+
+        def get_number_string(lyne):
+            if line == '':
+                number_str = "1"  # to get out of bottom while loop when file complete
+            else:
+                number_str = lyne.replace(' ', '').split(',')[1].strip().strip('S').strip('R')  # this takes the number
+            return (number_str)
+
+        while not done:
+            if not dataStarted:
+                line = oldFile.readline()
+                if line[0:3] == "Mk2":
+                    dataStarted = True
+                    number_string = get_number_string(line)
+                else:
+                    newFile.write(line)
+            if dataStarted:
+                if line == '':
+                    done = True
+                else:
+                    if number_string == "1":
+                        lines = line
+                        line = oldFile.readline()
+                        number_string = get_number_string(line)
+                        while number_string != "1":
+                            if number_string in ["99", "98", "97", "43", "42"]:
+                                break
+                            else:
+                                lines += line
+                            line = oldFile.readline()
+                            number_string = get_number_string(line)
+                        if number_string == "1":
+                            newFile.write(lines)
+                        else:
+                            while number_string != "1":
+                                line = oldFile.readline()
+                                number_string = get_number_string(line)
+                    else:
+                        print("ERROR")
+
+        newFile.close()
+        oldFile.close()
+    else:
+        print("I HAVE ALREADY 'CLEANED UP' THIS FILE")
+
+
+
+
+##############################################################################################
+####                                   Functions                                          ####
+##############################################################################################
+
+def get_topo( raw, topo_ids, topo_times, average, tmin, tmax, reject_num, baseline=(-0.1, 0), AR=True ):
+    topo_reject = dict(eeg=reject_num)
+    topo_picks = mne.pick_types(
+        raw.info
+        , meg=False
+        , eeg=True
+        , eog=False
+    )
+    topo_params = dict(
+        picks=topo_picks
+        , events=events  # global variable
+        , event_id=topo_ids
+        , tmin=tmin
+        , tmax=tmax
+    )
+    topo_epochs = mne.Epochs(
+        raw
+        , **topo_params
+        , add_eeg_ref=False
+        , baseline=baseline
+    )
+    # artifact rejection
+    if AR:
+        topo_epochs.drop_bad(reject=topo_reject)
+
+    topo_evoked = topo_epochs.average()
+    topo_evoked.plot_topomap(topo_times, ch_type='eeg', show_names=True, average=average),
+    plt.savefig('%s/P_topo/topomap_%s.png' % (directory, participant))
+    if dont_plot:
+        plt.close()
+
+    topo_evoked.plot_topo()
+    plt.savefig('%s/P_topo/topoplot_%s.png' % (directory, participant))
+    if dont_plot:
+        plt.close()
+
+    return (topo_evoked)
+
+
+def get_evoked( raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0.1,0), get_evoked=True, save_AR=True):
+    reject = dict(eeg=reject_num)
+    picks = mne.pick_types(
+    raw.info
+    , meg = False
+    , eeg = True
+    , eog = False
+    , selection = channel_name
+    )
+    params = dict(
+    picks =  picks
+    , events=events  # global variable
+    , event_id=event_id
+    , tmin=tmin
+    , tmax=tmax
+    )
+    epochs= mne.Epochs(
+    raw
+    , **params
+    , add_eeg_ref = False
+    , baseline = baseline
+    )
+
+    # artifact rejection
+    epochs.drop_bad(reject = reject)
+
+    if save_AR:
+        # percentage rejected by channel
+        if not dont_plot:
+            epochs.plot_drop_log()
+            plt.savefig('%s/P_AR/%s_%s_%s_drop_log_%s.png' % (directory, channel_name[0], list(event_id)[0][0:2], list(event_id)[0][3:5], participant))
+        # # visualize by channel, by epoch
+        # epochs.plot()
+        f = open('%s/P_AR/%s_%s_%s_AR_output_%s.txt' % (directory, channel_name[0], list(event_id)[0][0:2], list(event_id)[0][3:5], participant), 'w')
+        # get percentage of epochs dropped
+        f.write("Total number of epochs: ")
+        f.write(str(len(epochs)))
+        f.write("\nPercentage of epochs dropped: ")
+        f.write(str(epochs.drop_log_stats()))
+        f.close()
+
+    if get_evoked:
+        evoked = epochs.average()
+        # evoked.plot()
+        # average channels
+        sums = np.zeros(len(evoked.data[0]))
+        for i in range(0, len(evoked.data)):
+            sums = evoked.data[i] + sums
+
+        avg = np.array( [sums/len(evoked.data)] )
+        info = mne.create_info(
+            ch_names = [' '.join(channel_name)]
+            , sfreq = raw.info['sfreq']
+            , ch_types = 'eeg'
+            )
+        avg_wave = mne.EvokedArray(avg, info, tmin=tmin)
+        # avg_wave.plot()
+        to_return = avg_wave
+    else:
+        to_return = epochs
+    return to_return
+
+
+def concatenate_epochs( epoch1, epoch2, ch_name, reversal = False ):
+    epoch1_arr = epoch1.get_data()
+    epoch2_arr = epoch2.get_data()
+    comb_arr = np.concatenate( [epoch1_arr, epoch2_arr] )
+
+    comb_arr_sum = np.zeros(len(comb_arr[0][0]))
+    for idx in range(0, len(comb_arr)):
+        temp = comb_arr[idx][0]
+        comb_arr_sum = comb_arr_sum + temp
+
+    comb_arr_avg = np.array( [comb_arr_sum/len(comb_arr)] ) # get type 2d array
+
+    if reversal:
+        comb_arr_avg = comb_arr_avg * (-1)
+
+    info_comb = mne.create_info(
+        ch_names = [ch_name]
+        , sfreq = epoch1.info['sfreq']
+        , ch_types = 'eeg'
+        )
+
+    evoked = mne.EvokedArray(comb_arr_avg, info_comb, tmin=tmin)
+    # evoked.plot()
+
+    return evoked
+
+
+
 
 ##############################################################################################
 ####                                Load Data                                             ####
 ##############################################################################################
 
 # Participant
-participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04', 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47']
-# , 'e48', 'e49'
-
-# participant = 'e49'
+participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04'
+    , 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47', 'e48', 'e49']
 
 dont_plot = True
 
 for participant in participants:
+
+    if int(participant[1:3]) > 30:
+        do_vmrk_clean_up(participant)
+        os.chdir("/Volumes/LaCie/Experiments/MMIOR/Ghis/_Data/forMNE/new_data")
+    else:
+        os.chdir("/Volumes/LaCie/Experiments/MMIOR/Ghis/_Data/forMNE/BeforeSummer_ForAnalysis")
 
     for root, dirs, files in os.walk(".", topdown=False):
         for name in files:
             if fnmatch.fnmatch(name, '*%s.vhdr'%participant):
                 file = os.path.join(root, name)
 
-    # for one participant
-    # raw = mne.io.read_raw_brainvision('multimodal_ior_%s.vhdr' % participant, preload = True)
     raw = mne.io.read_raw_brainvision(file, preload=True)
 
-    directory = '/Users/ghislaindentremont/Documents/Multimodal_IOR/Ghis/P_analysis3/%s'%participant
+    directory = '/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo/%s'%participant
     if not os.path.exists(directory):
         os.makedirs(directory)
     if not os.path.exists('%s/P_preprocessing'%directory):
@@ -40,6 +254,8 @@ for participant in participants:
         os.makedirs('%s/P_averages'%directory)
     if not os.path.exists('%s/P_AR'%directory):
         os.makedirs('%s/P_AR'%directory)
+    if not os.path.exists('%s/P_topo'%directory):
+        os.makedirs('%s/P_topo'%directory)
 
     # remove Aux
     raw.drop_channels(['Aux1'])  # AUX1 = microsensor, o.w. nothing
@@ -257,68 +473,6 @@ for participant in participants:
 
 
 
-    ##############################################################################################
-    ####                                    Filters                                           ####
-    ##############################################################################################
-
-    #---------------------------------- Butterworth Filter --------------------------------------#
-    # Pick a subset of channels
-    picks = mne.pick_types(
-        raw.info
-        , meg = False
-        , eeg = True
-        , eog = False
-        , selection =
-        ['C3', 'C4'     # somatosensory (left/right)
-        , 'PO7', 'PO8']  # occipital(left/right)
-        )
-
-    # without filter
-    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
-    plt.savefig('%s/P_preprocessing/psd_pre_bandpass_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-
-    # apply filter
-    # applies zero-phase bandpass filter (default is 4th order butterworth, but using 2nd order here)
-    iir_params = dict(order=2, ftype='butter')
-    raw.filter(
-        .1
-        , 50
-        , picks=picks
-        , method = 'iir'
-        , iir_params = iir_params
-        , n_jobs = 4
-    )
-    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0), show = False)
-    plt.savefig('%s/P_preprocessing/psd_post_bandpass_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-    #---------------------------------- Butterworth Filter --------------------------------------#
-
-
-    #---------------------------------- Notch Filter --------------------------------------------#
-    # without filter
-    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
-    plt.savefig('%s/P_preprocessing/psd_pre_notch_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-
-    # apply notch
-    # zero phase notch filter
-    raw.notch_filter(
-        60
-        , picks=picks
-        , n_jobs = 4
-        )
-    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0), show = False)
-    plt.savefig('%s/P_preprocessing/psd_post_notch_%s.png'%(directory, participant) )
-    if dont_plot:
-        plt.close()
-    #---------------------------------- Notch Filter --------------------------------------------#
-
-
-
 
     ##############################################################################################
     ####                                Re-Reference                                          ####
@@ -374,97 +528,84 @@ for participant in participants:
 
 
     ##############################################################################################
-    ####                                   Functions                                          ####
+    ####                                    Filters                                           ####
     ##############################################################################################
 
-    def get_evoked( raw, event_id, channel_name, tmin, tmax, reject_num, baseline = (-0.1,0), get_evoked = True, save_AR = True):
-        reject = dict(eeg=reject_num)
-        picks = mne.pick_types(
+    #---------------------------------- Butterworth Filter --------------------------------------#
+    # Pick a subset of channels
+    picks = mne.pick_types(
         raw.info
         , meg = False
         , eeg = True
         , eog = False
-        , selection = channel_name
-        )
-        params = dict(
-        picks =  picks
-        , events=events  # global variable
-        , event_id=event_id
-        , tmin=tmin
-        , tmax=tmax
-        )
-        epochs= mne.Epochs(
-        raw
-        , **params
-        , add_eeg_ref = False
-        , baseline = baseline
+        # , selection =
+        # ['C3', 'C4'     # somatosensory (left/right)
+        # , 'PO7', 'PO8']  # occipital(left/right)
         )
 
-        # artifact rejection
-        epochs.drop_bad(reject = reject)
+    # without filter
+    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
+    plt.savefig('%s/P_preprocessing/psd_pre_bandpass_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
 
-        if save_AR:
-            # percentage rejected by channel
-            if not dont_plot:
-                epochs.plot_drop_log()
-                plt.savefig('%s/P_AR/%s_%s_%s_drop_log_%s.png' % (directory, channel_name[0], list(event_id)[0][0:2], list(event_id)[0][3:5], participant))
-            # # visualize by channel, by epoch
-            # epochs.plot()
-            f = open('%s/P_AR/%s_%s_%s_AR_output_%s.txt' % (directory, channel_name[0], list(event_id)[0][0:2], list(event_id)[0][3:5], participant), 'w')
-            # get percentage of epochs dropped
-            f.write("Total number of epochs: ")
-            f.write(str(len(epochs)))
-            f.write("\nPercentage of epochs dropped: ")
-            f.write(str(epochs.drop_log_stats()))
-            f.close()
-
-        if get_evoked:
-            evoked = epochs.average()
-            # evoked.plot()
-            # average channels
-            sums = np.zeros(len(evoked.data[0]))
-            for i in range(0, len(evoked.data)):
-                sums = evoked.data[i] + sums
-
-            avg = np.array( [sums/len(evoked.data)] )
-            info = mne.create_info(
-                ch_names = [' '.join(channel_name)]
-                , sfreq = raw.info['sfreq']
-                , ch_types = 'eeg'
-                )
-            avg_wave = mne.EvokedArray(avg, info, tmin=tmin)
-            # avg_wave.plot()
-            to_return = avg_wave
-        else:
-            to_return = epochs
-        return to_return
+    # apply filter
+    # applies zero-phase bandpass filter (default is 4th order butterworth, but using 2nd order here)
+    iir_params = dict(order=2, ftype='butter')
+    raw.filter(
+        .1
+        , 50
+        , picks=picks
+        , method = 'iir'
+        , iir_params = iir_params
+        , n_jobs = 4
+    )
+    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0), show = False)
+    plt.savefig('%s/P_preprocessing/psd_post_bandpass_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
+    #---------------------------------- Butterworth Filter --------------------------------------#
 
 
-    def concatenate_epochs( epoch1, epoch2, ch_name, reversal = False ):
-        epoch1_arr = epoch1.get_data()
-        epoch2_arr = epoch2.get_data()
-        comb_arr = np.concatenate( [epoch1_arr, epoch2_arr] )
+    #---------------------------------- Notch Filter --------------------------------------------#
+    # without filter
+    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (1,0,0), show = False)
+    plt.savefig('%s/P_preprocessing/psd_pre_notch_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
 
-        comb_arr_sum = np.zeros(len(comb_arr[0][0]))
-        for idx in range(0, len(comb_arr)):
-            temp = comb_arr[idx][0]
-            comb_arr_sum = comb_arr_sum + temp
+    # apply notch
+    # zero phase notch filter
+    raw.notch_filter(
+        60
+        , picks=picks
+        , n_jobs = 4
+        )
+    raw.plot_psd(area_mode='range', tmax=10.0, picks=picks, color = (0,1,0), show = False)
+    plt.savefig('%s/P_preprocessing/psd_post_notch_%s.png'%(directory, participant) )
+    if dont_plot:
+        plt.close()
+    #---------------------------------- Notch Filter --------------------------------------------#
 
-        comb_arr_avg = np.array( [comb_arr_sum/len(comb_arr)] ) # get type 2d array
+    # save filtered file
+    topo_dir = '/Volumes/LaCie/Experiments/MMIOR/Ghis/Topo/raw_post_filter_%s.fif'%participant
+    if not os.path.exists(topo_dir):
+        os.makedirs(directory)
+        raw.save(topo_dir)
 
-        if reversal:
-            comb_arr_avg = comb_arr_avg * (-1)
 
-        info_comb = mne.create_info(
-            ch_names = [ch_name]
-            , sfreq = epoch1.info['sfreq']
-            , ch_types = 'eeg'
-            )
 
-        evoked = mne.EvokedArray(comb_arr_avg, info_comb, tmin=tmin)
-        # evoked.plot()
 
-        return evoked
+    ##############################################################################################
+    ####                                Topographies                                          ####
+    ##############################################################################################
+
+    # topo_ids = {'LV/LT': 21, 'LT/LT': 25, 'RV/LT': 29, 'RT/LT': 33}
+    # get_topo(raw, topo_ids=topo_ids, topo_times=np.arange(.060, .120, .010), average=0.005, tmin, tmax, reject_num=100e-6)
+
+
+    # topo_contrast = mne.combine_evoked([topo_evoked_uncued, topo_evoked_cued], weights=[0.5, -0.5])
+
 
 
 

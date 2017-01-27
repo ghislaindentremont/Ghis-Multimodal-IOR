@@ -424,7 +424,7 @@ CW$mix_factor = as.factor(CW$mix_factor)
 levels(CW$mix_factor) = c("Tactile\nTactile", "Tactile\nVisual", "Visual\nTactile", "Visual\nVisual")
 
 # generate plot
-gg = ggplot(CW, 
+gg3 = ggplot(CW, 
             aes(x = mix_factor
               # x = cue_modality
                          ,y = M
@@ -440,13 +440,13 @@ gg = ggplot(CW,
   )+
   geom_point(size = 2)+
   # labs(x = "Cue Modality",y = "IOR Effect: Cued - Uncued (ms)", color = "Target Modality")+
-  labs(x = "Cue/Target Pairing",y = "IOR Effect: Cued - Uncued (ms)")+
+  labs(x = "Cue\nTarget",y = "IOR Effect: Cued - Uncued (ms)")+
   geom_hline(yintercept = 0, size = 1, linetype = "dashed")+
   theme_gray(base_size = 30)+
   theme(panel.grid.major = element_line(size = 1.5)
         ,panel.grid.minor = element_line(size = 1)) 
 
-print(gg)
+print(gg3)
 #--------------------------------- condition-wise -------------------------------------#
 
 

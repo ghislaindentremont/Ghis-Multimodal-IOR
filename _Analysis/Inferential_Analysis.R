@@ -158,9 +158,9 @@ plot_grands(visual_only,P1lo, P1hi, N1lo, N1hi)
 ##################################################################
 
 a_list2 = list.files(
-path = "."
-, pattern = "condition_averages"
-, recursive = T
+  path = "."
+  , pattern = "condition_averages"
+  , recursive = T
 )
 
 a_list = a_list2[grep(".csv", a_list2)]
@@ -171,16 +171,16 @@ for (id in P_list) {
 }
 
 a = ldply(
-.data = a_data
-, .fun = function(file) {
+  .data = a_data
+  , .fun = function(file) {
     df = read.csv(
-    file
-    , header = TRUE
+      file
+      , header = TRUE
     )
     P_col = data.frame(id = substr(file,1,3), stringsAsFactors=FALSE)
     to_return = cbind(P_col, df)
-  return(to_return)
-}
+    return(to_return)
+  }
 )
 
 select_batch(batch)
@@ -352,8 +352,8 @@ load("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/TXT/IO
 do_aov = function(component, target_modality, lower_bound, upper_bound) {
   # P45
   eeg_comp = a2[a2$target_modality == target_modality
-                          & a2$time >= lower_bound
-                          & a2$time <= upper_bound, ]
+                & a2$time >= lower_bound
+                & a2$time <= upper_bound, ]
   
   # get average voltage in window for each condition (4) x cueing (2) x participant (n)
   eeg_comp_agg = aggregate(value ~ cue_modality + laterality + cueing + id, data = eeg_comp, FUN = mean)
@@ -527,7 +527,7 @@ do_aov = function(component, target_modality, lower_bound, upper_bound) {
     theme(panel.grid.major = element_line(size = 1.5)
           ,panel.grid.minor = element_line(size = 1)) 
   print(gg2)
-    
+  
   
   pSEs = pairdiffs$SEs
   SEM_LM_estimate = sqrt( mean((pSEs/sqrt(2))^2) )
@@ -593,7 +593,7 @@ do_aov = function(component, target_modality, lower_bound, upper_bound) {
   EEG_CIs$from_zero = MEs
   
   if(substr(component, 1,1) == "P"){
-   EEG_CIs$M = -EEG_CIs$M 
+    EEG_CIs$M = -EEG_CIs$M 
   }
   
   print(EEG_CIs)
