@@ -42,7 +42,7 @@ print(summarize_b)
 hist(b$target_response_rt, breaks = 50)
 abline(v = 100)
 # dev.copy(png, sprintf("%s/%s.png",savedir,participant))
-dev.off()
+# dev.off()
 
 print("Proportion of blinks: ")
 blink_prop = sum(b$critical_blink)/length(b$critical_blink)
@@ -63,7 +63,7 @@ b[b$critical_saccade,]$keep = FALSE
 b[b$critical_blink,]$keep = FALSE
 b[b$target_type == "catch",]$keep = FALSE  # can't use these for analysis
 b[is.na(b$target_response_rt),]$keep = FALSE
-b[!is.na(b$target_response_rt) & b$target_response_rt < 100,]$keep = FALSE
+b[b$target_response_rt < 100 & !is.na(b$target_response_rt),]$keep = FALSE
 
 
 print("Number of trials we began with: ")

@@ -114,3 +114,41 @@ summarize_b = summary(b)
 print(summarize_b)
 source("get_ind_behav_resp_summaries.R")
 source('/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Analysis/get_ind_behav_resp_summaries.R', chdir = TRUE)
+filedir = "/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Data/"
+filedir = "/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Data/e42_2016_10_13_13_19"
+# libraries#
+library(grid)#
+library(gridExtra)#
+library(plyr)#
+library(ggplot2) #
+library(stringr)
+participant = "e42"
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+    , recursive = T#
+  )#
+#
+filename = file_ls[ grep(".txt", file_ls) ]
+a = read.table(filename, header = T)
+a
+summary(a)
+prac = a[a$block == "practice",]
+prac
+summary(prac)
+filedir = /Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Data/e43_2016_10_18_13_32
+filedir = "/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/_Data/e43_2016_10_18_13_32"
+participant = "e43"
+file_ls = list.files(#
+    path = filedir#
+    , pattern = participant#
+    , full.names = T #
+    , recursive = T#
+  )#
+#
+filename = file_ls[ grep(".txt", file_ls) ]#
+#
+a = read.table(filename, header = T)
+prac = a[a$block == "practice",]
+summary(prac)

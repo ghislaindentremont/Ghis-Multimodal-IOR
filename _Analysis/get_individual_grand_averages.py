@@ -303,7 +303,7 @@ vis_id = {
 }
 
 evoked_grand_avg_vis = get_evoked( raw, vis_id, ['PO7','PO8'], tmin, tmax, reject_num = 100e-6 )
-evoked_grand_avg_vis.plot()
+# evoked_grand_avg_vis.plot()
 grand_avg_vis = evoked_grand_avg_vis.data[0]
 
 
