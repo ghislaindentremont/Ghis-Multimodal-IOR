@@ -96,10 +96,25 @@ gg = ggplot(
   )+
   scale_x_continuous("Time (ms)")+
   scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
-  theme_gray(base_size = 30)+
-  theme(panel.grid.major = element_line(size = 1.5)
-        ,panel.grid.minor = element_line(size = 1)) 
-
+  geom_rect(
+    data = subset(b2_agg, target_modality == 'Visual Target\n(PO7/8)')
+    , aes(xmin=70, xmax=170, ymin=-Inf, ymax=Inf)
+    , alpha = 0.006
+    , fill = "grey"
+  )+
+  geom_rect(
+    data = subset(b2_agg, target_modality == 'Tactile Target\n(C3/4)')
+    , aes(xmin=60, xmax=120, ymin=-Inf, ymax=Inf)
+    , alpha = 0.006
+    , fill = "grey"
+  )+
+  theme_bw()+
+  theme(panel.grid.major = element_blank()
+        , panel.grid.minor = element_blank()
+        , axis.text = element_text(size = 30)
+        , axis.title = element_text(size = 30)
+        , strip.text = element_text(size = 30)
+        )
 print(gg)
 
 
@@ -150,6 +165,78 @@ P1hi = 170
 N1lo = 170
 N1hi = 210
 plot_grands(visual_only,P1lo, P1hi, N1lo, N1hi)
+
+
+
+
+##################################################################
+####                 Plotting Function                        ####
+##################################################################
+
+ggplot_wavs = function(dat, laterality = FALSE, cue_modality = FALSE, target_modality = FALSE, visual = FALSE, tactile = FALSE) {
+  gg = ggplot(
+    dat
+    , aes(x = time, y = value*1e6, group = cueing, color = cueing)
+  ) +
+    geom_line(size = 1) 
+  
+  if (laterality & !cue_modality & !target_modality) {
+    gg = gg + 
+      facet_grid(laterality~.)
+  } else if (laterality & cue_modality & !target_modality) {
+    gg = gg +
+      facet_grid(laterality ~ cue_modality)
+  } else if (laterality & cue_modality & target_modality) {
+    gg = gg +
+      facet_grid(laterality ~ cue_modality + target_modality)
+  }
+  
+  gg = gg +
+    geom_vline(
+      xintercept =  0
+      , linetype = 2
+    )+ 
+    geom_hline(
+      yintercept = 0
+    )+
+    scale_x_continuous("Time (ms)", limits = c(-100, 400))+
+    scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
+    labs(color = "Cueing")
+  
+  if (visual){
+    gg = gg + 
+      geom_rect(
+        data = subset(dat, target_modality == 'Visual Target\n(PO7/8)')
+        , aes(xmin=P1lo, xmax=P1hi, ymin=-Inf, ymax=Inf)
+        , alpha = 0.006
+        , fill = "grey79"
+        , color = NA
+      )
+  }
+  if (tactile){
+    gg = gg +
+      geom_rect(
+        data = subset(dat, target_modality == 'Tactile Target\n(C3/4)')
+        , aes(xmin=Nlo, xmax=Nhi, ymin=-Inf, ymax=Inf)
+        , alpha = 0.006
+        , fill = "grey79"
+        , color = NA
+      )
+  }
+  gg = gg +
+    theme_bw()+
+    theme(panel.grid.major = element_blank()
+          , panel.grid.minor = element_blank()
+          , axis.text = element_text(size = 20)
+          , axis.title = element_text(size = 20)
+          , strip.text = element_text(size = 20)
+          , legend.text = element_text(size = 20)
+          , legend.title = element_text(size = 20)
+    )
+  
+  return(gg)
+}
+
 
 
 
@@ -233,9 +320,27 @@ levels(a2_agg$target_modality) = c('Tactile Target\n(C3/4)', 'Visual Target\n(PO
 levels(a2_agg$laterality) = c("Contralateral", "Ipsilateral")
 levels(a2_agg$cueing) = c("Uncued", "Cued")
 
-gg = ggplot(
-  a2_agg
-  , aes(x = time, y = value*1e6, group = cueing, color = cueing)
+
+ggplot_wavs(a2_agg
+            , laterality = T
+            , cue_modality = T
+            , target_modality = T
+            , visual = T
+            , tactile = T
+            )
+
+
+
+##################################################################
+####       Condition-wise by Target Modality                  ####
+##################################################################
+
+a2_agg_visual = a2_agg[a2_agg$target_modality == 'Visual Target\n(PO7/8)',]
+
+# visual 
+ggplot(
+  a2_agg_visual
+  , aes(x = time, y = value*1e6, group = cueing, linetype = cueing)
 ) +
   geom_line(size = 1) +
   facet_grid(laterality ~ target_modality + cue_modality)+
@@ -248,12 +353,63 @@ gg = ggplot(
   )+
   scale_x_continuous("Time (ms)", limits = c(-100, 400))+
   scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
-  labs(color = "Cueing")+
-  theme_gray(base_size = 30)+
-  theme(panel.grid.major = element_line(size = 1.5)
-        ,panel.grid.minor = element_line(size = 1)) 
+  labs(linetype = "Cueing")+
+  # scale_linetype_manual(values = c("solid", "dotted"))+
+  theme_bw()+
+  geom_rect(
+    data = subset(a2_agg_visual, target_modality == 'Visual Target\n(PO7/8)')
+    , aes(xmin=P1lo, xmax=P1hi, ymin=-Inf, ymax=Inf)
+    , alpha = 0.006
+    , fill = "grey"
+  )+
+  theme(panel.grid.major = element_blank()
+        , panel.grid.minor = element_blank()
+        , axis.text = element_text(size = 15)
+        , axis.title = element_text(size = 22)
+        , strip.text = element_text(size = 22)
+        , legend.text = element_text(size = 22)
+        , legend.title = element_text(size = 22)
+  )
 
-print(gg)
+
+
+# tactile
+a2_agg_tactile = a2_agg[a2_agg$target_modality == 'Tactile Target\n(C3/4)',]
+
+# tactile
+ggplot(
+  a2_agg_tactile
+  , aes(x = time, y = value*1e6, group = cueing, linetype = cueing)
+) +
+  geom_line(size = 1) +
+  facet_grid(laterality ~ target_modality + cue_modality)+
+  geom_vline(
+    xintercept =  0
+    , linetype = 2
+  )+ 
+  geom_hline(
+    yintercept = 0
+  )+
+  scale_x_continuous("Time (ms)", limits = c(-100, 400))+
+  scale_y_reverse(paste("Voltage (", expression(u), "V)", sep = ""))+
+  labs(linetype = "Cueing")+
+  # scale_linetype_manual(values = c("solid", "dotted"))+
+  theme_bw()+
+  geom_rect(
+    data = subset(a2_agg_tactile, target_modality == 'Tactile Target\n(C3/4)')
+    , aes(xmin=Nlo, xmax=Nhi, ymin=-Inf, ymax=Inf)
+    , alpha = 0.006
+    , fill = "grey"
+  )+
+  theme(panel.grid.major = element_blank()
+        , panel.grid.minor = element_blank()
+        , axis.text = element_text(size = 15)
+        , axis.title = element_text(size = 22)
+        , strip.text = element_text(size = 22)
+        , legend.text = element_text(size = 22)
+        , legend.title = element_text(size = 22)
+  )
+
 
 
 
@@ -261,7 +417,7 @@ print(gg)
 ####           Collapse Across Laterality                     ####
 ##################################################################
 
-a2_agg_visual = a2_agg[a2_agg$target_modality == 'Visual Target\n(PO7/8)',]
+
 a2_agg2 = aggregate(value ~ time + cue_modality + cueing, data = a2_agg_visual, FUN = mean)
 
 gg = ggplot(
@@ -286,7 +442,6 @@ gg = ggplot(
 
 print(gg)
 
-a2_agg_tactile = a2_agg[a2_agg$target_modality == 'Tactile Target\n(C3/4)',]
 a2_agg22 = aggregate(value ~ time + cue_modality + cueing, data = a2_agg_tactile, FUN = mean)
 
 gg = ggplot(
@@ -633,7 +788,7 @@ do_aov = function(component, target_modality, lower_bound, upper_bound) {
 
 
 #### P45 ####
-P45 = do_aov('P45', 'tactile', Plo, Phi)
+# P45 = do_aov('P45', 'tactile', Plo, Phi)
 
 #### N80/P100 ####
 N80_P100 = do_aov('N80.P100.Complex', 'tactile', Nlo, Nhi)
@@ -642,7 +797,7 @@ N80_P100 = do_aov('N80.P100.Complex', 'tactile', Nlo, Nhi)
 P1 = do_aov("P1", 'visual', P1lo, P1hi)
 
 #### N1 ####
-N1 = do_aov("N1", 'visual', N1lo, N1hi)
+# N1 = do_aov("N1", 'visual', N1lo, N1hi)
 
 
 
