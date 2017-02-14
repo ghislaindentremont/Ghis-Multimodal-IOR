@@ -2,7 +2,7 @@ import os
 import mne
 import numpy as np
 from matplotlib import pyplot as plt
-import pandas as pd
+# import pandas as pd
 import fnmatch
 
 
@@ -26,7 +26,6 @@ def do_vmrk_clean_up(participant):
     filename = "multimodal_ior_%s.vmrk" % participant
 
     os.chdir(filedir)  # change to file's folder
-
     # rename original it hasn't already been 'cleaned up'
     already_done = os.path.isfile("original_vmrks/original_" + filename)
 
@@ -89,66 +88,63 @@ def do_vmrk_clean_up(participant):
 ####                                   Functions                                          ####
 ##############################################################################################
 
-def get_topo( raw, topo_ids, topo_times, average, tmin, tmax, reject_num, baseline=(-0.1, 0), AR=True ):
-    topo_reject = dict(eeg=reject_num)
-    topo_picks = mne.pick_types(
-        raw.info
-        , meg=False
-        , eeg=True
-        , eog=False
-    )
-    topo_params = dict(
-        picks=topo_picks
-        , events=events  # global variable
-        , event_id=topo_ids
-        , tmin=tmin
-        , tmax=tmax
-    )
-    topo_epochs = mne.Epochs(
-        raw
-        , **topo_params
-        , add_eeg_ref=False
-        , baseline=baseline
-    )
-    # artifact rejection
-    if AR:
-        topo_epochs.drop_bad(reject=topo_reject)
+# def get_topo( raw, topo_ids, topo_times, average, tmin, tmax, reject_num, baseline=(-0.1, 0), AR=True ):
+#     topo_reject = dict(eeg=reject_num)
+#     topo_picks = mne.pick_types(
+#         raw.info
+#         , meg=False
+#         , eeg=True
+#         , eog=False
+#     )
+#     topo_params = dict(
+#         picks=topo_picks
+#         , events=events  # global variable
+#         , event_id=topo_ids
+#         , tmin=tmin
+#         , tmax=tmax
+#     )
+#     topo_epochs = mne.Epochs(
+#         raw
+#         , **topo_params
+#         , add_eeg_ref=False
+#         , baseline=baseline
+#     )
+#     # artifact rejection
+#     if AR:
+#         topo_epochs.drop_bad(reject=topo_reject)
 
-    topo_evoked = topo_epochs.average()
-    topo_evoked.plot_topomap(topo_times, ch_type='eeg', show_names=True, average=average),
-    plt.savefig('%s/P_topo/topomap_%s.png' % (directory, participant))
-    if dont_plot:
-        plt.close()
+#     topo_evoked = topo_epochs.average()
+#     topo_evoked.plot_topomap(topo_times, ch_type='eeg', show_names=True, average=average),
+#     plt.savefig('%s/P_topo/topomap_%s.png' % (directory, participant))
+#     if dont_plot:
+#         plt.close()
 
-    topo_evoked.plot_topo()
-    plt.savefig('%s/P_topo/topoplot_%s.png' % (directory, participant))
-    if dont_plot:
-        plt.close()
+#     topo_evoked.plot_topo()
+#     plt.savefig('%s/P_topo/topoplot_%s.png' % (directory, participant))
+#     if dont_plot:
+#         plt.close()
 
-    return (topo_evoked)
+#     return (topo_evoked)
 
 
 def get_evoked( raw, event_id, channel_name, tmin, tmax, reject_num, baseline=(-0.1,0), get_evoked=True, save_AR=True):
     reject = dict(eeg=reject_num)
     picks = mne.pick_types(
-    raw.info
-    , meg = False
-    , eeg = True
-    , eog = False
-    , selection = channel_name
+    raw.info, meg = False, eeg = True, eog = False, selection = channel_name
     )
-    params = dict(
-    picks =  picks
+    # params = dict(
+    # picks =  picks
+    # , events=events  # global variable
+    # , event_id=event_id
+    # , tmin=tmin
+    # , tmax=tmax
+    # )
+    epochs= mne.Epochs(
+    raw,     picks =  picks
     , events=events  # global variable
     , event_id=event_id
     , tmin=tmin
-    , tmax=tmax
-    )
-    epochs= mne.Epochs(
-    raw
-    , **params
-    , add_eeg_ref = False
-    , baseline = baseline
+    , tmax=tmax, add_eeg_ref = False, baseline = baseline
     )
 
     # artifact rejection
@@ -225,7 +221,8 @@ def concatenate_epochs( epoch1, epoch2, ch_name, reversal = False ):
 ##############################################################################################
 
 # Participant
-participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04'
+# 'e02',
+participants = ['e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04'
     , 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47', 'e48', 'e49']
 
 dont_plot = True
@@ -245,7 +242,8 @@ for participant in participants:
 
     raw = mne.io.read_raw_brainvision(file, preload=True)
 
-    directory = '/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo/%s'%participant
+    # directory = '/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo/%s'%participant
+    directory = "/Volumes/Experiments/MMIOR/Ghis-Multimodal-IOR/P_analysis_topo/%s"%participant
     if not os.path.exists(directory):
         os.makedirs(directory)
     if not os.path.exists('%s/P_preprocessing'%directory):
@@ -303,13 +301,8 @@ for participant in participants:
         , 'RT/LT': 33
     }
     tmin, tmax = -0.2, 0.5
-    epochs_params_all = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
-    epochs_all = mne.Epochs(
-        raw
-        , **epochs_params_all
-        , add_eeg_ref = False
-        , baseline = (-0.1,0)
-    )
+    # epochs_params_all = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
+    epochs_all = mne.Epochs(raw, picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax, add_eeg_ref = False, baseline = (-0.1,0) )
 
     # artifact rejection
     epochs_all.drop_bad(reject = dict(eeg=100e-5), flat = dict(eeg = 100e-6))
@@ -478,7 +471,7 @@ for participant in participants:
     ####                                Re-Reference                                          ####
     ##############################################################################################
 
-    epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
+    # epochs_params_test = dict(picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax)
 
 
     #------------------------- Show Effect of Reference on Evoked -------------------------------#
@@ -486,14 +479,14 @@ for participant in participants:
 
     # no reference
     raw_no_ref, _ = mne.io.set_eeg_reference(raw, [])
-    evoked_no_ref = mne.Epochs(raw_no_ref, **epochs_params_test).average()
+    evoked_no_ref = mne.Epochs(raw_no_ref, picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax).average()
     del raw_no_ref  # save memory
 
     evoked_no_ref.plot(axes = ax[0], titles=dict(eeg='EEG Original reference'), show=False)
 
     # Average reference
     raw_ref, _ = mne.io.set_eeg_reference(raw)
-    evoked_ref = mne.Epochs(raw_ref, **epochs_params_test).average()
+    evoked_ref = mne.Epochs(raw_ref, picks = picks_all, events=events, event_id=event_id_all, tmin=tmin, tmax=tmax).average()
     del raw_ref  # save memory
 
     evoked_ref.plot(axes = ax[1], titles=dict(eeg='EEG Average reference'), show=False)
@@ -590,7 +583,6 @@ for participant in participants:
     # save filtered file
     topo_dir = '/Volumes/LaCie/Experiments/MMIOR/Ghis/Topo/raw_post_filter_%s.fif'%participant
     if not os.path.exists(topo_dir):
-        os.makedirs(directory)
         raw.save(topo_dir)
 
 
@@ -740,25 +732,25 @@ for participant in participants:
     ####                                    Save Dataframe                                    ####
     ##############################################################################################
 
-    dataset = list(
-        zip(
-            X
-            , grand_avg_vis.tolist()
-            , grand_avg_tact.tolist()
-            )
-        )
+    # dataset = list(
+    #     zip(
+    #         X
+    #         , grand_avg_vis.tolist()
+    #         , grand_avg_tact.tolist()
+    #         )
+    #     )
 
-    df = pd.DataFrame(
-        data = dataset
-        , columns =
-            [
-            'time (ms)'
-            , "ZZZV"  # where Z means collapsed across
-            , "ZZZT"
-            ]
-     )
+    # df = pd.DataFrame(
+    #     data = dataset
+    #     , columns =
+    #         [
+    #         'time (ms)'
+    #         , "ZZZV"  # where Z means collapsed across
+    #         , "ZZZT"
+    #         ]
+    #  )
 
-    df.to_csv( '%s/P_averages/grand_averages_%s.csv'%(directory, participant) )
+    # df.to_csv( '%s/P_averages/grand_averages_%s.csv'%(directory, participant) )
 
 
 
@@ -1014,56 +1006,56 @@ for participant in participants:
     ####                                    Save Dataframe                                    ####
     ##############################################################################################
 
-    dataset = list(
-        zip(
-            X
-            , cued_contra_TT.tolist()
-            , uncued_contra_TT.tolist()
-            , cued_ipsi_TT.tolist()
-            , uncued_ipsi_TT.tolist()
+    # dataset = list(
+    #     zip(
+    #         X
+    #         , cued_contra_TT.tolist()
+    #         , uncued_contra_TT.tolist()
+    #         , cued_ipsi_TT.tolist()
+    #         , uncued_ipsi_TT.tolist()
 
-            , cued_contra_VT.tolist()
-            , uncued_contra_VT.tolist()
-            , cued_ipsi_VT.tolist()
-            , uncued_ipsi_VT.tolist()
+    #         , cued_contra_VT.tolist()
+    #         , uncued_contra_VT.tolist()
+    #         , cued_ipsi_VT.tolist()
+    #         , uncued_ipsi_VT.tolist()
 
-            , cued_contra_TV.tolist()
-            , uncued_contra_TV.tolist()
-            , cued_ipsi_TV.tolist()
-            , uncued_ipsi_TV.tolist()
+    #         , cued_contra_TV.tolist()
+    #         , uncued_contra_TV.tolist()
+    #         , cued_ipsi_TV.tolist()
+    #         , uncued_ipsi_TV.tolist()
 
-            , cued_contra_VV.tolist()
-            , uncued_contra_VV.tolist()
-            , cued_ipsi_VV.tolist()
-            , uncued_ipsi_VV.tolist()
-            )
-        )
+    #         , cued_contra_VV.tolist()
+    #         , uncued_contra_VV.tolist()
+    #         , cued_ipsi_VV.tolist()
+    #         , uncued_ipsi_VV.tolist()
+    #         )
+    #     )
 
-    df = pd.DataFrame(
-        data = dataset
-        , columns =
-            [
-            'time (ms)'
-            ,'CCTT'
-            , 'UCTT'
-            , 'CITT'
-            , 'UITT'
+    # df = pd.DataFrame(
+    #     data = dataset
+    #     , columns =
+    #         [
+    #         'time (ms)'
+    #         ,'CCTT'
+    #         , 'UCTT'
+    #         , 'CITT'
+    #         , 'UITT'
 
-            , 'CCVT'
-            , 'UCVT'
-            , 'CIVT'
-            , 'UIVT'
+    #         , 'CCVT'
+    #         , 'UCVT'
+    #         , 'CIVT'
+    #         , 'UIVT'
 
-            , 'CCTV'
-            , 'UCTV'
-            , 'CITV'
-            , 'UITV'
+    #         , 'CCTV'
+    #         , 'UCTV'
+    #         , 'CITV'
+    #         , 'UITV'
 
-            , 'CCVV'
-            , 'UCVV'
-            , 'CIVV'
-            , 'UIVV'
-            ]
-     )
+    #         , 'CCVV'
+    #         , 'UCVV'
+    #         , 'CIVV'
+    #         , 'UIVV'
+    #         ]
+    #  )
 
-    df.to_csv( '%s/P_averages/condition_averages_%s.csv'%(directory, participant) )
+    # df.to_csv( '%s/P_averages/condition_averages_%s.csv'%(directory, participant) )

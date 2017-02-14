@@ -1,0 +1,2 @@
+Total number of epochs: 20
+Percentage of epochs dropped: 16.6666666667
