@@ -85,9 +85,6 @@ def do_vmrk_clean_up(participant):
 
 
 
-##############################################################################################
-####                                   Functions                                          ####
-##############################################################################################
 
 def get_topo( raw, topo_ids, topo_times, average, tmin, tmax, reject_num, baseline=(-0.1, 0), AR=True ):
     topo_reject = dict(eeg=reject_num)
