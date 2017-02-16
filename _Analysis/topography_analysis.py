@@ -90,28 +90,12 @@ for participant in participants:
     evoked_left_uncued_TT = get_topo( raw, {'RT/LT': 33}, np.arange(.060, .120, .010), 0.005, tmin, tmax, reject_num = 100e-6, AR = False )
     evoked_right_uncued_TT = get_topo( raw, {'LT/RT': 27}, np.arange(.060, .120, .010), 0.005, tmin, tmax, reject_num = 100e-6, AR = False )
 
-    # evoked_left_red_TT = mne.combine_evoked([evoked_left_cued_TT,evoked_left_uncued_TT ], weights=[1, -1])  # subtraction
-    # evoked_right_red_TT = mne.combine_evoked([evoked_right_cued_TT,evoked_right_uncued_TT ], weights=[1, -1])  # subtraction
-    #
-    # evoked_cued_TT = mne.combine_evoked([evoked_left_cued_TT,evoked_right_cued_TT ], weights=[0.5, 0.5]) # average
-    # evoked_uncued_TT = mne.combine_evoked([evoked_left_uncued_TT, evoked_right_uncued_TT], weights=[0.5, 0.5])  # average
-    #
-    # evoked_red_TT = mne.combine_evoked([evoked_cued_TT, evoked_uncued_TT],weights=[1, -1])  # subtraction
-
     if first:
         sum_left_cued_TT = evoked_left_cued_TT
         sum_right_cued_TT = evoked_right_cued_TT
 
         sum_left_uncued_TT = evoked_left_uncued_TT
         sum_right_uncued_TT = evoked_right_uncued_TT
-
-        # sum_left_red_TT = evoked_left_red_TT
-        # sum_right_red_TT = evoked_right_red_TT
-        #
-        # sum_cued_TT = evoked_cued_TT
-        # sum_uncued_TT = evoked_uncued_TT
-        #
-        # sum_red_TT = evoked_red_TT
 
         first = False
     else:
@@ -120,14 +104,6 @@ for participant in participants:
 
         sum_left_uncued_TT =  mne.combine_evoked([sum_left_uncued_TT, evoked_left_uncued_TT], weights=[1, 1])  # sum
         sum_right_uncued_TT = mne.combine_evoked([sum_right_uncued_TT, evoked_right_uncued_TT], weights=[1, 1])  # sum
-
-        # sum_left_red_TT = mne.combine_evoked([sum_left_red_TT , evoked_left_red_TT], weights=[1, 1])  # sum
-        # sum_right_red_TT = mne.combine_evoked([sum_right_red_TT , evoked_right_red_TT], weights=[1, 1])  # sum
-        #
-        # sum_cued_TT = mne.combine_evoked([sum_cued_TT, evoked_cued_TT], weights=[1, 1])  # sum
-        # sum_uncued_TT = mne.combine_evoked([sum_uncued_TT, evoked_uncued_TT], weights=[1, 1])  # sum
-        #
-        # sum_red_TT = mne.combine_evoked([sum_red_TT, evoked_red_TT], weights=[1, 1])  # sum
 
 
 
@@ -220,8 +196,13 @@ for participant in participants:
 
 
 ##############################################################################################
-####                                    Group-wise                                        ####
+####                                    Topographies                                      ####
 ##############################################################################################
+
+directory = '/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo'
+
+
+####################################### Tactile/Tactile ######################################
 
 # get averages out of sums
 avg_left_cued_TT = mne.combine_evoked([sum_left_cued_TT], weights=[1/len(participants)])
@@ -237,7 +218,87 @@ avg_ipsi_cued_TT = -(avg_left_cued_TT.data[7] + avg_right_cued_TT.data[24])/2  #
 avg_contra_uncued_TT = (avg_left_uncued_TT.data[24] + avg_right_uncued_TT.data[7])/2  # average
 avg_ipsi_uncued_TT = -(avg_left_uncued_TT.data[7] + avg_right_uncued_TT.data[24])/2  # average and reverse for ipsi
 
-# plot waveforms
+
+#----------------------------------- Left Reduction ----------------------------------------#
+avg_left_red_TT  = mne.combine_evoked([avg_left_cued_TT, avg_left_uncued_TT], weights=[1, -1])  # subtraction
+
+avg_left_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/left_red_TT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/left_red_TT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_left_red_TT.info['bads'] = ['T7']
+avg_left_red_TT.interpolate_bads(reset_bads=True)
+
+avg_left_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/left_red_TT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/left_red_TT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#----------------------------------- Left Reduction ----------------------------------------#
+
+
+#---------------------------------- Right Reduction ----------------------------------------#
+avg_right_red_TT = mne.combine_evoked([avg_right_cued_TT, avg_right_uncued_TT], weights=[1, -1])  # subtraction
+
+avg_right_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/right_red_TT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/right_red_TT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_right_red_TT.info['bads'] = ['T7']
+avg_right_red_TT.interpolate_bads(reset_bads=True)
+
+avg_right_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/right_red_TT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/right_red_TT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#---------------------------------- Right Reduction ----------------------------------------#
+
+
+
+
+##############################################################################################
+####                                               ERPs                                   ####
+##############################################################################################
+
 X = np.linspace(-200, 500, 701)
 
 f, ax = plt.subplots(1, 2, sharex=True, sharey=True)
@@ -253,17 +314,14 @@ ax[1].plot(X, avg_ipsi_uncued_TT, label='uncued')
 ax[1].axhline(y=0, color='black')
 ax[1].axvline(x=0, linestyle='dashed', color='black')
 
-# f.set_size_inches(18.5, 10.5)
+f.set_size_inches(18.5, 10.5)
 
-# plt.savefig('%s/P_averages/condition_averages_%s.png' % (directory, participant))
+plt.gca().invert_yaxis()
 
-# if dont_plot:
-#     plt.close()
+plt.savefig('%s/condition_averages.png' % directory)
 
-
-# # take differences
-# avg_left_red_TT  = mne.combine_evoked([avg_left_cued_TT, avg_left_uncued_TT], weights=[1, -1])  # subtraction
-# avg_right_red_TT  = mne.combine_evoked([avg_right_cued_TT, avg_right_uncued_TT], weights=[1, -1])  # subtraction
+if dont_plot:
+    plt.close()
 
 
 
