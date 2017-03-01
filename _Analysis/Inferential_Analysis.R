@@ -4,7 +4,11 @@ library(reshape)
 library(scales)
 library(ggthemes)
 
-setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis2")
+setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo_AR")
+
+# # GOOD ONE (BELOW)
+# setwd("/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis2")
+
 
 
 ##################################################################
