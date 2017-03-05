@@ -1,0 +1,530 @@
+import os
+import mne
+from mne import io
+import numpy as np
+from matplotlib import pyplot as plt
+import pandas as pd
+import fnmatch
+
+
+
+##############################################################################################
+####                                   Load Files                                         ####
+##############################################################################################
+
+os.chdir('/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo/grand_sums')
+
+sum_left_cued_TT = mne.Evoked('sum_left_cued_TT-ave.fif')
+sum_right_cued_TT = mne.Evoked('sum_right_cued_TT-ave.fif')
+sum_left_uncued_TT = mne.Evoked('sum_left_uncued_TT-ave.fif')
+sum_right_uncued_TT = mne.Evoked('sum_right_uncued_TT-ave.fif')
+
+sum_left_cued_VT = mne.Evoked('sum_left_cued_VT-ave.fif')
+sum_right_cued_VT = mne.Evoked('sum_right_cued_VT-ave.fif')
+sum_left_uncued_VT = mne.Evoked('sum_left_uncued_VT-ave.fif')
+sum_right_uncued_VT = mne.Evoked('sum_right_uncued_VT-ave.fif')
+
+sum_left_cued_TV = mne.Evoked('sum_left_cued_TV-ave.fif')
+sum_right_cued_TV = mne.Evoked('sum_right_cued_TV-ave.fif')
+sum_left_uncued_TV = mne.Evoked('sum_left_uncued_TV-ave.fif')
+sum_right_uncued_TV = mne.Evoked('sum_right_uncued_TV-ave.fif')
+
+sum_left_cued_VV = mne.Evoked('sum_left_cued_VV-ave.fif')
+sum_right_cued_VV = mne.Evoked('sum_right_cued_VV-ave.fif')
+sum_left_uncued_VV = mne.Evoked('sum_left_uncued_VV-ave.fif')
+sum_right_uncued_VV = mne.Evoked('sum_right_uncued_VV-ave.fif')
+
+
+
+# participants
+participants = ['e02', 'e12', 'e16', 'e17', 'e20', 'e22', 'e27', 'e03', 'e04'
+    , 'e05', 'e06', 'p06', 'e40', 'e41', 'e42', 'e44', 'e45', 'e46', 'e47', 'e48', 'e49']
+
+dont_plot = True
+
+
+
+##############################################################################################
+####                                    Topographies                                      ####
+##############################################################################################
+
+directory = '/Users/ghislaindentremont/Documents/Experiments/Multimodal_IOR/Ghis/P_analysis_topo'
+
+if not os.path.exists('%s/grand_topos' % directory):
+    os.makedirs('%s/grand_topos' % directory)
+
+
+####################################### TACTILE/TACTILE ######################################
+
+# get averages out of sums
+avg_left_cued_TT = mne.combine_evoked([sum_left_cued_TT], weights=[1/len(participants)])
+avg_right_cued_TT = mne.combine_evoked([sum_right_cued_TT], weights=[1/len(participants)])
+
+avg_left_uncued_TT = mne.combine_evoked([sum_left_uncued_TT], weights=[1/len(participants)])
+avg_right_uncued_TT = mne.combine_evoked([sum_right_uncued_TT], weights=[1/len(participants)])
+
+# get ipsi and contra waveforms
+ERP_avg_contra_cued_TT = (avg_left_cued_TT.data[24] + avg_right_cued_TT.data[7])/2  # average
+ERP_avg_ipsi_cued_TT = -(avg_left_cued_TT.data[7] + avg_right_cued_TT.data[24])/2  # average and reverse for ipsi
+
+ERP_avg_contra_uncued_TT = (avg_left_uncued_TT.data[24] + avg_right_uncued_TT.data[7])/2  # average
+ERP_avg_ipsi_uncued_TT = -(avg_left_uncued_TT.data[7] + avg_right_uncued_TT.data[24])/2  # average and reverse for ipsi
+
+
+#----------------------------------- Left Reduction ----------------------------------------#
+avg_left_red_TT  = mne.combine_evoked([avg_left_cued_TT, avg_left_uncued_TT], weights=[1, -1])  # subtraction
+
+avg_left_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_TT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_TT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_left_red_TT.info['bads'] = ['T7']
+avg_left_red_TT.interpolate_bads(reset_bads=True)
+
+avg_left_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_TT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_TT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#----------------------------------- Left Reduction ----------------------------------------#
+
+
+#---------------------------------- Right Reduction ----------------------------------------#
+avg_right_red_TT = mne.combine_evoked([avg_right_cued_TT, avg_right_uncued_TT], weights=[1, -1])  # subtraction
+
+avg_right_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_TT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_TT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_right_red_TT.info['bads'] = ['T7']
+avg_right_red_TT.interpolate_bads(reset_bads=True)
+
+avg_right_red_TT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_TT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_TT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#---------------------------------- Right Reduction ----------------------------------------#
+
+
+
+
+####################################### VISUAL/TACTILE ######################################
+
+# get averages out of sums
+avg_left_cued_VT = mne.combine_evoked([sum_left_cued_VT], weights=[1/len(participants)])
+avg_right_cued_VT = mne.combine_evoked([sum_right_cued_VT], weights=[1/len(participants)])
+
+avg_left_uncued_VT = mne.combine_evoked([sum_left_uncued_VT], weights=[1/len(participants)])
+avg_right_uncued_VT = mne.combine_evoked([sum_right_uncued_VT], weights=[1/len(participants)])
+
+# get ipsi and contra waveforms
+ERP_avg_contra_cued_VT = (avg_left_cued_VT.data[24] + avg_right_cued_VT.data[7])/2  # average
+ERP_avg_ipsi_cued_VT = -(avg_left_cued_VT.data[7] + avg_right_cued_VT.data[24])/2  # average and reverse for ipsi
+
+ERP_avg_contra_uncued_VT = (avg_left_uncued_VT.data[24] + avg_right_uncued_VT.data[7])/2  # average
+ERP_avg_ipsi_uncued_VT = -(avg_left_uncued_VT.data[7] + avg_right_uncued_VT.data[24])/2  # average and reverse for ipsi
+
+
+#----------------------------------- Left Reduction ----------------------------------------#
+avg_left_red_VT  = mne.combine_evoked([avg_left_cued_VT, avg_left_uncued_VT], weights=[1, -1])  # subtraction
+
+avg_left_red_VT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_VT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_VT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_VT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_left_red_VT.info['bads'] = ['T7']
+avg_left_red_VT.interpolate_bads(reset_bads=True)
+
+avg_left_red_VT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_VT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_VT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_VT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#----------------------------------- Left Reduction ----------------------------------------#
+
+
+#---------------------------------- Right Reduction ----------------------------------------#
+avg_right_red_VT = mne.combine_evoked([avg_right_cued_VT, avg_right_uncued_VT], weights=[1, -1])  # subtraction
+
+avg_right_red_VT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_VT_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_VT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_VT_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_right_red_VT.info['bads'] = ['TP7', 'T7', 'TP8', 'TP10']
+avg_right_red_VT.interpolate_bads(reset_bads=True)
+
+avg_right_red_VT.plot_topomap([.090], ch_type='eeg', show_names=True, average= 0.030, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_VT_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_VT.plot_topomap(np.arange(.060, .130, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_VT_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#---------------------------------- Right Reduction ----------------------------------------#
+
+
+
+
+####################################### TACTILE/VISUAL ######################################
+
+# get averages out of sums
+avg_left_cued_TV = mne.combine_evoked([sum_left_cued_TV], weights=[1/len(participants)])
+avg_right_cued_TV = mne.combine_evoked([sum_right_cued_TV], weights=[1/len(participants)])
+
+avg_left_uncued_TV = mne.combine_evoked([sum_left_uncued_TV], weights=[1/len(participants)])
+avg_right_uncued_TV = mne.combine_evoked([sum_right_uncued_TV], weights=[1/len(participants)])
+
+# get ipsi and contra waveforms
+ERP_avg_contra_cued_TV = (avg_left_cued_TV.data[50] + avg_right_cued_TV.data[46])/2  # average
+ERP_avg_ipsi_cued_TV = (avg_left_cued_TV.data[46] + avg_right_cued_TV.data[50])/2  # average
+
+ERP_avg_contra_uncued_TV = (avg_left_uncued_TV.data[50] + avg_right_uncued_TV.data[46])/2  # average
+ERP_avg_ipsi_uncued_TV = (avg_left_uncued_TV.data[46] + avg_right_uncued_TV.data[50])/2  # average
+
+
+#----------------------------------- Left Reduction ----------------------------------------#
+avg_left_red_TV  = mne.combine_evoked([avg_left_cued_TV, avg_left_uncued_TV], weights=[-1, 1])  # subtraction
+
+avg_left_red_TV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_TV_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_TV_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_left_red_TV.info['bads'] = ['T7']
+avg_left_red_TV.interpolate_bads(reset_bads=True)
+
+avg_left_red_TV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_TV_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_TV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_TV_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#----------------------------------- Left Reduction ----------------------------------------#
+
+
+#---------------------------------- Right Reduction ----------------------------------------#
+avg_right_red_TV = mne.combine_evoked([avg_right_cued_TV, avg_right_uncued_TV], weights=[-1, 1])  # subtraction
+
+avg_right_red_TV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_TV_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_TV_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_right_red_TV.info['bads'] = ['T7']
+avg_right_red_TV.interpolate_bads(reset_bads=True)
+
+avg_right_red_TV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_TV_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_TV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_TV_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#---------------------------------- Right Reduction ----------------------------------------#
+
+
+
+
+####################################### VISUAL/VISUAL ######################################
+
+# get averages out of sums
+avg_left_cued_VV = mne.combine_evoked([sum_left_cued_VV], weights=[1/len(participants)])
+avg_right_cued_VV = mne.combine_evoked([sum_right_cued_VV], weights=[1/len(participants)])
+
+avg_left_uncued_VV = mne.combine_evoked([sum_left_uncued_VV], weights=[1/len(participants)])
+avg_right_uncued_VV = mne.combine_evoked([sum_right_uncued_VV], weights=[1/len(participants)])
+
+# get ipsi and contra waveforms
+ERP_avg_contra_cued_VV = (avg_left_cued_VV.data[50] + avg_right_cued_VV.data[46])/2  # average
+ERP_avg_ipsi_cued_VV = (avg_left_cued_VV.data[46] + avg_right_cued_VV.data[50])/2  # average
+
+ERP_avg_contra_uncued_VV = (avg_left_uncued_VV.data[50] + avg_right_uncued_VV.data[46])/2  # average
+ERP_avg_ipsi_uncued_VV = (avg_left_uncued_VV.data[46] + avg_right_uncued_VV.data[50])/2  # average
+
+
+#----------------------------------- Left Reduction ----------------------------------------#
+avg_left_red_VV  = mne.combine_evoked([avg_left_cued_VV, avg_left_uncued_VV], weights=[-1, 1])  # subtraction
+
+avg_left_red_VV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_VV_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_VV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_VV_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_left_red_VV.info['bads'] = ['TP7', 'T7']
+avg_left_red_VV.interpolate_bads(reset_bads=True)
+
+avg_left_red_VV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/left_red_VV_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_left_red_VV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/left_red_VV_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#----------------------------------- Left Reduction ----------------------------------------#
+
+
+#---------------------------------- Right Reduction ----------------------------------------#
+avg_right_red_VV = mne.combine_evoked([avg_right_cued_VV, avg_right_uncued_VV], weights=[-1, 1])  # subtraction
+
+avg_right_red_VV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_VV_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_VV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_VV_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+# INTERPOLATE
+avg_right_red_VV.info['bads'] = ['TP7', 'T7']
+avg_right_red_VV.interpolate_bads(reset_bads=True)
+
+avg_right_red_VV.plot_topomap([.120], ch_type='eeg', show_names=True, average= 0.050, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(10.5, 5.5)
+plt.savefig('%s/grand_topos/right_red_VV_interp_avg_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+
+avg_right_red_VV.plot_topomap(np.arange(.070, .180, .010), ch_type='eeg', show_names=True, average= 0.005, vmin=-2, vmax=2, sensors=False)
+fig = plt.gcf()
+fig.set_size_inches(18.5, 10.5)
+plt.savefig('%s/grand_topos/right_red_VV_interp_timeseries_topomap.png' % directory)
+if dont_plot:
+    plt.close()
+#---------------------------------- Right Reduction ----------------------------------------#
+
+
+
+
+
+
+##############################################################################################
+####                                               ERPs                                   ####
+##############################################################################################
+
+X = np.linspace(-200, 500, 701)
+
+f, ax = plt.subplots(2, 4, sharex=True, sharey=True)
+
+ax111 = f.add_subplot(111, frameon=False)
+ax111.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax111.set_xlabel("time (ms)")
+ax111.set_ylabel("voltage (V)", labelpad=15)
+
+# cue modality labels
+ax211 = f.add_subplot(211, frameon=False)
+ax211.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax211.set_ylabel("tactile cue", rotation=270, labelpad=20)
+ax211.yaxis.set_label_position("right")
+
+ax212 = f.add_subplot(212, frameon=False)
+ax212.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax212.set_ylabel("visual cue", rotation=270, labelpad=20)
+ax212.yaxis.set_label_position("right")
+
+# target modality labels
+ax121 = f.add_subplot(121, frameon=False)
+ax121.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax121.set_title("tactile target", y=1.05)
+
+ax122 = f.add_subplot(122, frameon=False)
+ax122.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax122.set_title("visual target", y=1.05)
+
+# contralaterality labels
+ax141 = f.add_subplot(141, frameon=False)
+ax141.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax141.set_title("contralateral")
+
+ax142 = f.add_subplot(142, frameon=False)
+ax142.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax142.set_title("ipsilateral")
+
+ax143 = f.add_subplot(143, frameon=False)
+ax143.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax143.set_title("contralateral")
+
+ax144 = f.add_subplot(144, frameon=False)
+ax144.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+ax144.set_title("ipsilateral")
+
+ax[0, 0].plot(X, ERP_avg_contra_cued_TT, label='cued')
+ax[0, 0].plot(X, ERP_avg_contra_uncued_TT, label='uncued')
+ax[0, 0].axhline(y=0, color='black')
+ax[0, 0].axvline(x=0, linestyle='dashed', color='black')
+ax[0, 0].legend(prop={'size': 12})
+
+ax[0, 1].plot(X, ERP_avg_ipsi_cued_TT, label='cued')
+ax[0, 1].plot(X, ERP_avg_ipsi_uncued_TT, label='uncued')
+ax[0, 1].axhline(y=0, color='black')
+ax[0, 1].axvline(x=0, linestyle='dashed', color='black')
+
+ax[1, 0].plot(X, ERP_avg_contra_cued_VT, label='cued')
+ax[1, 0].plot(X, ERP_avg_contra_uncued_VT, label='uncued')
+ax[1, 0].axhline(y=0, color='black')
+ax[1, 0].axvline(x=0, linestyle='dashed', color='black')
+
+ax[1, 1].plot(X, ERP_avg_ipsi_cued_VT, label='cued')
+ax[1, 1].plot(X, ERP_avg_ipsi_uncued_VT, label='uncued')
+ax[1, 1].axhline(y=0, color='black')
+ax[1, 1].axvline(x=0, linestyle='dashed', color='black')
+
+ax[0, 2].plot(X, ERP_avg_contra_cued_TV, label='cued')
+ax[0, 2].plot(X, ERP_avg_contra_uncued_TV, label='uncued')
+ax[0, 2].axhline(y=0, color='black')
+ax[0, 2].axvline(x=0, linestyle='dashed', color='black')
+
+ax[0, 3].plot(X, ERP_avg_ipsi_cued_TV, label='cued')
+ax[0, 3].plot(X, ERP_avg_ipsi_uncued_TV, label='uncued')
+ax[0, 3].axhline(y=0, color='black')
+ax[0, 3].axvline(x=0, linestyle='dashed', color='black')
+
+ax[1, 2].plot(X, ERP_avg_contra_cued_VV, label='cued')
+ax[1, 2].plot(X, ERP_avg_contra_uncued_VV, label='uncued')
+ax[1, 2].axhline(y=0, color='black')
+ax[1, 2].axvline(x=0, linestyle='dashed', color='black')
+
+ax[1, 3].plot(X, ERP_avg_ipsi_cued_VV, label='cued')
+ax[1, 3].plot(X, ERP_avg_ipsi_uncued_VV, label='uncued')
+ax[1, 3].axhline(y=0, color='black')
+ax[1, 3].axvline(x=0, linestyle='dashed', color='black')
+
+ax[1, 3].set_ylim(ax[1, 3].get_ylim()[::-1])
+ax[1, 3].ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+
+f.set_size_inches(18.5, 10.5)
+
+plt.savefig('%s/condition_averages.png' % directory)
+
+if dont_plot:
+    plt.close()
